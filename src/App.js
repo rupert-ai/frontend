@@ -11,8 +11,7 @@ import AdminDashboard from './pages/admin/Admin'
 
 function App() {
   return (
-
-    <BrowserRouter path="/frontend">
+    <BrowserRouter>
       <div className='page' id='page'>
           {/* <Navbar/> */}
           <div  id='routerContent'>
@@ -21,7 +20,7 @@ function App() {
                   {/* <Route path='/about' render={() => <AboutUs/>}></Route> */}
                   {/* <Route path='/contacts' render={() => <Contacts/>}></Route> */}
                   {/* <Route path='/admin' render={() => <AdminDashboard/>}></Route> */}
-                  <Route exact path='/' render={() => <AdminDashboard/>}></Route>
+                  <Route path='/' render={() => <AdminDashboard/>}></Route>
                   <Route component={NoMatch}/>
               </Switch>
           </div>
