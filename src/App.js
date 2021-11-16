@@ -12,16 +12,16 @@ import AdminDashboard from './pages/admin/Admin'
 function App() {
   return (
 
-    <BrowserRouter>
+    <BrowserRouter path="/frontend">
       <div className='page' id='page'>
           {/* <Navbar/> */}
           <div  id='routerContent'>
               <ScrollToTop />
               <Switch>
-                  <Route path='/about' render={() => <AboutUs/>}></Route>
-                  <Route path='/contacts' render={() => <Contacts/>}></Route>
-                  <Route path='/admin' render={() => <AdminDashboard/>}></Route>
-                  <Route exact path='/' render={() => <Home/>}></Route>
+                  {/* <Route path='/about' render={() => <AboutUs/>}></Route> */}
+                  {/* <Route path='/contacts' render={() => <Contacts/>}></Route> */}
+                  {/* <Route path='/admin' render={() => <AdminDashboard/>}></Route> */}
+                  <Route exact path='/' render={() => <AdminDashboard/>}></Route>
                   <Route component={NoMatch}/>
               </Switch>
           </div>
