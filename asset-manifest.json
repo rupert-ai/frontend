@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4cd8a8d4.chunk.css",
+    "main.js": "/static/js/main.afbebf4d.chunk.js",
+    "main.js.map": "/static/js/main.afbebf4d.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c7d94934.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c7d94934.js.map",
+    "static/js/2.01811f0d.chunk.js": "/static/js/2.01811f0d.chunk.js",
+    "static/js/2.01811f0d.chunk.js.map": "/static/js/2.01811f0d.chunk.js.map",
+    "static/js/3.5790da44.chunk.js": "/static/js/3.5790da44.chunk.js",
+    "static/js/3.5790da44.chunk.js.map": "/static/js/3.5790da44.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.4cd8a8d4.chunk.css.map": "/static/css/main.4cd8a8d4.chunk.css.map",
+    "static/js/2.01811f0d.chunk.js.LICENSE.txt": "/static/js/2.01811f0d.chunk.js.LICENSE.txt",
+    "static/media/Overview.87704cee.svg": "/static/media/Overview.87704cee.svg",
+    "static/media/homeIcon.9929c0f9.svg": "/static/media/homeIcon.9929c0f9.svg",
+    "static/media/liveBG2.95300b91.svg": "/static/media/liveBG2.95300b91.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c7d94934.js",
+    "static/js/2.01811f0d.chunk.js",
+    "static/css/main.4cd8a8d4.chunk.css",
+    "static/js/main.afbebf4d.chunk.js"
+  ]
+}
