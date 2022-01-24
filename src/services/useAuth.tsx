@@ -37,12 +37,6 @@ function useProvideAuth() {
       setIsSdkLoaded(true);
     });
     FacebookAuth.loadSdkAsynchronously();
-    // let fbRoot = document.getElementById('fb-root');
-    // if (!fbRoot) {
-    //   fbRoot = document.createElement('div');
-    //   fbRoot.id = 'fb-root';
-    //   document.body.appendChild(fbRoot);
-    // }
   }, []);
 
   const login = (onSuccess: () => void, onError: () => void) => {
@@ -51,10 +45,7 @@ function useProvideAuth() {
     }
     FacebookAuth.getLoginStatus((response) => {
       if (response.status === "connected") {
-        // FacebookAuth.getMe((user) => {
-        //   console.log("Auth user", user);
         FacebookAuth.getMe((user) => {
-          console.log(user);
           if (!user.error) {
             setUser({
               ...user,
@@ -65,12 +56,10 @@ function useProvideAuth() {
             // need to logout and login again?
           }
         });
-        // });
       } else {
         FacebookAuth.login((loginResponse) => {
           if (loginResponse.status === "connected") {
             FacebookAuth.getMe((user) => {
-              console.log(user);
               setUser({
                 ...user,
                 accessToken: response.authResponse?.accessToken,
@@ -78,7 +67,6 @@ function useProvideAuth() {
               onSuccess();
             });
           } else {
-            console.log("ERROR");
             onError();
           }
         });
@@ -94,17 +82,3 @@ function useProvideAuth() {
 
   return { user, isSdkLoaded, login, logout };
 }
-
-// export function AuthProvider({ children }) {
-//   const auth = useAuth();
-
-//   return (
-//     <authContext.Provider value={auth}>
-//       {children}
-//     </authContext.Provider>
-//   );
-// }
-
-// export default function AuthConsumer() {
-//   return React.useContext(authContext);
-// }

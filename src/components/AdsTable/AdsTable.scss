@@ -2,14 +2,6 @@
   z-index: 1;
   background-color: var(--iui-color-background-1);
   position: sticky;
-  // .iui-table-body
-  //   .iui-row:hover:not(.iui-disabled):not(.iui-expanded-content)
-  //   & {
-  //   background-color: rgba(
-  //     var(--iui-color-foreground-primary-rgb),
-  //     var(--iui-opacity-6)
-  //   );
-  // }
 }
 
 .sticky-name.sticky-name {
@@ -47,12 +39,6 @@
     }
     &:hover {
       background-color: initial;
-      // .iui-cell {
-      //   background-color: rgba(
-      //     var(--iui-color-foreground-primary-rgb),
-      //     var(--iui-opacity-6)
-      //   );
-      // }
     }
     > .iui-cell:first-child {
       border-left: 1px solid transparent;

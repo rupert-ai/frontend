@@ -4,10 +4,6 @@ import { useState } from "react";
 import DateInput from "../Dateinput/DateInput";
 import "./Toolbar.scss";
 
-type ToolbarProps = {
-  sets: string[];
-};
-
 function Toolbar() {
   const monthAgo = new Date();
   monthAgo.setMonth(monthAgo.getMonth() - 1);

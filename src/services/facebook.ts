@@ -29,21 +29,18 @@ export class FacebookAuth {
     callback: (response: StatusResponse) => void
   ) => {
     (window as any).FB.getLoginStatus((response: StatusResponse) => {
-      console.log("status check response", response);
       callback(response);
     });
   };
 
   public static login = (callback: (response: StatusResponse) => void) => {
     (window as any).FB.login((response: StatusResponse) => {
-      console.log("login response", response);
       callback(response);
     });
   };
 
   public static logout = (callback: (response: StatusResponse) => void) => {
     (window as any).FB.logout((response: StatusResponse) => {
-      console.log("logout response", response);
       callback(response);
     });
   };
@@ -64,7 +61,6 @@ export class FacebookAuth {
       "/me",
       { fields: "name,email,picture" },
       (me: UserResponse) => {
-        console.log("user", me);
         callback(me);
       }
     );
