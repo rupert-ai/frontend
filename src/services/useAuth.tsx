@@ -1,5 +1,5 @@
 import React from "react";
-import { FacebookAuth, UserResponse } from "./facebook";
+import { FacebookAuth, FACEBOOK_SCRIPT_ID, UserResponse } from "./facebook";
 
 interface FBUser extends UserResponse {
   accessToken?: string;
@@ -29,7 +29,7 @@ function useProvideAuth() {
   const [user, setUser] = React.useState<FBUser>();
 
   React.useEffect(() => {
-    if (document.getElementById("facebook-jssdk")) {
+    if (document.getElementById(FACEBOOK_SCRIPT_ID)) {
       setIsSdkLoaded(true);
       return;
     }

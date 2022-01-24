@@ -24,6 +24,8 @@ export interface UserResponse {
   };
 }
 
+export const FACEBOOK_SCRIPT_ID = "facebook-sdk";
+
 export class FacebookAuth {
   public static getLoginStatus = (
     callback: (response: StatusResponse) => void
@@ -78,6 +80,6 @@ export class FacebookAuth {
       js.id = id;
       js.src = `https://connect.facebook.net/en_US/sdk.js`;
       fjs.parentNode?.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
+    })(document, "script", FACEBOOK_SCRIPT_ID);
   };
 }
