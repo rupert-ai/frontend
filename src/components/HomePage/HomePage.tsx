@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import "./HomePage.css";
 import {
   DropdownButton,
@@ -58,6 +58,16 @@ function HomePage() {
     const split = name.split(" ");
     return split[1] ? split[0][0] + split[1][0] : split[0];
   };
+  
+  // example call
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_BASE}/auth/account`, {
+      headers: {
+        Authorization: auth?.user?.accessToken!,
+        Accept: 'application/json',
+      },
+    }).then(response => response.json()).then(console.log).catch(console.error);
+  }, [auth?.user?.accessToken]);
 
   return (
     <>
