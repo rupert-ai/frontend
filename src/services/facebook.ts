@@ -28,11 +28,12 @@ export const FACEBOOK_SCRIPT_ID = "facebook-sdk";
 
 export class FacebookAuth {
   public static getLoginStatus = (
-    callback: (response: StatusResponse) => void
+    callback: (response: StatusResponse) => void,
+    roundtrip: boolean = false
   ) => {
     (window as any).FB.getLoginStatus((response: StatusResponse) => {
       callback(response);
-    });
+    }, roundtrip);
   };
 
   public static login = (callback: (response: StatusResponse) => void) => {
