@@ -39,7 +39,7 @@ export class FacebookAuth {
   public static login = (callback: (response: StatusResponse) => void) => {
     (window as any).FB.login((response: StatusResponse) => {
       callback(response);
-    });
+    }, { scope: 'email,ads_management,ads_read,business_management' });
   };
 
   public static logout = (callback: (response: StatusResponse) => void) => {
@@ -52,7 +52,7 @@ export class FacebookAuth {
     (window as any).fbAsyncInit = () => {
       (window as any).FB.init({
         version: "v12.0",
-        appId: "158812729745471",
+        appId: process.env.REACT_APP_FACEBOOK_APP_ID,
         xfbml: true,
       });
       callback();
