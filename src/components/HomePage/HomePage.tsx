@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./HomePage.css";
 import {
   DropdownButton,
@@ -18,9 +18,32 @@ import { SvgFlag, SvgHome, SvgNotification } from "@itwin/itwinui-icons-react";
 import AdsTable from "../AdsTable/AdsTable";
 import Toolbar from "../Toolbar/Toolbar";
 import { useAuth } from "../../services/useAuth";
+import { Ad, Backend } from "../../services/backend";
 
 function HomePage() {
   const auth = useAuth();
+  const [data, setData] = useState<Ad[]>([]);
+  const [isSynced, setIsSynced] = useState(false);
+
+  useEffect(() => {
+    if (!auth?.user?.accessToken) {
+      return;
+    }
+
+    const getData = async () => {
+      const res = await Backend.getAdsList(auth?.user?.accessToken ?? "");
+      if (res.synced) {
+        setIsSynced(true);
+        setData(res.data);
+      } else {
+        setTimeout(() => {
+          getData();
+        }, 500);
+      }
+    };
+
+    getData();
+  }, [auth?.user?.accessToken]);
 
   const userIconMenuItems = (close: () => void) => [
     <MenuExtraContent key={0}>
@@ -58,16 +81,6 @@ function HomePage() {
     const split = name.split(" ");
     return split[1] ? split[0][0] + split[1][0] : split[0];
   };
-  
-  // example call
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_BASE}/auth/account`, {
-      headers: {
-        Authorization: auth?.user?.accessToken!,
-        Accept: 'application/json',
-      },
-    }).then(response => response.json()).then(console.log).catch(console.error);
-  }, [auth?.user?.accessToken]);
 
   return (
     <>
@@ -165,52 +178,7 @@ function HomePage() {
           </DropdownButton>
         </div>
       </div> */}
-          <AdsTable
-            data={useMemo(
-              () => [
-                {
-                  name: "Generic 1",
-                  impressions: 1512,
-                  amountSpent: "2.21",
-                  clicks: 12,
-                  cpc: "0.07",
-                  ctr: "2.25%",
-                  engagement: 33,
-                  postReactions: 3,
-                  engagementCost: "0.11",
-                  linkClicks: 51,
-                  outboundClicks: "0.11",
-                },
-                {
-                  name: "Generic 2",
-                  impressions: 1512,
-                  amountSpent: "2.21",
-                  clicks: 12,
-                  cpc: "0.07",
-                  ctr: "2.25%",
-                  engagement: 33,
-                  postReactions: 3,
-                  engagementCost: "0.11",
-                  linkClicks: 51,
-                  outboundClicks: "0.11",
-                },
-                {
-                  name: "Generic 3",
-                  impressions: 1512,
-                  amountSpent: "2.21",
-                  clicks: 12,
-                  cpc: "0.07",
-                  ctr: "2.25%",
-                  engagement: 33,
-                  postReactions: 3,
-                  engagementCost: "0.11",
-                  linkClicks: 51,
-                  outboundClicks: "0.11",
-                },
-              ],
-              []
-            )}
-          />
+          <AdsTable data={data} isLoading={!isSynced} />
         </div>
       </div>
     </>

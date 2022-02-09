@@ -1,12 +1,15 @@
 import { Table } from "@itwin/itwinui-react";
 import { useMemo } from "react";
+import { Ad } from "../../services/backend";
 import "./AdsTable.scss";
+import { CellProps } from "react-table";
 
 type AdsTableProps = {
-  data: {}[];
+  data: Ad[];
+  isLoading: boolean;
 };
 
-function AdsTable({ data }: AdsTableProps) {
+function AdsTable({ data, isLoading }: AdsTableProps) {
   const columns = useMemo(
     () => [
       {
@@ -17,17 +20,11 @@ function AdsTable({ data }: AdsTableProps) {
             Header: "AD NAME",
             accessor: "name",
             minWidth: 150,
-            Cell: (props: any) => (
+            Cell: (props: CellProps<Ad>) => (
               <>
                 <div className="table-ad-name-cell">
-                  <a
-                    href="https://d3e4mgdhax5r7d.cloudfront.net/uploads/photos/users/ca62e336-79b3-47e6-87e4-f2e1c551f352/thumb300_3FC4A312-6FD3-4C94-83EF-58B39A701BF5.jpg"
-                    download="ImageName"
-                  >
-                    <img
-                      src="https://d3e4mgdhax5r7d.cloudfront.net/uploads/photos/users/ca62e336-79b3-47e6-87e4-f2e1c551f352/thumb300_3FC4A312-6FD3-4C94-83EF-58B39A701BF5.jpg"
-                      alt="Ad"
-                    />
+                  <a href={props.row.original.image_url} download="ImageName">
+                    <img src={props.row.original.image_url} alt="Ad" />
                   </a>
                   <span>{props.row.original.name}</span>
                 </div>
@@ -35,6 +32,14 @@ function AdsTable({ data }: AdsTableProps) {
             ),
             columnClassName: "sticky-name table-header-cell",
             cellClassName: "sticky-name-cell",
+          },
+          {
+            id: "clarityScore",
+            Header: "CLARITY SCORE",
+            accessor: "clarity_score",
+            minWidth: 120,
+
+            columnClassName: "table-header-cell",
           },
           {
             id: "impressions",
@@ -46,7 +51,7 @@ function AdsTable({ data }: AdsTableProps) {
           {
             id: "amountSpent",
             Header: "AMOUNT SPENT",
-            accessor: "amountSpent",
+            accessor: "amount_spent",
             minWidth: 120,
 
             columnClassName: "table-header-cell",
@@ -62,48 +67,55 @@ function AdsTable({ data }: AdsTableProps) {
             id: "cpc",
             Header: "CPC",
             accessor: "cpc",
-            width: 80,
+            width: 100,
             columnClassName: "table-header-cell",
           },
           {
             id: "ctr",
             Header: "CTR",
             accessor: "ctr",
-            width: 80,
+            width: 100,
             columnClassName: "table-header-cell",
           },
+          // {
+          //   id: "engagement",
+          //   Header: "ENGAGEMENT",
+          //   accessor: "engagement",
+          //   minWidth: 120,
+          //   columnClassName: "table-header-cell",
+          // },
+          // {
+          //   id: "postReactions",
+          //   Header: "POST REACTIONS",
+          //   accessor: "postReactions",
+          //   minWidth: 120,
+          //   columnClassName: "table-header-cell",
+          // },
+          // {
+          //   id: "engagementCost",
+          //   Header: "ENGAGEMENT COST",
+          //   accessor: "engagementCost",
+          //   minWidth: 120,
+          //   columnClassName: "table-header-cell",
+          // },
           {
-            id: "engagement",
-            Header: "ENGAGEMENT",
-            accessor: "engagement",
-            minWidth: 120,
-            columnClassName: "table-header-cell",
-          },
-          {
-            id: "postReactions",
-            Header: "POST REACTIONS",
-            accessor: "postReactions",
-            minWidth: 120,
-            columnClassName: "table-header-cell",
-          },
-          {
-            id: "engagementCost",
-            Header: "ENGAGEMENT COST",
-            accessor: "engagementCost",
-            minWidth: 120,
+            id: "reach",
+            Header: "REACH",
+            accessor: "reach",
+            minWidth: 80,
             columnClassName: "table-header-cell",
           },
           {
             id: "linkClicks",
             Header: "LINK CLICKS",
-            accessor: "linkClicks",
+            accessor: "inline_link_clicks",
             minWidth: 120,
             columnClassName: "table-header-cell",
           },
           {
             id: "outboundClicks",
             Header: "OUTBOUND CLICKS",
-            accessor: "outboundClicks",
+            accessor: "outbound_clicks",
             minWidth: 120,
             columnClassName: "table-header-cell",
           },
@@ -119,8 +131,9 @@ function AdsTable({ data }: AdsTableProps) {
         style={{ minWidth: 1600 }}
         columns={columns}
         data={data}
-        emptyTableContent="No data."
+        emptyTableContent="There is no ads data available."
         isSelectable
+        isLoading={isLoading}
         density="condensed"
       />
     </div>
