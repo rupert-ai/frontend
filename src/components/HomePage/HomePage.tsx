@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./HomePage.css";
 import {
-  DropdownButton,
   DropdownMenu,
   Header,
   HeaderLogo,
+  Headline,
   IconButton,
   MenuDivider,
   MenuExtraContent,
@@ -14,9 +14,8 @@ import {
   Text,
   UserIcon,
 } from "@itwin/itwinui-react";
-import { SvgFlag, SvgHome, SvgNotification } from "@itwin/itwinui-icons-react";
+import { SvgFlag, SvgHome } from "@itwin/itwinui-icons-react";
 import AdsTable from "../AdsTable/AdsTable";
-import Toolbar from "../Toolbar/Toolbar";
 import { useAuth } from "../../services/useAuth";
 import { Ad, Backend } from "../../services/backend";
 
@@ -60,17 +59,17 @@ function HomePage() {
     </MenuItem>,
   ];
 
-  const adsMenuItems = useCallback(
-    () =>
-      ["Set 1", "Set 2", "Set 3", "Set 4"].map((set) => {
-        return (
-          <MenuItem key={set} value="set">
-            {set}
-          </MenuItem>
-        );
-      }),
-    []
-  );
+  // const adsMenuItems = useCallback(
+  //   () =>
+  //     ["Set 1", "Set 2", "Set 3", "Set 4"].map((set) => {
+  //       return (
+  //         <MenuItem key={set} value="set">
+  //           {set}
+  //         </MenuItem>
+  //       );
+  //     }),
+  //   []
+  // );
 
   const getAbbr = () => {
     const name = auth?.user?.name;
@@ -103,11 +102,11 @@ function HomePage() {
             Rupert AI
           </HeaderLogo>
         }
-        actions={[
-          <IconButton key={0} styleType="borderless">
-            <SvgNotification />
-          </IconButton>,
-        ]}
+        // actions={[
+        //   <IconButton key={0} styleType="borderless">
+        //     <SvgNotification />
+        //   </IconButton>,
+        // ]}
         userIcon={
           <DropdownMenu menuItems={userIconMenuItems}>
             <IconButton styleType="borderless">
@@ -127,9 +126,6 @@ function HomePage() {
             <SidenavButton startIcon={<SvgHome />} key={0}>
               Overview
             </SidenavButton>,
-            <SidenavButton startIcon={<SvgFlag />} key={1}>
-              Ads
-            </SidenavButton>,
           ]}
           expanderPlacement="hidden"
         />
@@ -143,7 +139,8 @@ function HomePage() {
             gap: 24,
           }}
         >
-          <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Headline>User Ads</Headline>
+          {/* <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Text as="h2">Ads</Text>
             <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
               <Text as="span" isMuted>
@@ -153,8 +150,8 @@ function HomePage() {
                 Ad set #1
               </DropdownButton>
             </span>
-          </span>
-          <Toolbar />
+          </span> */}
+          {/* <Toolbar /> */}
           {/* <div
         style={{
           display: "flex",

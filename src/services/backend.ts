@@ -17,6 +17,7 @@ export type Ad = {
   inline_link_clicks: number;
   outbound_clicks: number;
   created_at: string;
+  objective: string;
 };
 
 export class Backend {

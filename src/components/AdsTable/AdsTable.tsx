@@ -19,11 +19,16 @@ function AdsTable({ data, isLoading }: AdsTableProps) {
             id: "name",
             Header: "AD NAME",
             accessor: "name",
-            minWidth: 150,
+            minWidth: 180,
             Cell: (props: CellProps<Ad>) => (
               <>
                 <div className="table-ad-name-cell">
-                  <a href={props.row.original.image_url} download="ImageName">
+                  <a
+                    href={props.row.original.image_url}
+                    download="ImageName"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <img src={props.row.original.image_url} alt="Ad" />
                   </a>
                   <span>{props.row.original.name}</span>
@@ -45,7 +50,7 @@ function AdsTable({ data, isLoading }: AdsTableProps) {
             id: "impressions",
             Header: "IMPRESSIONS",
             accessor: "impressions",
-            minWidth: 150,
+            minWidth: 120,
             columnClassName: "table-header-cell",
           },
           {
@@ -60,7 +65,7 @@ function AdsTable({ data, isLoading }: AdsTableProps) {
             id: "clicks",
             Header: "CLICKS",
             accessor: "clicks",
-            width: 150,
+            width: 120,
             columnClassName: "table-header-cell",
           },
           {
@@ -103,6 +108,13 @@ function AdsTable({ data, isLoading }: AdsTableProps) {
             Header: "REACH",
             accessor: "reach",
             minWidth: 80,
+            columnClassName: "table-header-cell",
+          },
+          {
+            id: "objective",
+            Header: "OBJECTIVE",
+            accessor: "objective",
+            minWidth: 120,
             columnClassName: "table-header-cell",
           },
           {
