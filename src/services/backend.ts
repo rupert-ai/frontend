@@ -6,7 +6,7 @@ interface AdsResponse {
 
 export type Ad = {
   name: string;
-  image_url: string;
+  image_url?: string;
   clarity_score?: number;
   impressions: number;
   amount_spent: number;

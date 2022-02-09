@@ -9,8 +9,9 @@ const authContext = React.createContext<
   | {
       user?: FBUser;
       isSdkLoaded: boolean;
-      login: (onSuccess: () => void, onError: () => void) => void;
-      logout: () => void;
+      checked: boolean;
+      login: () => Promise<void>;
+      logout: () => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -27,58 +28,97 @@ export const useAuth = () => {
 function useProvideAuth() {
   const [isSdkLoaded, setIsSdkLoaded] = React.useState(false);
   const [user, setUser] = React.useState<FBUser>();
+  const [checked, setChecked] = React.useState(false);
 
-  React.useEffect(() => {
+  const loginStatus = React.useCallback(async () => {
+    const loginStatus = await FacebookAuth.getLoginStatus();
+
+    if (loginStatus.status === "connected") {
+      const me = await FacebookAuth.getMe();
+      if (!me.error) {
+        setUser({
+          ...me,
+          accessToken: loginStatus.authResponse?.accessToken,
+        });
+      } else {
+        setUser({
+          accessToken: loginStatus.authResponse?.accessToken,
+        });
+      }
+    }
+  }, []);
+
+  const checkStatus = async () => {
+    const loginStatus = await FacebookAuth.getLoginStatus();
+    if (loginStatus.status === "connected") {
+      const me = await FacebookAuth.getMe();
+      if (!me.error) {
+        setUser({
+          ...me,
+          accessToken: loginStatus.authResponse?.accessToken,
+        });
+      } else {
+        setUser({
+          accessToken: loginStatus.authResponse?.accessToken,
+        });
+      }
+    }
+
+    return loginStatus.status;
+  };
+
+  React.useLayoutEffect(() => {
     if (document.getElementById(FACEBOOK_SCRIPT_ID)) {
       setIsSdkLoaded(true);
       return;
     }
-    FacebookAuth.setAsyncSdk(() => {
+
+    const init = async () => {
+      await FacebookAuth.init();
       setIsSdkLoaded(true);
-    });
+    };
+
+    init();
     FacebookAuth.loadSdkAsynchronously();
   }, []);
 
-  const login = (onSuccess: () => void, onError: () => void) => {
+  React.useLayoutEffect(() => {
     if (!isSdkLoaded) {
       return;
     }
-    FacebookAuth.getLoginStatus((response) => {
-      if (response.status === "connected") {
-        FacebookAuth.getMe((user) => {
-          if (!user.error) {
+
+    checkStatus().then(() => setChecked(true));
+  }, [isSdkLoaded, loginStatus]);
+
+  const login = async (): Promise<void> => {
+    return new Promise(async (resolve, reject) => {
+      const status = await checkStatus();
+      if (status !== "connected") {
+        const loginResult = await FacebookAuth.login();
+        if (loginResult.status === "connected") {
+          const me = await FacebookAuth.getMe();
+          if (!me.error) {
             setUser({
-              ...user,
-              accessToken: response.authResponse?.accessToken,
-            });
-            onSuccess();
-          } else {
-            // need to logout and login again?
-          }
-        });
-      } else {
-        FacebookAuth.login((loginResponse) => {
-          if (loginResponse.status === "connected") {
-            FacebookAuth.getMe((user) => {
-              setUser({
-                ...user,
-                accessToken: response.authResponse?.accessToken,
-              });
-              onSuccess();
+              ...me,
+              accessToken: loginResult.authResponse?.accessToken,
             });
           } else {
-            onError();
+            setUser({
+              accessToken: loginResult.authResponse?.accessToken,
+            });
           }
-        });
+          resolve();
+        } else {
+          reject();
+        }
       }
+      resolve();
     });
   };
 
-  const logout = () => {
-    FacebookAuth.logout(() => {
-      setUser(undefined);
-    });
+  const logout = async () => {
+    await FacebookAuth.logout();
   };
 
-  return { user, isSdkLoaded, login, logout };
+  return { user, isSdkLoaded, checked, login, logout };
 }

@@ -14,7 +14,7 @@ import {
   Text,
   UserIcon,
 } from "@itwin/itwinui-react";
-import { SvgFlag, SvgHome } from "@itwin/itwinui-icons-react";
+import { SvgHome } from "@itwin/itwinui-icons-react";
 import AdsTable from "../AdsTable/AdsTable";
 import { useAuth } from "../../services/useAuth";
 import { Ad, Backend } from "../../services/backend";
@@ -35,9 +35,10 @@ function HomePage() {
         setIsSynced(true);
         setData(res.data);
       } else {
+        setData(res.data);
         setTimeout(() => {
           getData();
-        }, 500);
+        }, 4000);
       }
     };
 

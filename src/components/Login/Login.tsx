@@ -7,15 +7,13 @@ function Login() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    auth?.login(
-      () => {
-        navigate("/", { replace: true });
-      },
-      () => {
-        toaster.negative("Failed to login. Try again later.");
-      }
-    );
+  const handleLogin = async () => {
+    try {
+      await auth?.login();
+      navigate("/", { replace: true });
+    } catch {
+      toaster.negative("Failed to login. Try again later.");
+    }
   };
 
   return (

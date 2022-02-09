@@ -29,7 +29,9 @@ function AdsTable({ data, isLoading }: AdsTableProps) {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={props.row.original.image_url} alt="Ad" />
+                    {props.row.original.image_url && (
+                      <img src={props.row.original.image_url} alt="Ad" />
+                    )}
                   </a>
                   <span>{props.row.original.name}</span>
                 </div>
