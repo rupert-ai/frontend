@@ -7,9 +7,10 @@ import { CellProps } from "react-table";
 type AdsTableProps = {
   data: Ad[];
   isLoading: boolean;
+  isError: boolean;
 };
 
-function AdsTable({ data, isLoading }: AdsTableProps) {
+function AdsTable({ data, isLoading, isError }: AdsTableProps) {
   const columns = useMemo(
     () => [
       {
@@ -145,7 +146,11 @@ function AdsTable({ data, isLoading }: AdsTableProps) {
         style={{ minWidth: 1600 }}
         columns={columns}
         data={data}
-        emptyTableContent="There is no ads data available."
+        emptyTableContent={
+          isError
+            ? "Could not get data. Try again later."
+            : "There is no ads data available."
+        }
         isSelectable
         isLoading={isLoading}
         density="condensed"

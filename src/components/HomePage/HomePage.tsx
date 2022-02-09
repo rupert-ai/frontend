@@ -23,6 +23,7 @@ function HomePage() {
   const auth = useAuth();
   const [data, setData] = useState<Ad[]>([]);
   const [isSynced, setIsSynced] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (!auth?.user?.accessToken) {
@@ -30,15 +31,20 @@ function HomePage() {
     }
 
     const getData = async () => {
-      const res = await Backend.getAdsList(auth?.user?.accessToken ?? "");
-      if (res.synced) {
+      try {
+        const res = await Backend.getAdsList(auth?.user?.accessToken ?? "");
+        if (res.synced) {
+          setIsSynced(true);
+          setData(res.data);
+        } else {
+          setData(res.data);
+          setTimeout(() => {
+            getData();
+          }, 4000);
+        }
+      } catch {
         setIsSynced(true);
-        setData(res.data);
-      } else {
-        setData(res.data);
-        setTimeout(() => {
-          getData();
-        }, 4000);
+        setIsError(true);
       }
     };
 
@@ -176,7 +182,7 @@ function HomePage() {
           </DropdownButton>
         </div>
       </div> */}
-          <AdsTable data={data} isLoading={!isSynced} />
+          <AdsTable data={data} isLoading={!isSynced} isError={isError} />
         </div>
       </div>
     </>
