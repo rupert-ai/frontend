@@ -7,7 +7,7 @@ import Login from "./components/Login/Login";
 import { ProvideAuth } from "./services/useAuth";
 
 function App() {
-  useTheme("dark");
+  useTheme("dark", { highContrast: true });
 
   return (
     <div className="App">
