@@ -1,8 +1,9 @@
-import { Table } from "@itwin/itwinui-react";
-import { useMemo } from "react";
+import { InformationPanelWrapper, Table } from "@itwin/itwinui-react";
+import { useMemo, useState } from "react";
 import { Ad } from "../../services/backend";
 import "./AdsTable.scss";
 import { CellProps } from "react-table";
+import SidePanel from "../SidePanel/SidePanel";
 
 type AdsTableProps = {
   data: Ad[];
@@ -11,6 +12,13 @@ type AdsTableProps = {
 };
 
 function AdsTable({ data, isLoading, isError }: AdsTableProps) {
+  const [showPanel, setShowPanel] = useState(false);
+  const [currentAd, setCurrentAd] = useState<Ad>();
+  const showAdVision = (ad: Ad) => {
+    setCurrentAd(ad);
+    setShowPanel(true);
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -31,10 +39,15 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
                     rel="noreferrer"
                   >
                     {props.row.original.image_url && (
-                      <img src={props.row.original.image_url} alt="Ad" />
+                      <img
+                        src={props.row.original.image_url}
+                        alt={`${props.row.original.name} ad thumbnail`}
+                      />
                     )}
                   </a>
-                  <span>{props.row.original.name}</span>
+                  <span onClick={() => showAdVision(props.row.original)}>
+                    {props.row.original.name}
+                  </span>
                 </div>
               </>
             ),
@@ -142,19 +155,27 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <Table
-        style={{ minWidth: 1600 }}
-        columns={columns}
-        data={data}
-        emptyTableContent={
-          isError
-            ? "Could not get data. Try again later."
-            : "There is no ads data available."
-        }
-        isSelectable
-        isLoading={isLoading}
-        density="condensed"
-      />
+      <InformationPanelWrapper>
+        <SidePanel
+          ad={currentAd}
+          onClose={() => setShowPanel(false)}
+          isOpen={showPanel}
+        >
+          <Table
+            style={{ minWidth: 1600 }}
+            columns={columns}
+            data={data}
+            emptyTableContent={
+              isError
+                ? "Could not get data. Try again later."
+                : "There is no ads data available."
+            }
+            isSelectable
+            isLoading={isLoading}
+            density="condensed"
+          />
+        </SidePanel>
+      </InformationPanelWrapper>
     </div>
   );
 }

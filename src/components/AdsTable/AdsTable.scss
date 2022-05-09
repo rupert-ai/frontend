@@ -67,4 +67,22 @@
     display: flex;
     align-items: center;
   }
+  span {
+    color: var(--iui-color-foreground-primary);
+  }
+}
+
+.iui-tile-thumbnail {
+  height: 250px;
+  border-bottom: 0;
+  border-top-left-radius: 4%;
+  border-top-right-radius: 4%;
+}
+
+.iui-tile {
+  border-radius: 4%;
+}
+
+.iui-button.iui-active::after {
+  content: none;
 }
