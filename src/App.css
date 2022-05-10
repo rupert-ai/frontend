@@ -107,4 +107,5 @@
   font-family: Satoshi;
   overflow: auto;
   overflow: overlay;
+  font-size: 16px !important;
 }
