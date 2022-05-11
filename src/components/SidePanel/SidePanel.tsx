@@ -20,15 +20,25 @@ type SidePanelProps = {
   ad: Ad | undefined;
   isOpen: boolean;
   onClose?: () => void;
+  relative?: boolean;
 };
 
-function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
+function SidePanel({
+  children,
+  ad,
+  isOpen,
+  onClose,
+  relative = true,
+}: SidePanelProps) {
   const [index, setIndex] = useState(0);
 
   return (
     <>
       {children}
-      <InformationPanel isOpen={isOpen && !!ad}>
+      <InformationPanel
+        isOpen={isOpen && !!ad}
+        className={`${!relative ? "panel-relative" : undefined}`}
+      >
         <InformationPanelHeader
           onClose={() => {
             onClose?.();
@@ -60,13 +70,19 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
           >
             {index === 0 && (
               <>
+                <InformationPanelContent>
+                  <h3 className="iui-text-spacing">
+                    Clarity score: {ad?.clarity_score}
+                  </h3>
+                </InformationPanelContent>
+                <hr />
                 <h3 className="iui-text-spacing">Text</h3>
                 <InformationPanelContent>
                   {ad?.vision.fullTextAnnotation.pages?.map(
                     (page, pageIndex) => {
                       return (
                         <ExpandableBlock title={`Page ${pageIndex}`}>
-                          Confidence {page.confidence}
+                          Confidence {page.confidence.toFixed(2)}
                           {/* {page.blocks?.map((block, blockIndex) => {
                           return (
                             <ExpandableBlock title={`Block ${blockIndex}`}>
@@ -89,7 +105,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                     {ad?.vision.imagePropertiesAnnotation.dominantColors.colors?.map(
                       (color) => {
                         return (
-                          <Tooltip content={color.score}>
+                          <Tooltip content={color.score} key={color.hex}>
                             <ColorSwatch
                               color={{
                                 r: color.color.red,
@@ -123,7 +139,9 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                           <span>Tilt: {face.tiltAngle}</span>
                           <span>Pan: {face.panAngle}</span>
                         </div>
-                        <div>Confidence: {face.detectionConfidence}</div>
+                        <div>
+                          Confidence: {face.detectionConfidence.toFixed(2)}
+                        </div>
                       </>
                     );
                   })}
@@ -134,7 +152,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                   {ad?.vision.localizedObjectAnnotations?.map((obj) => {
                     return (
                       <div>
-                        {obj.name}: {obj.score}
+                        {obj.name}: {obj.score.toFixed(2)}
                       </div>
                     );
                   })}
@@ -148,7 +166,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                     {ad?.vision.labelAnnotations?.map((label) => {
                       return (
                         <div>
-                          {label.description}: {label.score}
+                          {label.description}: {label.score.toFixed(2)}
                         </div>
                       );
                     })}
@@ -172,6 +190,20 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                   </div>
                 </InformationPanelContent>
               </>
+            )}
+            {index === 1 && (
+              <div
+                style={{ display: "flex", gap: 16, flexDirection: "column" }}
+              >
+                <div>Impressions: {ad?.impressions?.toFixed(2)}</div>
+                <div>Amount Spent: {ad?.amount_spent?.toFixed(2)}</div>
+                <div>Clicks: {ad?.clicks?.toFixed(2)}</div>
+                <div>CPC: {ad?.cpc?.toFixed(2)}</div>
+                <div>CTR: {ad?.ctr?.toFixed(2)}</div>
+                <div>Reach: {ad?.reach?.toFixed(2)}</div>
+                <div>Link Clicks: {ad?.inline_link_clicks?.toFixed(2)}</div>
+                <div>Outbound Clicks: {ad?.outbound_clicks?.toFixed(2)}</div>
+              </div>
             )}
           </HorizontalTabs>
         </InformationPanelBody>

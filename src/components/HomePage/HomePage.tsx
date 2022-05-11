@@ -15,8 +15,8 @@ function HomePage() {
   const [showPanel, setShowPanel] = useState(false);
   const [currentAd, setCurrentAd] = useState<Ad>();
   const toggleAdVision = (ad: Ad) => {
-    setCurrentAd(showPanel ? undefined : ad);
-    setShowPanel((prev) => !prev);
+    setCurrentAd(ad);
+    setShowPanel(true);
   };
 
   useEffect(() => {
@@ -54,7 +54,6 @@ function HomePage() {
         display: "flex",
         flexDirection: "column",
         gap: 24,
-        position: "relative",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -90,6 +89,7 @@ function HomePage() {
               setShowPanel(false);
               setCurrentAd(undefined);
             }}
+            relative={false}
           >
             <div
               style={{

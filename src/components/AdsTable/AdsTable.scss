@@ -5,7 +5,7 @@
 }
 
 .sticky-name.sticky-name {
-  left: 48px;
+  left: 0;
   z-index: 1;
   background-color: var(--iui-color-background-3);
   position: sticky;
@@ -13,7 +13,7 @@
 }
 
 .sticky-name-cell.sticky-name-cell {
-  left: 48px;
+  left: 0;
   @include sticky-row-cell();
   box-shadow: 2px 0 0 var(--iui-color-background-2);
 }
@@ -39,6 +39,7 @@
     }
     &:hover {
       background-color: initial;
+      cursor: pointer;
     }
     > .iui-cell:first-child {
       border-left: 1px solid transparent;
