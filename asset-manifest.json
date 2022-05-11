@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.223612af.css",
-    "main.js": "/static/js/main.8dc113e7.js",
+    "main.css": "/static/css/main.0ac9f821.css",
+    "main.js": "/static/js/main.d4c3a4f3.js",
     "static/js/787.9c5622c8.chunk.js": "/static/js/787.9c5622c8.chunk.js",
     "static/media/Satoshi-VariableItalic.woff2": "/static/media/Satoshi-VariableItalic.9d501e440d7109a57c88.woff2",
     "static/media/Satoshi-Variable.woff2": "/static/media/Satoshi-Variable.353a66cdd8922bb63107.woff2",
@@ -16,12 +16,12 @@
     "static/media/Satoshi-LightItalic.woff2": "/static/media/Satoshi-LightItalic.540a6dd2e29f70e15477.woff2",
     "static/media/Satoshi-Light.woff2": "/static/media/Satoshi-Light.df8f06167ee6fd05a131.woff2",
     "index.html": "/index.html",
-    "main.223612af.css.map": "/static/css/main.223612af.css.map",
-    "main.8dc113e7.js.map": "/static/js/main.8dc113e7.js.map",
+    "main.0ac9f821.css.map": "/static/css/main.0ac9f821.css.map",
+    "main.d4c3a4f3.js.map": "/static/js/main.d4c3a4f3.js.map",
     "787.9c5622c8.chunk.js.map": "/static/js/787.9c5622c8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.223612af.css",
-    "static/js/main.8dc113e7.js"
+    "static/css/main.0ac9f821.css",
+    "static/js/main.d4c3a4f3.js"
   ]
 }
