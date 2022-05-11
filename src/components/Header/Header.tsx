@@ -1,6 +1,5 @@
 import {
   DropdownMenu,
-  IconButton,
   MenuDivider,
   MenuExtraContent,
   MenuItem,

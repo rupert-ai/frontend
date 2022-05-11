@@ -1,4 +1,4 @@
-import { InformationPanelWrapper, Table } from "@itwin/itwinui-react";
+import { Table } from "@itwin/itwinui-react";
 import { useMemo, useState } from "react";
 import { Ad } from "../../services/backend";
 import "./AdsTable.scss";
