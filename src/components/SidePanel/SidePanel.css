@@ -1,0 +1,15 @@
+.iui-information-panel .iui-information-body {
+  padding-left: 24px;
+}
+
+.iui-information-panel .iui-information-header {
+  background-color: #161616;
+}
+
+.iui-tabs.iui-default .iui-tab::after {
+  content: none;
+}
+
+iui-tab iui-active {
+  color: inherit;
+}
