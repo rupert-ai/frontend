@@ -1,7 +1,7 @@
 import React from "react";
 import { FacebookAuth, FACEBOOK_SCRIPT_ID, UserResponse } from "./facebook";
 
-interface FBUser extends UserResponse {
+export interface FBUser extends UserResponse {
   accessToken?: string;
 }
 
@@ -117,7 +117,10 @@ function useProvideAuth() {
   };
 
   const logout = async () => {
-    await FacebookAuth.logout();
+    const loginStatus = await FacebookAuth.getLoginStatus();
+    if (loginStatus.status === "connected") {
+      await FacebookAuth.logout();
+    }
   };
 
   return { user, isSdkLoaded, checked, login, logout };

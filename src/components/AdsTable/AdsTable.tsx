@@ -45,9 +45,7 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
                       />
                     )}
                   </a>
-                  <span onClick={() => showAdVision(props.row.original)}>
-                    {props.row.original.name}
-                  </span>
+                  {props.row.original.name}
                 </div>
               </>
             ),
@@ -154,8 +152,8 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
   );
 
   return (
-    <div style={{ overflowX: "auto" }}>
-      <InformationPanelWrapper>
+    <div style={{ position: "relative" }}>
+      <div style={{ overflow: "auto" }}>
         <SidePanel
           ad={currentAd}
           onClose={() => setShowPanel(false)}
@@ -173,9 +171,11 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
             isSelectable
             isLoading={isLoading}
             density="condensed"
+            selectionMode="single"
+            onRowClick={(_, row) => showAdVision(row.original)}
           />
         </SidePanel>
-      </InformationPanelWrapper>
+      </div>
     </div>
   );
 }

@@ -20,15 +20,25 @@ type SidePanelProps = {
   ad: Ad | undefined;
   isOpen: boolean;
   onClose?: () => void;
+  relative?: boolean;
 };
 
-function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
+function SidePanel({
+  children,
+  ad,
+  isOpen,
+  onClose,
+  relative = true,
+}: SidePanelProps) {
   const [index, setIndex] = useState(0);
 
   return (
     <>
       {children}
-      <InformationPanel isOpen={isOpen && !!ad}>
+      <InformationPanel
+        isOpen={isOpen && !!ad}
+        className={`${!relative ? "panel-relative" : undefined}`}
+      >
         <InformationPanelHeader
           onClose={() => {
             onClose?.();
@@ -55,17 +65,24 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
               <Tab key="Details" label="Details" />,
               <Tab key="Statistics" label="Statistics" />,
             ]}
+            type="pill"
             onTabSelected={setIndex}
           >
             {index === 0 && (
               <>
-                <Leading>Text</Leading>
+                <InformationPanelContent>
+                  <h3 className="iui-text-spacing">
+                    Clarity score: {ad?.clarity_score}
+                  </h3>
+                </InformationPanelContent>
+                <hr />
+                <h3 className="iui-text-spacing">Text</h3>
                 <InformationPanelContent>
                   {ad?.vision.fullTextAnnotation.pages?.map(
                     (page, pageIndex) => {
                       return (
                         <ExpandableBlock title={`Page ${pageIndex}`}>
-                          Confidence {page.confidence}
+                          Confidence {page.confidence.toFixed(2)}
                           {/* {page.blocks?.map((block, blockIndex) => {
                           return (
                             <ExpandableBlock title={`Block ${blockIndex}`}>
@@ -83,12 +100,12 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Colors</Leading>
+                  <h3 className="iui-text-spacing">Colors</h3>
                   <div style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                     {ad?.vision.imagePropertiesAnnotation.dominantColors.colors?.map(
                       (color) => {
                         return (
-                          <Tooltip content={color.score}>
+                          <Tooltip content={color.score} key={color.hex}>
                             <ColorSwatch
                               color={{
                                 r: color.color.red,
@@ -105,7 +122,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Faces</Leading>
+                  <h3 className="iui-text-spacing">Faces</h3>
                   {ad?.vision.faceAnnotations?.map((face, faceIndex) => {
                     return (
                       <>
@@ -122,32 +139,34 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                           <span>Tilt: {face.tiltAngle}</span>
                           <span>Pan: {face.panAngle}</span>
                         </div>
-                        <div>Confidence: {face.detectionConfidence}</div>
+                        <div>
+                          Confidence: {face.detectionConfidence.toFixed(2)}
+                        </div>
                       </>
                     );
                   })}
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Localized objects</Leading>
+                  <h3 className="iui-text-spacing">Localized objects</h3>
                   {ad?.vision.localizedObjectAnnotations?.map((obj) => {
                     return (
                       <div>
-                        {obj.name}: {obj.score}
+                        {obj.name}: {obj.score.toFixed(2)}
                       </div>
                     );
                   })}
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Labels</Leading>
+                  <h3 className="iui-text-spacing">Labels</h3>
                   <div
                     style={{ display: "flex", gap: 4, flexDirection: "column" }}
                   >
                     {ad?.vision.labelAnnotations?.map((label) => {
                       return (
                         <div>
-                          {label.description}: {label.score}
+                          {label.description}: {label.score.toFixed(2)}
                         </div>
                       );
                     })}
@@ -155,7 +174,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Safe search</Leading>
+                  <h3 className="iui-text-spacing">Safe search</h3>
                   <div
                     style={{ display: "flex", gap: 4, flexDirection: "column" }}
                   >
@@ -171,6 +190,20 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                   </div>
                 </InformationPanelContent>
               </>
+            )}
+            {index === 1 && (
+              <div
+                style={{ display: "flex", gap: 16, flexDirection: "column" }}
+              >
+                <div>Impressions: {ad?.impressions?.toFixed(2)}</div>
+                <div>Amount Spent: {ad?.amount_spent?.toFixed(2)}</div>
+                <div>Clicks: {ad?.clicks?.toFixed(2)}</div>
+                <div>CPC: {ad?.cpc?.toFixed(2)}</div>
+                <div>CTR: {ad?.ctr?.toFixed(2)}</div>
+                <div>Reach: {ad?.reach?.toFixed(2)}</div>
+                <div>Link Clicks: {ad?.inline_link_clicks?.toFixed(2)}</div>
+                <div>Outbound Clicks: {ad?.outbound_clicks?.toFixed(2)}</div>
+              </div>
             )}
           </HorizontalTabs>
         </InformationPanelBody>

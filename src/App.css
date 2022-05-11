@@ -105,7 +105,12 @@
   height: 100vh;
   background-color: #000;
   font-family: Satoshi;
-  overflow: auto;
-  overflow: overlay;
+  overflow-y: auto;
+  overflow-y: overlay;
   font-size: 16px !important;
+}
+
+body {
+  overflow: hidden;
+  position: relative;
 }

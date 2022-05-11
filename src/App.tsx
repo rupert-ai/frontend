@@ -12,8 +12,8 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
       <ProvideAuth>
+        <Header />
         <BrowserRouter basename={process.env.PUBLIC_URL}>
           <Routes>
             <Route
