@@ -67,20 +67,29 @@
     display: flex;
     align-items: center;
   }
-  span {
-    color: var(--iui-color-foreground-primary);
-  }
 }
 
 .iui-tile-thumbnail {
-  height: 250px;
   border-bottom: 0;
   border-top-left-radius: 4%;
   border-top-right-radius: 4%;
+  height: initial;
+  aspect-ratio: 1/1;
 }
 
 .iui-tile {
   border-radius: 4%;
+  width: initial;
+}
+
+.iui-tile .iui-tile-content {
+  height: 50px;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.iui-tile .iui-tile-content .iui-tile-name {
+  margin-bottom: 0;
 }
 
 .iui-button.iui-active::after {

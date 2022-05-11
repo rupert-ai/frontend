@@ -55,11 +55,12 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
               <Tab key="Details" label="Details" />,
               <Tab key="Statistics" label="Statistics" />,
             ]}
+            type="pill"
             onTabSelected={setIndex}
           >
             {index === 0 && (
               <>
-                <Leading>Text</Leading>
+                <h3 className="iui-text-spacing">Text</h3>
                 <InformationPanelContent>
                   {ad?.vision.fullTextAnnotation.pages?.map(
                     (page, pageIndex) => {
@@ -83,7 +84,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Colors</Leading>
+                  <h3 className="iui-text-spacing">Colors</h3>
                   <div style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                     {ad?.vision.imagePropertiesAnnotation.dominantColors.colors?.map(
                       (color) => {
@@ -105,7 +106,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Faces</Leading>
+                  <h3 className="iui-text-spacing">Faces</h3>
                   {ad?.vision.faceAnnotations?.map((face, faceIndex) => {
                     return (
                       <>
@@ -129,7 +130,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Localized objects</Leading>
+                  <h3 className="iui-text-spacing">Localized objects</h3>
                   {ad?.vision.localizedObjectAnnotations?.map((obj) => {
                     return (
                       <div>
@@ -140,7 +141,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Labels</Leading>
+                  <h3 className="iui-text-spacing">Labels</h3>
                   <div
                     style={{ display: "flex", gap: 4, flexDirection: "column" }}
                   >
@@ -155,7 +156,7 @@ function SidePanel({ children, ad, isOpen, onClose }: SidePanelProps) {
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
-                  <Leading>Safe search</Leading>
+                  <h3 className="iui-text-spacing">Safe search</h3>
                   <div
                     style={{ display: "flex", gap: 4, flexDirection: "column" }}
                   >

@@ -10,6 +10,14 @@
   content: none;
 }
 
-iui-tab iui-active {
+.iui-tabs .iui-tab.iui-active {
   color: inherit;
+}
+
+.iui-tabs.iui-animated::after {
+  background-color: rgba(141,141,141,0.32);
+}
+
+hr {
+  border-color: rgba(255,255,255,0.1)
 }

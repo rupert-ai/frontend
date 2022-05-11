@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import "./HomePage.css";
-import {
-  ButtonGroup,
-  Headline,
-  IconButton,
-  InformationPanelWrapper,
-  Tile,
-} from "@itwin/itwinui-react";
+import { ButtonGroup, Headline, IconButton, Tile } from "@itwin/itwinui-react";
 import AdsTable from "../AdsTable/AdsTable";
 import { useAuth } from "../../services/useAuth";
 import { Ad, Backend } from "../../services/backend";
@@ -53,80 +46,77 @@ function HomePage() {
   }, [auth?.user?.accessToken]);
 
   return (
-    <InformationPanelWrapper>
-      <div style={{ display: "flex", height: "calc(100% - 57px)" }}>
-        <div
-          style={{
-            flexGrow: 1,
-            padding: "24px 48px",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            gap: 24,
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Headline style={{ margin: 0 }}>User Ads</Headline>
-            <ButtonGroup>
-              <IconButton
-                key="grid-button"
-                isActive={viewType === "grid"}
-                onClick={() => setViewType("grid")}
-                styleType="borderless"
-              >
-                <SvgGrid />
-              </IconButton>
-              <IconButton
-                key="list-button"
-                isActive={viewType === "list"}
-                onClick={() => {
-                  setCurrentAd(undefined);
-                  setViewType("list");
-                }}
-                styleType="borderless"
-              >
-                <SvgList />
-              </IconButton>
-            </ButtonGroup>
-          </div>
-          {viewType === "grid" && (
-            <div>
-              <SidePanel
-                isOpen={showPanel}
-                ad={currentAd}
-                onClose={() => {
-                  setShowPanel(false);
-                  setCurrentAd(undefined);
-                }}
-              >
-                <div
-                  style={{
-                    display: "grid",
-                    gap: 24,
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(min(100%, 256px), 1fr))",
-                    padding: "3px 0",
-                  }}
-                >
-                  {data.map((el) => (
-                    <Tile
-                      isActionable
-                      isSelected={currentAd?.name === el.name}
-                      name={el.name}
-                      thumbnail={el.image_url}
-                      onClick={() => toggleAdVision(el)}
-                    />
-                  ))}
-                </div>
-              </SidePanel>
-            </div>
-          )}
-          {viewType === "list" && (
-            <AdsTable data={data} isLoading={!isSynced} isError={isError} />
-          )}
-        </div>
+    <div
+      style={{
+        flexGrow: 1,
+        padding: "24px 48px",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        gap: 24,
+        position: "relative",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Headline style={{ margin: 0 }}>User Ads</Headline>
+        <ButtonGroup>
+          <IconButton
+            key="grid-button"
+            isActive={viewType === "grid"}
+            onClick={() => setViewType("grid")}
+            styleType="borderless"
+          >
+            <SvgGrid />
+          </IconButton>
+          <IconButton
+            key="list-button"
+            isActive={viewType === "list"}
+            onClick={() => {
+              setCurrentAd(undefined);
+              setViewType("list");
+            }}
+            styleType="borderless"
+          >
+            <SvgList />
+          </IconButton>
+        </ButtonGroup>
       </div>
-    </InformationPanelWrapper>
+      {viewType === "grid" && (
+        <div>
+          <SidePanel
+            isOpen={showPanel}
+            ad={currentAd}
+            onClose={() => {
+              setShowPanel(false);
+              setCurrentAd(undefined);
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                gap: 24,
+                gridTemplateColumns:
+                  "repeat(auto-fill, minmax(min(100%, 256px), 1fr))",
+                padding: "3px 0",
+              }}
+            >
+              {data.map((el) => (
+                <Tile
+                  isActionable
+                  isSelected={currentAd?.name === el.name}
+                  name={el.name}
+                  thumbnail={el.image_url}
+                  onClick={() => toggleAdVision(el)}
+                />
+              ))}
+            </div>
+          </SidePanel>
+        </div>
+      )}
+      {viewType === "list" && (
+        <AdsTable data={data} isLoading={!isSynced} isError={isError} />
+      )}
+    </div>
   );
 }
 
