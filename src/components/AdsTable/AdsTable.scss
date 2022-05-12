@@ -70,7 +70,7 @@
   }
 }
 
-.iui-tile-thumbnail {
+.iui-tile-thumbnail.iui-tile-thumbnail {
   border-bottom: 0;
   border-top-left-radius: 4%;
   border-top-right-radius: 4%;
@@ -78,21 +78,21 @@
   aspect-ratio: 1/1;
 }
 
-.iui-tile {
+.iui-tile.iui-tile {
   border-radius: 4%;
   width: initial;
 }
 
-.iui-tile .iui-tile-content {
+.iui-tile.iui-tile .iui-tile-content {
   height: 50px;
   box-sizing: border-box;
   justify-content: center;
 }
 
-.iui-tile .iui-tile-content .iui-tile-name {
+.iui-tile.iui-tile .iui-tile-content .iui-tile-name {
   margin-bottom: 0;
 }
 
-.iui-button.iui-active::after {
+.iui-button.iui-button.iui-active::after {
   content: none;
 }
