@@ -102,7 +102,7 @@
   --iui-color-foreground-primary: #3e68ff;
   --iui-icons-color-primary: #3e68ff;
 
-  height: 100%;
+  height: 100vh;
   background-color: #000;
   font-family: Satoshi;
   overflow-y: auto;
@@ -110,13 +110,20 @@
   font-size: 16px !important;
 }
 
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  .App {
+    height: -webkit-fill-available;
+  }
+}
+
 body {
   overflow: hidden;
   position: relative;
-  height: 100%;
+  /* height: 100%; */
 }
 
-html, #root {
-  height: 100%;
+ html, #root {
+  /* height: 100%; */
   overflow: hidden;
 }
