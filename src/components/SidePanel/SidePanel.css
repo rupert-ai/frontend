@@ -1,20 +1,20 @@
-.iui-information-panel .iui-information-body {
+.iui-information-panel.iui-information-panel .iui-information-body {
   padding-left: 24px;
 }
 
-.iui-information-panel .iui-information-header {
+.iui-information-panel.iui-information-panel .iui-information-header {
   background-color: #161616;
 }
 
-.iui-tabs.iui-default .iui-tab::after {
+.iui-tabs.iui-tabs.iui-default .iui-tab::after {
   content: none;
 }
 
-.iui-tabs .iui-tab.iui-active {
+.iui-tabs.iui-tabs .iui-tab.iui-active {
   color: inherit;
 }
 
-.iui-tabs.iui-animated::after {
+.iui-tabs.iui-tabs.iui-animated::after {
   background-color: rgba(141,141,141,0.32);
 }
 
