@@ -78,7 +78,7 @@ function SidePanel({
                 <hr />
                 <h3 className="iui-text-spacing">Text</h3>
                 <InformationPanelContent>
-                  {ad?.vision.fullTextAnnotation.pages?.map(
+                  {ad?.vision.fullTextAnnotation?.pages?.map(
                     (page, pageIndex) => {
                       return (
                         <ExpandableBlock title={`Page ${pageIndex}`}>
@@ -96,13 +96,17 @@ function SidePanel({
                       );
                     }
                   )}
-                  <Text>Full text: ${ad?.vision.fullTextAnnotation.text}</Text>
+                  {ad?.vision.fullTextAnnotation?.text && (
+                    <Text>
+                      Full text: ${ad?.vision.fullTextAnnotation?.text}
+                    </Text>
+                  )}
                 </InformationPanelContent>
                 <hr />
                 <InformationPanelContent>
                   <h3 className="iui-text-spacing">Colors</h3>
                   <div style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-                    {ad?.vision.imagePropertiesAnnotation.dominantColors.colors?.map(
+                    {ad?.vision.imagePropertiesAnnotation?.dominantColors.colors?.map(
                       (color) => {
                         return (
                           <Tooltip content={color.score} key={color.hex}>
@@ -175,19 +179,25 @@ function SidePanel({
                 <hr />
                 <InformationPanelContent>
                   <h3 className="iui-text-spacing">Safe search</h3>
-                  <div
-                    style={{ display: "flex", gap: 4, flexDirection: "column" }}
-                  >
-                    <div>Adult: {ad?.vision.safeSearchAnnotation.adult}</div>
-                    <div>
-                      Medical: {ad?.vision.safeSearchAnnotation.medical}
+                  {ad?.vision.safeSearchAnnotation && (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 4,
+                        flexDirection: "column",
+                      }}
+                    >
+                      <div>Adult: {ad?.vision.safeSearchAnnotation?.adult}</div>
+                      <div>
+                        Medical: {ad?.vision.safeSearchAnnotation?.medical}
+                      </div>
+                      <div>Racy: {ad?.vision.safeSearchAnnotation?.racy}</div>
+                      <div>Spoof: {ad?.vision.safeSearchAnnotation?.spoof}</div>
+                      <div>
+                        Violence: {ad?.vision.safeSearchAnnotation?.violence}
+                      </div>
                     </div>
-                    <div>Racy: {ad?.vision.safeSearchAnnotation.racy}</div>
-                    <div>Spoof: {ad?.vision.safeSearchAnnotation.spoof}</div>
-                    <div>
-                      Violence: {ad?.vision.safeSearchAnnotation.violence}
-                    </div>
-                  </div>
+                  )}
                 </InformationPanelContent>
               </>
             )}
