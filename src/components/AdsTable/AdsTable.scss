@@ -74,8 +74,10 @@
   border-bottom: 0;
   border-top-left-radius: 4%;
   border-top-right-radius: 4%;
-  height: initial;
-  aspect-ratio: 1/1;
+  @supports (aspect-ratio: 1/1) {
+    height: initial;
+    aspect-ratio: 1/1;
+  }
 }
 
 .iui-tile.iui-tile {
