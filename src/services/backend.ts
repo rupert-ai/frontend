@@ -151,6 +151,7 @@ type AdVision = {
   localizedObjectAnnotations?: LocalizedObjectAnnotationsEntity[] | null;
   safeSearchAnnotation?: SafeSearchAnnotation;
   textAnnotations?: TextAnnotationsEntity[] | null;
+  error?: { code: number; message: string };
 };
 
 export type Ad = {
