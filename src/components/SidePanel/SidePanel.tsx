@@ -138,7 +138,13 @@ function SidePanel({
                       <h3 className="iui-text-spacing">Faces</h3>
                       {ad?.vision.faceAnnotations?.map((face, faceIndex) => {
                         return (
-                          <>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: 4,
+                              flexDirection: "column",
+                            }}
+                          >
                             <Leading>Face #{faceIndex}:</Leading>
                             <div>Joy: {face.joyLikelihood}</div>
                             <div>Sorrow: {face.sorrowLikelihood}</div>
@@ -147,15 +153,13 @@ function SidePanel({
                             <div>Exposed: {face.underExposedLikelihood}</div>
                             <div>Blurred: {face.blurredLikelihood}</div>
                             <div>Headwear: {face.headwearLikelihood}</div>
-                            <div style={{ display: "flex", gap: 2 }}>
-                              <span>Roll: {face.rollAngle}</span>
-                              <span>Tilt: {face.tiltAngle}</span>
-                              <span>Pan: {face.panAngle}</span>
-                            </div>
+                            <div>Roll: {face.rollAngle.toFixed(2)}</div>
+                            <div>Tilt: {face.tiltAngle.toFixed(2)}</div>
+                            <div>Pan: {face.panAngle.toFixed(2)}</div>
                             <div>
                               Confidence: {face.detectionConfidence.toFixed(2)}
                             </div>
-                          </>
+                          </div>
                         );
                       })}
                     </InformationPanelContent>
