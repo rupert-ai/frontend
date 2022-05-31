@@ -143,14 +143,15 @@ export interface FaceAnnotationsEntity {
 }
 
 type AdVision = {
-  cropHintsAnnotation: CropHintsAnnotation;
+  cropHintsAnnotation?: CropHintsAnnotation;
   faceAnnotations?: FaceAnnotationsEntity[] | null;
-  fullTextAnnotation: FullTextAnnotation;
-  imagePropertiesAnnotation: ImagePropertiesAnnotation;
+  fullTextAnnotation?: FullTextAnnotation;
+  imagePropertiesAnnotation?: ImagePropertiesAnnotation;
   labelAnnotations?: LabelAnnotationsEntity[] | null;
   localizedObjectAnnotations?: LocalizedObjectAnnotationsEntity[] | null;
-  safeSearchAnnotation: SafeSearchAnnotation;
+  safeSearchAnnotation?: SafeSearchAnnotation;
   textAnnotations?: TextAnnotationsEntity[] | null;
+  error?: { code: number; message: string };
 };
 
 export type Ad = {

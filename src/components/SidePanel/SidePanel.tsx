@@ -76,14 +76,21 @@ function SidePanel({
                   </h3>
                 </InformationPanelContent>
                 <hr />
-                <h3 className="iui-text-spacing">Text</h3>
-                <InformationPanelContent>
-                  {ad?.vision.fullTextAnnotation.pages?.map(
-                    (page, pageIndex) => {
-                      return (
-                        <ExpandableBlock title={`Page ${pageIndex}`}>
-                          Confidence {page.confidence.toFixed(2)}
-                          {/* {page.blocks?.map((block, blockIndex) => {
+                {ad?.vision.error ? (
+                  <>
+                    <h3 className="iui-text-spacing">Error</h3>
+                    <div>{ad?.vision.error.message}</div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="iui-text-spacing">Text</h3>
+                    <InformationPanelContent>
+                      {ad?.vision.fullTextAnnotation?.pages?.map(
+                        (page, pageIndex) => {
+                          return (
+                            <ExpandableBlock title={`Page ${pageIndex}`}>
+                              Confidence {page.confidence.toFixed(2)}
+                              {/* {page.blocks?.map((block, blockIndex) => {
                           return (
                             <ExpandableBlock title={`Block ${blockIndex}`}>
                               {block.paragraphs?.map((par) => (
@@ -92,103 +99,132 @@ function SidePanel({
                             </ExpandableBlock>
                           );
                         })} */}
-                        </ExpandableBlock>
-                      );
-                    }
-                  )}
-                  <Text>Full text: ${ad?.vision.fullTextAnnotation.text}</Text>
-                </InformationPanelContent>
-                <hr />
-                <InformationPanelContent>
-                  <h3 className="iui-text-spacing">Colors</h3>
-                  <div style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-                    {ad?.vision.imagePropertiesAnnotation.dominantColors.colors?.map(
-                      (color) => {
-                        return (
-                          <Tooltip content={color.score} key={color.hex}>
-                            <ColorSwatch
-                              color={{
-                                r: color.color.red,
-                                g: color.color.green,
-                                b: color.color.blue,
-                                a: color.color.alpha,
-                              }}
-                            />
-                          </Tooltip>
-                        );
-                      }
-                    )}
-                  </div>
-                </InformationPanelContent>
-                <hr />
-                <InformationPanelContent>
-                  <h3 className="iui-text-spacing">Faces</h3>
-                  {ad?.vision.faceAnnotations?.map((face, faceIndex) => {
-                    return (
-                      <>
-                        <Leading>Face #{faceIndex}:</Leading>
-                        <div>Joy: {face.joyLikelihood}</div>
-                        <div>Sorrow: {face.sorrowLikelihood}</div>
-                        <div>Anger: {face.angerLikelihood}</div>
-                        <div>Surprise: {face.surpriseLikelihood}</div>
-                        <div>Exposed: {face.underExposedLikelihood}</div>
-                        <div>Blurred: {face.blurredLikelihood}</div>
-                        <div>Headwear: {face.headwearLikelihood}</div>
-                        <div style={{ display: "flex", gap: 2 }}>
-                          <span>Roll: {face.rollAngle}</span>
-                          <span>Tilt: {face.tiltAngle}</span>
-                          <span>Pan: {face.panAngle}</span>
-                        </div>
-                        <div>
-                          Confidence: {face.detectionConfidence.toFixed(2)}
-                        </div>
-                      </>
-                    );
-                  })}
-                </InformationPanelContent>
-                <hr />
-                <InformationPanelContent>
-                  <h3 className="iui-text-spacing">Localized objects</h3>
-                  {ad?.vision.localizedObjectAnnotations?.map((obj) => {
-                    return (
-                      <div>
-                        {obj.name}: {obj.score.toFixed(2)}
+                            </ExpandableBlock>
+                          );
+                        }
+                      )}
+                      {ad?.vision.fullTextAnnotation?.text && (
+                        <Text>
+                          Full text: ${ad?.vision.fullTextAnnotation?.text}
+                        </Text>
+                      )}
+                    </InformationPanelContent>
+                    <hr />
+                    <InformationPanelContent>
+                      <h3 className="iui-text-spacing">Colors</h3>
+                      <div
+                        style={{ display: "flex", gap: 2, flexWrap: "wrap" }}
+                      >
+                        {ad?.vision.imagePropertiesAnnotation?.dominantColors.colors?.map(
+                          (color) => {
+                            return (
+                              <Tooltip content={color.score} key={color.hex}>
+                                <ColorSwatch
+                                  color={{
+                                    r: color.color.red,
+                                    g: color.color.green,
+                                    b: color.color.blue,
+                                    a: color.color.alpha,
+                                  }}
+                                />
+                              </Tooltip>
+                            );
+                          }
+                        )}
                       </div>
-                    );
-                  })}
-                </InformationPanelContent>
-                <hr />
-                <InformationPanelContent>
-                  <h3 className="iui-text-spacing">Labels</h3>
-                  <div
-                    style={{ display: "flex", gap: 4, flexDirection: "column" }}
-                  >
-                    {ad?.vision.labelAnnotations?.map((label) => {
-                      return (
-                        <div>
-                          {label.description}: {label.score.toFixed(2)}
+                    </InformationPanelContent>
+                    <hr />
+                    <InformationPanelContent>
+                      <h3 className="iui-text-spacing">Faces</h3>
+                      {ad?.vision.faceAnnotations?.map((face, faceIndex) => {
+                        return (
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: 4,
+                              flexDirection: "column",
+                            }}
+                          >
+                            <Leading>Face #{faceIndex}:</Leading>
+                            <div>Joy: {face.joyLikelihood}</div>
+                            <div>Sorrow: {face.sorrowLikelihood}</div>
+                            <div>Anger: {face.angerLikelihood}</div>
+                            <div>Surprise: {face.surpriseLikelihood}</div>
+                            <div>Exposed: {face.underExposedLikelihood}</div>
+                            <div>Blurred: {face.blurredLikelihood}</div>
+                            <div>Headwear: {face.headwearLikelihood}</div>
+                            <div>Roll: {face.rollAngle.toFixed(2)}</div>
+                            <div>Tilt: {face.tiltAngle.toFixed(2)}</div>
+                            <div>Pan: {face.panAngle.toFixed(2)}</div>
+                            <div>
+                              Confidence: {face.detectionConfidence.toFixed(2)}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </InformationPanelContent>
+                    <hr />
+                    <InformationPanelContent>
+                      <h3 className="iui-text-spacing">Localized objects</h3>
+                      {ad?.vision.localizedObjectAnnotations?.map((obj) => {
+                        return (
+                          <div>
+                            {obj.name}: {obj.score.toFixed(2)}
+                          </div>
+                        );
+                      })}
+                    </InformationPanelContent>
+                    <hr />
+                    <InformationPanelContent>
+                      <h3 className="iui-text-spacing">Labels</h3>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: 4,
+                          flexDirection: "column",
+                        }}
+                      >
+                        {ad?.vision.labelAnnotations?.map((label) => {
+                          return (
+                            <div>
+                              {label.description}: {label.score.toFixed(2)}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </InformationPanelContent>
+                    <hr />
+                    <InformationPanelContent>
+                      <h3 className="iui-text-spacing">Safe search</h3>
+                      {ad?.vision.safeSearchAnnotation && (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: 4,
+                            flexDirection: "column",
+                          }}
+                        >
+                          <div>
+                            Adult: {ad?.vision.safeSearchAnnotation?.adult}
+                          </div>
+                          <div>
+                            Medical: {ad?.vision.safeSearchAnnotation?.medical}
+                          </div>
+                          <div>
+                            Racy: {ad?.vision.safeSearchAnnotation?.racy}
+                          </div>
+                          <div>
+                            Spoof: {ad?.vision.safeSearchAnnotation?.spoof}
+                          </div>
+                          <div>
+                            Violence:{" "}
+                            {ad?.vision.safeSearchAnnotation?.violence}
+                          </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </InformationPanelContent>
-                <hr />
-                <InformationPanelContent>
-                  <h3 className="iui-text-spacing">Safe search</h3>
-                  <div
-                    style={{ display: "flex", gap: 4, flexDirection: "column" }}
-                  >
-                    <div>Adult: {ad?.vision.safeSearchAnnotation.adult}</div>
-                    <div>
-                      Medical: {ad?.vision.safeSearchAnnotation.medical}
-                    </div>
-                    <div>Racy: {ad?.vision.safeSearchAnnotation.racy}</div>
-                    <div>Spoof: {ad?.vision.safeSearchAnnotation.spoof}</div>
-                    <div>
-                      Violence: {ad?.vision.safeSearchAnnotation.violence}
-                    </div>
-                  </div>
-                </InformationPanelContent>
+                      )}
+                    </InformationPanelContent>
+                  </>
+                )}
               </>
             )}
             {index === 1 && (
