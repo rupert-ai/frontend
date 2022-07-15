@@ -1,0 +1,12 @@
+.dropdown-menu {
+  max-width: 30vw;
+}
+
+.dropdown-button {
+  margin-left: 8px;
+  max-width: 20vw;
+  .iui-button-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

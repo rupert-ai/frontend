@@ -169,6 +169,12 @@ export type Ad = {
   created_at: string;
   objective: string;
   vision: AdVision;
+  account_id: string;
+  account_name: string;
+  adset_id: string;
+  adset_name: string;
+  campaign_id: string;
+  campaign_name: string;
 };
 
 export interface BoundingPolyOrFdBoundingPolyOrBoundingBox {
