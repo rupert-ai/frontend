@@ -111,16 +111,16 @@
 }
 
 body {
-  overflow: hidden;
-  position: relative;
-  /* height: 100%; */
   --iui-color-background-border: rgba(255, 255, 255, 0.05);
   --iui-color-background-2: #000;
   --iui-color-background-1: #262626;
   --iui-color-background-primary: #3e68ff;
   --iui-color-foreground-primary: #3e68ff;
   --iui-icons-color-primary: #3e68ff;
-  --iui-surface-background-color: var(--iui-color-background-3)
+  --iui-surface-background-color: var(--iui-color-background-3);
+  overflow: hidden;
+  position: relative;
+  /* height: 100%; */
 }
 
  html, #root {
