@@ -1,10 +1,5 @@
 import { SvgCaretDownSmall } from "@itwin/itwinui-icons-react";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuProps,
-  Text,
-} from "@itwin/itwinui-react";
+import { Button, DropdownMenu, DropdownMenuProps } from "@itwin/itwinui-react";
 import "./BreadcrumbItem.scss";
 
 type BreadcrumbItemProps = {
