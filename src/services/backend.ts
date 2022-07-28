@@ -192,14 +192,18 @@ export interface Position {
 
 export class Backend {
   public static getAdsList = async (
-    accessToken: string
+    accessToken: string,
+    page = 1
   ): Promise<AdsResponse> => {
-    const response = await fetch(`${process.env.REACT_APP_API_BASE}/ads`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_BASE}/ads?limit=100&page=${page}`,
+      {
+        headers: {
+          Authorization: accessToken,
+          Accept: "application/json",
+        },
+      }
+    );
     if (response.ok) {
       return response.json();
     }

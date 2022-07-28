@@ -9,9 +9,15 @@ type AdsTableProps = {
   data: Ad[];
   isLoading: boolean;
   isError: boolean;
+  onBottomReached: () => void;
 };
 
-function AdsTable({ data, isLoading, isError }: AdsTableProps) {
+function AdsTable({
+  data,
+  isLoading,
+  isError,
+  onBottomReached,
+}: AdsTableProps) {
   const [showPanel, setShowPanel] = useState(false);
   const [currentAd, setCurrentAd] = useState<Ad>();
   const showAdVision = (ad: Ad) => {
@@ -29,6 +35,7 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
             Header: "AD NAME",
             accessor: "name",
             minWidth: 180,
+            sticky: "left",
             Cell: (props: CellProps<Ad>) => (
               <>
                 <div className="table-ad-name-cell">
@@ -49,8 +56,6 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
                 </div>
               </>
             ),
-            columnClassName: "sticky-name table-header-cell",
-            cellClassName: "sticky-name-cell",
           },
           {
             id: "clarityScore",
@@ -152,31 +157,30 @@ function AdsTable({ data, isLoading, isError }: AdsTableProps) {
   );
 
   return (
-    <div style={{ position: "relative" }}>
-      <div style={{ overflow: "auto" }}>
-        <SidePanel
-          ad={currentAd}
-          onClose={() => setShowPanel(false)}
-          isOpen={showPanel}
-        >
-          <Table
-            style={{ minWidth: 1600 }}
-            columns={columns}
-            data={data}
-            emptyTableContent={
-              isError
-                ? "Could not get data. Try again later."
-                : "There is no ads data available."
-            }
-            isSelectable
-            isLoading={isLoading}
-            density="condensed"
-            selectionMode="single"
-            onRowClick={(_, row) => showAdVision(row.original)}
-          />
-        </SidePanel>
-      </div>
-    </div>
+    <>
+      <SidePanel
+        ad={currentAd}
+        onClose={() => setShowPanel(false)}
+        isOpen={showPanel}
+      >
+        <Table
+          style={{ minWidth: 0, overflow: "hidden" }}
+          columns={columns}
+          data={data}
+          emptyTableContent={
+            isError
+              ? "Could not get data. Try again later."
+              : "There is no ads data available."
+          }
+          isSelectable
+          isLoading={isLoading}
+          density="condensed"
+          selectionMode="single"
+          onRowClick={(_, row) => showAdVision(row.original)}
+          onBottomReached={onBottomReached}
+        />
+      </SidePanel>
+    </>
   );
 }
 

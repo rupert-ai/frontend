@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ButtonGroup,
   Headline,
   IconButton,
   MenuItem,
-  Tile,
 } from "@itwin/itwinui-react";
 import AdsTable from "../AdsTable/AdsTable";
 import { useAuth } from "../../services/useAuth";
@@ -12,6 +11,7 @@ import { Ad, Backend } from "../../services/backend";
 import { SvgChevronRight, SvgGrid, SvgList } from "@itwin/itwinui-icons-react";
 import SidePanel from "../SidePanel/SidePanel";
 import BreadcrumbItem from "../Breadcrumbs/BreadcrumbItem";
+import AdsList from "../AdsList/AdsList";
 
 function HomePage() {
   const auth = useAuth();
@@ -38,30 +38,44 @@ function HomePage() {
     name: string;
   } | null>(null);
 
-  useEffect(() => {
-    if (!auth?.user?.accessToken) {
-      return;
-    }
+  const currentPage = useRef(1);
+  const allLoaded = useRef(false);
 
-    const getData = async () => {
+  const getData = useCallback(
+    async (override = false) => {
       try {
-        const res = await Backend.getAdsList(auth?.user?.accessToken ?? "");
+        const res = await Backend.getAdsList(
+          auth?.user?.accessToken ?? "",
+          currentPage.current
+        );
         if (res.synced) {
           setIsSynced(true);
-          setData(res.data);
+          setData((data) => {
+            const allData = override ? res.data : [...data, ...res.data];
+            allLoaded.current = allData.length === res.total;
+            return allData;
+          });
         } else {
           setData(res.data);
           setTimeout(() => {
-            getData();
+            getData(true);
           }, 4000);
         }
       } catch {
         setIsSynced(true);
         setIsError(true);
       }
-    };
+    },
+    [auth?.user?.accessToken]
+  );
+
+  useEffect(() => {
+    if (!auth?.user?.accessToken) {
+      return;
+    }
 
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.user?.accessToken]);
 
   useEffect(() => {
@@ -213,6 +227,14 @@ function HomePage() {
     />
   );
 
+  const onBottomReached = useCallback(() => {
+    if (allLoaded.current) {
+      return;
+    }
+    ++currentPage.current;
+    getData();
+  }, [getData]);
+
   return (
     <div
       style={{
@@ -222,6 +244,9 @@ function HomePage() {
         display: "flex",
         flexDirection: "column",
         gap: 24,
+        height: viewType === "list" ? "calc(100% - 86px)" : undefined,
+        boxSizing: "border-box",
+        maxWidth: 1900,
       }}
     >
       <div
@@ -296,30 +321,22 @@ function HomePage() {
             }}
             relative={false}
           >
-            <div
-              style={{
-                display: "grid",
-                gap: 24,
-                gridTemplateColumns:
-                  "repeat(auto-fill, minmax(min(100%, 256px), 1fr))",
-                padding: "3px 0",
-              }}
-            >
-              {adsData.map((el) => (
-                <Tile
-                  isActionable
-                  isSelected={currentAd?.name === el.name}
-                  name={el.name}
-                  thumbnail={el.image_url}
-                  onClick={() => toggleAdVision(el)}
-                />
-              ))}
-            </div>
+            <AdsList
+              data={adsData}
+              currentAd={currentAd}
+              onAdClick={toggleAdVision}
+              onBottomReached={onBottomReached}
+            />
           </SidePanel>
         </div>
       )}
       {viewType === "list" && (
-        <AdsTable data={adsData} isLoading={!isSynced} isError={isError} />
+        <AdsTable
+          data={adsData}
+          isLoading={!isSynced}
+          isError={isError}
+          onBottomReached={onBottomReached}
+        />
       )}
     </div>
   );
