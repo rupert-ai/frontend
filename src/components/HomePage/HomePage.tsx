@@ -265,7 +265,7 @@ function HomePage() {
             flexWrap: "wrap",
           }}
         >
-          <Headline style={{ margin: 0 }}>User Ads</Headline>
+          <Headline style={{ margin: 0 }}>User Ads ({adsData.length})</Headline>
           <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <BreadcrumbItem
               label="Ad Account"
