@@ -1,0 +1,6 @@
+.rai-test-page {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  flex-grow: 1;
+}
