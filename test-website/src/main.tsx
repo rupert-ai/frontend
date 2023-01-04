@@ -7,7 +7,7 @@ import { TestPage } from "./pages/TestPage";
 import { Theme } from "carbon-components-react";
 import PrivateRoute from "./PrivateRoute";
 import { ProvideAuth } from "./services/useAuth";
-import ResultPage from "./pages/ResultPage";
+import { HistoryPage } from "./pages/HistoryPage";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "test",
+        path: "/",
         element: (
           <PrivateRoute>
             <TestPage />
@@ -23,10 +23,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "result",
+        path: "/history",
         element: (
           <PrivateRoute>
-            <ResultPage />
+            <HistoryPage />
           </PrivateRoute>
         ),
       },

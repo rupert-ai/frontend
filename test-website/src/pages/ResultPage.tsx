@@ -1,21 +1,22 @@
 import { Button } from "carbon-components-react";
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { ResearchItem } from "../services/backend";
+import PreviewImage from "../components/PreviewImage";
 
 export function ResultPage() {
-  const { state }: { state: ResearchItem[] } = useLocation();
+  // const { state }: { state: ResearchItem[] } = useLocation();
+  const { state }: { state: File[] } = useLocation();
 
   const mainImage = React.useMemo(() => {
-    let bestItem: ResearchItem = { clarity_score: "0" } as ResearchItem;
-    for (let i = 0; i < state.length; ++i) {
-      bestItem =
-        Number(bestItem.clarity_score) > Number(state[i].clarity_score)
-          ? bestItem
-          : state[i];
-    }
+    // let bestItem: ResearchItem = { clarity_score: "0" } as ResearchItem;
+    // for (let i = 0; i < state.length; ++i) {
+    //   bestItem =
+    //     Number(bestItem.clarity_score) > Number(state[i].clarity_score)
+    //       ? bestItem
+    //       : state[i];
+    // }
 
-    return bestItem;
+    return state[0];
   }, [state]);
 
   return (
@@ -24,7 +25,8 @@ export function ResultPage() {
         <h2>Your test has finished.</h2>
         <small>Here are your test results:</small>
         <div style={{ display: "flex", gap: 8 }}>
-          <img src={mainImage.image_original} width="128" height="128" />
+          {/* <img src={mainImage.image_original} width="128" height="128" /> */}
+          <PreviewImage image={mainImage} />
           <div
             style={{
               display: "flex",
@@ -53,7 +55,8 @@ export function ResultPage() {
           >
             {state.map((i) => (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <img src={i.image_original} width="256" height="256" />
+                {/* <img src={i.image_original} width="256" height="256" /> */}
+                <PreviewImage image={i} />
                 <div>{i.name}</div>
               </div>
             ))}

@@ -3,9 +3,10 @@ import "./PreviewImage.css";
 
 type PreviewImageProps = {
   image: File;
+  style?: React.CSSProperties;
 };
 
-export function PreviewImage({ image }: PreviewImageProps) {
+export function PreviewImage({ image, style }: PreviewImageProps) {
   const [url, setUrl] = React.useState<string>();
 
   React.useEffect(() => {
@@ -20,6 +21,7 @@ export function PreviewImage({ image }: PreviewImageProps) {
       src={url}
       alt={`Ad image ${image.name}`}
       className="rai-preview-image"
+      style={style}
     />
   );
 }

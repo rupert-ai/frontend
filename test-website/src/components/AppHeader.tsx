@@ -21,7 +21,7 @@ export function AppHeader() {
   const handleLogin = async () => {
     try {
       await auth?.login();
-      navigate("/test", { replace: true });
+      navigate("/", { replace: true });
     } catch {
       console.error("Failed to login. Try again later.");
     }
@@ -39,10 +39,12 @@ export function AppHeader() {
         Rupert
       </HeaderName>
       <HeaderNavigation aria-label="Rupert">
-        <HeaderMenuItem element={Link} to="/test">
+        <HeaderMenuItem element={Link} to="/">
           Create a test
         </HeaderMenuItem>
-        <HeaderMenuItem href="#">History</HeaderMenuItem>
+        <HeaderMenuItem element={Link} to="/history">
+          History
+        </HeaderMenuItem>
       </HeaderNavigation>
       {!auth?.user?.accessToken && (
         <HeaderGlobalBar>

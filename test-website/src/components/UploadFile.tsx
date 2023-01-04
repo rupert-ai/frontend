@@ -13,7 +13,11 @@ export function UploadFile({ onFilesAdded }: UploadFileProps) {
 
   const onAddFiles = React.useCallback(
     (evt: React.DragEvent, { addedFiles }: { addedFiles: File[] }) => {
-      onFilesAdded(addedFiles);
+      const files = addedFiles.filter((f) => f.size <= 1024 * 1024 * 5);
+      if (files.length !== addedFiles.length) {
+        alert("Some files exceeded 5mb");
+      }
+      onFilesAdded(files);
     },
     []
   );
