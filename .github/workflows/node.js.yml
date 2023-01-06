@@ -10,10 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    defaults: 
-      run:
-        working-directory: ${{ github.workspace }}/test-website
+    runs-on: ubuntu-latest     
 
     strategy:
       matrix:
@@ -27,11 +24,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+      working-directory: ./test-website
     - run: npm run build
-    
+      working-directory: ./test-website
     - name: Deploy to Github Pages
       uses: peaceiris/actions-gh-pages@v3.7.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+        publish_dir: ./test-website./dist
     
