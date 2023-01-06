@@ -4,14 +4,18 @@ import {
   SideNavItems,
   Switcher,
   SwitcherItem,
+  Tile,
 } from "carbon-components-react";
 import React from "react";
+import { useLocation } from "react-router-dom";
 import PreviewImage from "../components/PreviewImage";
 import { useTestsContext } from "../hooks/useTestsContext";
 
 export function HistoryPage() {
   const { runs } = useTestsContext();
-  const [currentRun, setCurrentRun] = React.useState(0);
+  const location = useLocation();
+  const data = location.state;
+  const [currentRun, setCurrentRun] = React.useState(data?.lastRun ?? 0);
 
   return (
     <>
@@ -32,15 +36,37 @@ export function HistoryPage() {
               <SwitcherItem
                 isSelected={index === currentRun}
                 onClick={() => setCurrentRun(index)}
-              >{`Test #${index}`}</SwitcherItem>
+              >{`Test #${index + 1}`}</SwitcherItem>
             ))}
           </Switcher>
         </SideNavItems>
       </SideNav>
-      <Content>
-        <div>
-          {runs[currentRun].files.map((file) => (
-            <PreviewImage image={file} />
+      <Content style={{ width: "calc(100% - 16rem)" }}>
+        <div
+          style={{
+            display: "grid",
+            gridGap: 24,
+            gridTemplateColumns:
+              "repeat(auto-fill, minmax(MIN(100%, 256px), 1fr))",
+          }}
+        >
+          {runs[currentRun]?.files.map((file, index) => (
+            <div>
+              <Tile
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 32,
+                  width: "100%",
+                }}
+              >
+                <div>{index === 0 ? "CHAMPION" : `#${index + 1}`}</div>
+                <PreviewImage
+                  image={file}
+                  style={{ width: "auto", height: "auto" }}
+                />
+              </Tile>
+            </div>
           ))}
         </div>
       </Content>

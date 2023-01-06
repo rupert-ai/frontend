@@ -15,7 +15,7 @@ function App() {
           style={{
             overflow: "auto",
             display: "flex",
-            width: "calc(100% - 20rem)",
+            width: "100%",
           }}
         >
           <Outlet />

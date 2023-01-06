@@ -2,5 +2,5 @@
   display: flex;
   gap: 16px;
   flex-direction: column;
-  flex-grow: 1;
+  width: calc(100% - 20rem);
 }

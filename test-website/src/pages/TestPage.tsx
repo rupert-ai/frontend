@@ -19,7 +19,7 @@ export function TestPage() {
   const auth = useAuth();
   const [files, setFiles] = React.useState<File[]>([]);
   const [testState, setTestState] = React.useState<"loading" | "done">();
-  const { setRuns } = useTestsContext();
+  const { setRuns, runs } = useTestsContext();
   const navigate = useNavigate();
 
   const onFilesAdded = React.useCallback((files: File[]) => {
@@ -168,11 +168,19 @@ export function TestPage() {
             setTestState(undefined);
             setFiles([]);
           }}
-          onRequestSubmit={() => navigate("./history")}
+          onRequestSubmit={() =>
+            navigate("./history", { state: { lastRun: runs.length - 1 } })
+          }
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-            <p>Predicted champion</p>
-            <PreviewImage image={files[0]} />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+              <p>Predicted champion</p>
+              <p>{files[0].name}</p>
+              <PreviewImage
+                image={files[0]}
+                style={{ width: 150, height: 150 }}
+              />
+            </div>
           </div>
         </Modal>
       )}
