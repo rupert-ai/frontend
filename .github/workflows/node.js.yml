@@ -20,6 +20,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: npm ci
     - run: npm run build
+    - run: cp -f CNAME ./build
     - name: Deploy to Github Pages
       uses: peaceiris/actions-gh-pages@v3.7.3
       with:
