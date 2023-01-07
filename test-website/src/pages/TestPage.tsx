@@ -11,12 +11,12 @@ import { Image } from "@carbon/icons-react";
 import PreviewImage from "../components/PreviewImage";
 import "./TestPage.css";
 import { Backend } from "../services/backend";
-import { useAuth } from "../services/useAuth";
+// import { useAuth } from "../services/useAuth";
 import { useTestsContext } from "../hooks/useTestsContext";
 import { useNavigate } from "react-router-dom";
 
 export function TestPage() {
-  const auth = useAuth();
+  // const auth = useAuth();
   const [files, setFiles] = React.useState<File[]>([]);
   const [testState, setTestState] = React.useState<"loading" | "done">();
   const { setRuns, runs } = useTestsContext();
@@ -35,12 +35,12 @@ export function TestPage() {
     e.preventDefault();
     // console.log(e.target.images);
     // const response = await Backend.upload(auth?.user?.accessToken || "", files);
-    const data = await Backend.getResult(
-      auth?.user?.accessToken || "",
-      // response.batch_id
-      2
-    );
-    console.log(data);
+    // const data = await Backend.getResult(
+    //   auth?.user?.accessToken || "",
+    //   // response.batch_id
+    //   2
+    // );
+    // console.log(data);
     setTimeout(() => {
       setRuns((runs) => [...runs, { files }]);
       setTestState("done");

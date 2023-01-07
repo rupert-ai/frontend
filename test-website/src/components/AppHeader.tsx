@@ -12,20 +12,20 @@ import {
   Switcher,
 } from "carbon-components-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../services/useAuth";
+// import { useAuth } from "../services/useAuth";
 
 export function AppHeader() {
-  const auth = useAuth();
-  const navigate = useNavigate();
+  // const auth = useAuth();
+  // const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      await auth?.login();
-      navigate("/", { replace: true });
-    } catch {
-      console.error("Failed to login. Try again later.");
-    }
-  };
+  // const handleLogin = async () => {
+  // try {
+  //   await auth?.login();
+  //   navigate("/", { replace: true });
+  // } catch {
+  //   console.error("Failed to login. Try again later.");
+  // }
+  // };
 
   return (
     <Header aria-label="Rupert">
@@ -46,13 +46,13 @@ export function AppHeader() {
           History
         </HeaderMenuItem>
       </HeaderNavigation>
-      {!auth?.user?.accessToken && (
+      {/* {!auth?.user?.accessToken && (
         <HeaderGlobalBar>
           <HeaderGlobalAction aria-label="Login" onClick={handleLogin}>
             <Button>Login</Button>
           </HeaderGlobalAction>
         </HeaderGlobalBar>
-      )}
+      )} */}
     </Header>
   );
 }
