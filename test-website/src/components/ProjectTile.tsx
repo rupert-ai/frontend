@@ -1,4 +1,4 @@
-import { Tile } from "carbon-components-react";
+import { ClickableTile } from "carbon-components-react";
 import PredictedChampionText from "./PredictedChampionText";
 import PreviewImage from "./PreviewImage";
 
@@ -9,7 +9,7 @@ type ProjectTileProps = {
 
 export function ProjectTile({ image, label, style, ...rest }: ProjectTileProps) {
 
-  return <Tile
+  return <ClickableTile
     style={{
       display: "flex",
       flexDirection: "column",
@@ -19,11 +19,11 @@ export function ProjectTile({ image, label, style, ...rest }: ProjectTileProps) 
     }}
     {...rest}
   >
-    <div>{label}</div>
+    <div style={{wordBreak: "break-all"}}>{label}</div>
     <PredictedChampionText />
     <PreviewImage
       image={image}
-      style={{ width: "auto", height: "auto" }}
+      style={{ width: "auto", height: "auto", objectFit: "cover" }}
     />
-  </Tile>
+  </ClickableTile>
 }

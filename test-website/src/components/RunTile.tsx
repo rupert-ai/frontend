@@ -15,15 +15,23 @@ export function RunTile({image, label, isChamp, style, ...rest}: RunTileProps) {
     flexDirection: "column",
     gap: 32,
     width: "100%",
+    height: "100%",
     ...style
   }}
   {...rest}
 >
   {isChamp ? <PredictedChampionText /> : <div>{label}</div>}
-  <div>{image.name}</div>
   <PreviewImage
     image={image}
-    style={{ width: "auto", height: "auto" }}
+    style={{ width: "auto", height: "auto", objectFit: "cover"}}
   />
+  <div style={{
+    wordBreak: "break-all",
+    display: "-webkit-box",
+    "-webkit-line-clamp": "2",
+    "-webkit-box-orient": "vertical",  
+    overflow: "hidden" }}>
+      {image.name}
+  </div>
 </Tile>
 }

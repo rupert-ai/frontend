@@ -55,7 +55,7 @@ export function AppHeader() {
         </HeaderGlobalBar>
       )} */}
       <SideNav aria-label="Side navigation" expanded>
-        <SideNavItems>
+        <SideNavItems className="rai-side-nav-items">
           <SideNavLink renderIcon={AddAlt} element={Link} to="/" aria-current={pathname === '/' ? "page" : undefined}>
             Create new project
           </SideNavLink>

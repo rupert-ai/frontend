@@ -16,20 +16,6 @@ export function TilesList<T>({data, renderer}: TilesListProps<T>) {
   {data.map((instance, index) => (
     <div key={index}>
       {renderer(instance, index)}
-      {/* <Tile
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 32,
-          width: "100%",
-        }}
-      >
-        {index === 0 ? <PredictedChampionText /> : <p>`#${index + 1}`</p>}
-        <PreviewImage
-          image={instance.image}
-          style={{ width: "auto", height: "auto" }}
-        />
-      </Tile> */}
     </div>
   ))}
 </div>

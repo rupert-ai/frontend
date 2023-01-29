@@ -24,7 +24,8 @@ export function RunsPage() {
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>{`Test #${Number(id) + 1}`}</BreadcrumbItem>
       </Breadcrumb>
-      <TilesList<{file: File}> data={data} renderer={(instance, index) => <RunTile label={`#${index}`} image={instance.file} isChamp={index === 0} />} />
+      <h4>{`Test #${Number(id) + 1}`}</h4>
+      <TilesList<{file: File}> data={data} renderer={(instance, index) => <RunTile label={`#${index + 1}`} image={instance.file} isChamp={index === 0} />} />
     </div>
   );
 }
