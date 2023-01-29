@@ -7,7 +7,8 @@ import { TestPage } from "./pages/TestPage";
 import { Theme } from "carbon-components-react";
 import PrivateRoute from "./PrivateRoute";
 import { ProvideAuth } from "./services/useAuth";
-import { HistoryPage } from "./pages/HistoryPage";
+import { ProjectsPage } from "./pages/ProjectsPage";
+import { RunsPage } from "./pages/RunsPage";
 
 const router = createBrowserRouter([
   {
@@ -23,10 +24,18 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/history",
+        path: "/projects/:id",
         element: (
           <PrivateRoute>
-            <HistoryPage />
+            <RunsPage />
+          </PrivateRoute>
+        )
+      },
+      {
+        path: "/projects",
+        element: (
+          <PrivateRoute>
+            <ProjectsPage />
           </PrivateRoute>
         ),
       },

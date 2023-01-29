@@ -1,18 +1,20 @@
 import {
-  Button,
   Header,
   HeaderGlobalAction,
   HeaderGlobalBar,
-  HeaderMenu,
   HeaderMenuButton,
-  HeaderMenuItem,
   HeaderName,
-  HeaderNavigation,
   Search,
-  Switcher,
+  SideNav,
+  SideNavDivider,
+  SideNavItem,
+  SideNavItems,
+  SideNavLink,
+  SideNavLinkText,
 } from "carbon-components-react";
-import { Link, useNavigate } from "react-router-dom";
-// import { useAuth } from "../services/useAuth";
+import { Link, useLocation } from "react-router-dom";
+import { AddAlt, ListChecked, MachineLearning, MachineLearningModel, Folder, UserAvatar } from "@carbon/icons-react";
+import "./AppHeader.css"
 
 export function AppHeader() {
   // const auth = useAuth();
@@ -26,26 +28,25 @@ export function AppHeader() {
   //   console.error("Failed to login. Try again later.");
   // }
   // };
+  const { pathname } = useLocation();
 
   return (
     <Header aria-label="Rupert">
-      <HeaderMenuButton
+      {/* <HeaderMenuButton
         aria-label="Open menu"
         isCollapsible
         //  onClick={onClickSideNavExpand}
         //  isActive={isSideNavExpanded}
-      />
-      <HeaderName element={Link} to="/" prefix="">
-        Rupert
+      /> */}
+      <HeaderName element={Link} to="/" prefix="" className="rai-header-name">
+        Rupert AI
       </HeaderName>
-      <HeaderNavigation aria-label="Rupert">
-        <HeaderMenuItem element={Link} to="/">
-          Create a test
-        </HeaderMenuItem>
-        <HeaderMenuItem element={Link} to="/history">
-          History
-        </HeaderMenuItem>
-      </HeaderNavigation>
+        <Search labelText="Search projects and assets" placeholder="Search projects and assets" size="lg" className="rai-header-search-input" />
+      <HeaderGlobalBar>
+        <HeaderGlobalAction>
+          <UserAvatar size="20" />
+        </HeaderGlobalAction>
+      </HeaderGlobalBar>
       {/* {!auth?.user?.accessToken && (
         <HeaderGlobalBar>
           <HeaderGlobalAction aria-label="Login" onClick={handleLogin}>
@@ -53,6 +54,26 @@ export function AppHeader() {
           </HeaderGlobalAction>
         </HeaderGlobalBar>
       )} */}
+      <SideNav aria-label="Side navigation" expanded>
+        <SideNavItems>
+          <SideNavLink renderIcon={AddAlt} element={Link} to="/" aria-current={pathname === '/' ? "page" : undefined}>
+            Create new project
+          </SideNavLink>
+          <SideNavLink renderIcon={ListChecked} element={Link} to="/projects" aria-current={pathname.includes('/projects') ? "page" : undefined}>
+            Projects
+          </SideNavLink>
+          <SideNavDivider />
+          <SideNavLink aria-disabled renderIcon={MachineLearning}>
+            Rupert AI tools
+          </SideNavLink>
+          <SideNavLink aria-disabled renderIcon={MachineLearningModel}>
+            AI training
+          </SideNavLink>
+          <SideNavLink aria-disabled renderIcon={Folder}>
+            Assets
+          </SideNavLink>
+        </SideNavItems>
+      </SideNav>
     </Header>
   );
 }

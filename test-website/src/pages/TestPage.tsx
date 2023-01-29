@@ -2,7 +2,6 @@ import {
   Button,
   FileUploaderItem,
   HeaderPanel,
-  Loading,
   Modal,
 } from "carbon-components-react";
 import React from "react";
@@ -14,6 +13,8 @@ import { Backend } from "../services/backend";
 // import { useAuth } from "../services/useAuth";
 import { useTestsContext } from "../hooks/useTestsContext";
 import { useNavigate } from "react-router-dom";
+import CustomLoader from "../components/CustomLoader";
+import PredictedChampionText from "../components/PredictedChampionText";
 
 export function TestPage() {
   // const auth = useAuth();
@@ -44,7 +45,7 @@ export function TestPage() {
     setTimeout(() => {
       setRuns((runs) => [...runs, { files }]);
       setTestState("done");
-    }, 10000);
+    }, 5000);
   };
 
   return (
@@ -81,10 +82,12 @@ export function TestPage() {
             style={{
               padding: "1rem 1rem 0 1rem",
               display: "flex",
-              flexDirection: "column",
+              gap: 8,
+              justifyContent: "space-between"
             }}
           >
-            <h5>Your ad images</h5>
+            <h4>Your ad images{!!files.length && ` (${files.length})`}</h4>
+            {!!files.length && <Button kind="ghost" size="sm" onClick={() => setFiles([])}>Remove all</Button>}
           </div>
           {files.length === 0 && (
             <div
@@ -105,13 +108,13 @@ export function TestPage() {
               display: "flex",
               flexDirection: "column",
               gap: 8,
-              overflow: "overlay",
+              overflow: "overlay"
             }}
           >
             {files.map((f, index) => (
               <div
                 key={f.name}
-                style={{ display: "flex", paddingLeft: "1rem" }}
+                style={{ display: "flex", paddingLeft: "1rem"}}
               >
                 <PreviewImage image={f} />
                 <FileUploaderItem
@@ -136,7 +139,7 @@ export function TestPage() {
       {testState === "loading" && (
         <Modal
           open
-          modalHeading="Test #1"
+          modalHeading={`Test #${runs.length + 1}`}
           modalLabel="In progress"
           passiveModal
         >
@@ -146,11 +149,8 @@ export function TestPage() {
               the champion ad that had the highest performance in terms of
               click-through rate, conversion rate, and cost-per-click.
             </p>
-            <Loading
-              description="Testing Ads..."
-              withOverlay={false}
-              style={{ alignSelf: "center" }}
-            />
+            <CustomLoader />
+            <div style={{ alignSelf: "center" }}>Testing Ads...</div>
             <small style={{ alignSelf: "center" }}>
               Please wait, this might take few minutes
             </small>
@@ -160,7 +160,7 @@ export function TestPage() {
       {testState === "done" && (
         <Modal
           open
-          modalHeading="Test #1"
+          modalHeading={`Test #${runs.length}`}
           modalLabel="Finished"
           primaryButtonText="See full report"
           secondaryButtonText="Close"
@@ -169,17 +169,22 @@ export function TestPage() {
             setFiles([]);
           }}
           onRequestSubmit={() =>
-            navigate("./history", { state: { lastRun: runs.length - 1 } })
+            navigate(`./projects/${runs.length - 1}`)
           }
         >
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-              <p>Predicted champion</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+            <p>
+              This report present the test results of the image ads, including
+              the champion ad that had the highest performance in terms of
+              click-through rate, conversion rate, and cost-per-click.
+            </p>
+            <div style={{ alignSelf: "center", display: "flex", flexDirection: "column", gap: 16 }}>
+              <PredictedChampionText />
               <p>{files[0].name}</p>
               <PreviewImage
                 image={files[0]}
                 style={{ width: 150, height: 150 }}
-              />
+                />
             </div>
           </div>
         </Modal>

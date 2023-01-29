@@ -16,6 +16,7 @@ function App() {
             overflow: "auto",
             display: "flex",
             width: "100%",
+            marginLeft: "16rem"
           }}
         >
           <Outlet />
