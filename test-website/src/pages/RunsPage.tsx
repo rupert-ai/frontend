@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { RunTile } from "../components/RunTile";
 import TilesList from "../components/TilesList";
 import { useTestsContext } from "../hooks/useTestsContext";
+import "./RunsPage.css"
 
 export function RunsPage() {
   const { runs  } = useTestsContext();
@@ -14,11 +15,9 @@ export function RunsPage() {
     return runs[Number(id)].files.map((file) => ({file}))
   }, [runs, id]);
 
-  console.log(id)
-
   return (
-    <div style={{display: "flex", flexDirection: "column", gap: 16, width: "100%"}}>
-      <Breadcrumb>
+    <div className="rai-runs-page">
+      <Breadcrumb className="rai-runs-page-breadcrumbs">
         <BreadcrumbItem>
           <Link to="/projects">Projects</Link>
         </BreadcrumbItem>

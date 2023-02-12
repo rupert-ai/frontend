@@ -14,7 +14,7 @@ export function ProjectsPage() {
   }, [runs]);
 
   return (
-    <div style={{display: "flex", flexDirection: "column", gap: 16}}>
+    <div style={{display: "flex", flexDirection: "column", gap: 16, width: "100%"}}>
       <h4>Projects</h4>
       <TilesList<{image: File}> data={projects} renderer={(instance, index) => <ProjectTile label={`Test #${index + 1}`} image={instance.image} onClick={() => navigate(`./${index}`)} />} />
     </div>

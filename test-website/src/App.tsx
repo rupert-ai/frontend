@@ -11,14 +11,7 @@ function App() {
     <>
       <TestsContext.Provider value={{ runs, setRuns }}>
         <AppHeader />
-        <Content
-          style={{
-            overflow: "auto",
-            display: "flex",
-            width: "100%",
-            marginLeft: "16rem"
-          }}
-        >
+        <Content className="rai-page-content">
           <Outlet />
         </Content>
       </TestsContext.Provider>
