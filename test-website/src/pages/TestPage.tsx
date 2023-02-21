@@ -79,13 +79,14 @@ export function TestPage() {
           modalHeading={`Test #${runs.length + 1}`}
           modalLabel="In progress"
           passiveModal
+          selectorPrimaryFocus=".cds--modal-content"
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-            <p>
+            <div>
               This report present the test results of the image ads, including
               the champion ad that had the highest performance in terms of
               click-through rate, conversion rate, and cost-per-click.
-            </p>
+            </div>
             <CustomLoader />
             <div style={{ alignSelf: "center" }}>Testing Ads...</div>
             <small style={{ alignSelf: "center" }}>
@@ -108,20 +109,23 @@ export function TestPage() {
           onRequestSubmit={() =>
             navigate(`./projects/${runs.length - 1}`)
           }
+          selectorPrimaryFocus=".cds--modal-content"
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-            <p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 32, height: "100%", overflow: "hidden" }}>
+            {/* <div>
               This report present the test results of the image ads, including
               the champion ad that had the highest performance in terms of
               click-through rate, conversion rate, and cost-per-click.
-            </p>
-            <div style={{ alignSelf: "center", display: "flex", flexDirection: "column", gap: 16 }}>
+            </div> */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, overflow: "hidden" }}>
               <PredictedChampionText />
-              <p>{files[0].name}</p>
-              <PreviewImage
-                image={files[0]}
-                style={{ width: 150, height: 150 }}
-              />
+              <div style={{wordBreak: "break-all"}}>{files[0].name}</div>
+              <div style={{overflow: "hidden"}}>
+                <PreviewImage
+                  image={files[0]}
+                  style={{ width: "unset", height: "100%", maxWidth: "100%" }}
+                  />
+              </div>
             </div>
           </div>
         </Modal>

@@ -53,20 +53,20 @@ export function AppHeader() {
           </HeaderGlobalBar>
           <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
             <SideNavItems className="rai-side-nav-items">
-              <SideNavLink renderIcon={AddAlt} element={Link} to="/" aria-current={pathname === '/' ? "page" : undefined}>
+              <SideNavLink renderIcon={AddAlt} element={Link} to="/" aria-current={pathname === '/' ? "page" : undefined} onClick={onClickSideNavExpand}>
                 Create new project
               </SideNavLink>
-              <SideNavLink renderIcon={ListChecked} element={Link} to="/projects" aria-current={pathname.includes('/projects') ? "page" : undefined}>
+              <SideNavLink renderIcon={ListChecked} element={Link} to="/projects" aria-current={pathname.includes('/projects') ? "page" : undefined} onClick={onClickSideNavExpand}>
                 Projects
               </SideNavLink>
               <SideNavDivider />
-              <SideNavLink aria-disabled renderIcon={MachineLearning}>
+              <SideNavLink aria-disabled renderIcon={MachineLearning} onClick={onClickSideNavExpand}>
                 Rupert AI tools
               </SideNavLink>
-              <SideNavLink aria-disabled renderIcon={MachineLearningModel}>
+              <SideNavLink aria-disabled renderIcon={MachineLearningModel} onClick={onClickSideNavExpand}>
                 AI training
               </SideNavLink>
-              <SideNavLink aria-disabled renderIcon={Folder}>
+              <SideNavLink aria-disabled renderIcon={Folder} onClick={onClickSideNavExpand}>
                 Assets
               </SideNavLink>
             </SideNavItems>
