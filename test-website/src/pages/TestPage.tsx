@@ -123,7 +123,7 @@ export function TestPage() {
               <div style={{overflow: "hidden"}}>
                 <PreviewImage
                   image={files[0]}
-                  style={{ width: "unset", height: "100%", maxWidth: "100%" }}
+                  style={{ width: "unset", height: "100%", maxWidth: "100%", aspectRatio: "unset" }}
                   />
               </div>
             </div>
