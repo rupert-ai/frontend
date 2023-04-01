@@ -23,9 +23,9 @@ export function ProjectsPage() {
       <h4>Projects</h4>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Could not fetch researches. Try again later.</div>}
-      {!!projects && (
+      {!!projects?.length && (
         <TilesList
-          data={projects ?? []}
+          data={projects.filter(ins => !!ins.finishedAt).sort((a, b) => (a.id <= b.id ? 1 : -1))}
           renderer={instance => {
             if (!instance.items?.length) {
               return <></>;
