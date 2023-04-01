@@ -1,50 +1,47 @@
-import {
-  Button,
-  Modal,
-} from "carbon-components-react";
-import React from "react";
-import UploadFile from "../components/UploadFile";
-import PreviewImage from "../components/PreviewImage";
-import "./TestPage.css";
-import { useTestsContext } from "../hooks/useTestsContext";
-import { useNavigate } from "react-router-dom";
-import CustomLoader from "../components/CustomLoader";
-import PredictedChampionText from "../components/PredictedChampionText";
-import useIsMobile from "../hooks/useIsMobile";
-import { UploadedFilesDesktop } from "../components/UploadedFilesDesktop";
-import { UploadedFilesList } from "../components/UploadedFilesList";
-import { ChartMultitype } from "@carbon/icons-react";
+import { Button } from 'carbon-components-react';
+import React, { useState } from 'react';
+import UploadFile from '../components/UploadFile';
+import './TestPage.css';
+import { useNavigate } from 'react-router-dom';
+import useIsMobile from '../hooks/useIsMobile';
+import { UploadedFilesDesktop } from '../components/UploadedFilesDesktop';
+import { UploadedFilesList } from '../components/UploadedFilesList';
+import { ChartMultitype } from '@carbon/icons-react';
+import { Backend } from '../services/backend';
+import { useAuth } from '../services/useAuth';
+import { LoadingModal } from '../components/LoadingModal';
+import { CompletedModal } from '../components/CompletedModal';
 
 export function TestPage() {
-  // const auth = useAuth();
+  const auth = useAuth();
   const [files, setFiles] = React.useState<File[]>([]);
-  const [testState, setTestState] = React.useState<"loading" | "done">();
-  const { setRuns, runs } = useTestsContext();
+  const [testState, setTestState] = React.useState<'loading' | 'done'>();
+  const [currentBatchId, setCurrentBatchId] = useState(0);
+  const [championImage, setChampionImage] = useState<{ name: string; url: string }>();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   const onFilesAdded = React.useCallback((files: File[]) => {
-    setFiles((f) => [...f, ...files]);
+    setFiles(f => [...f, ...files]);
   }, []);
 
   const onFileDelete = React.useCallback((fileName: string) => {
-    return setFiles((f) => f.filter(({ name }) => fileName !== name));
+    return setFiles(f => f.filter(({ name }) => fileName !== name));
   }, []);
 
   const startTest = async () => {
-    setTestState("loading");
-    // console.log(e.target.images);
-    // const response = await Backend.upload(auth?.user?.accessToken || "", files);
-    // const data = await Backend.getResult(
-    //   auth?.user?.accessToken || "",
-    //   // response.batch_id
-    //   2
-    // );
-    // console.log(data);
-    setTimeout(() => {
-      setRuns((runs) => [...runs, { files }]);
-      setTestState("done");
-    }, 5000);
+    setTestState('loading');
+    const response = await Backend.upload(auth?.user?.accessToken || '', files);
+    setCurrentBatchId(response.batchId);
+    const int = window.setInterval(async () => {
+      const data = await Backend.getResult(auth?.user?.accessToken || '', response.batchId);
+      if (!!data.finishedAt) {
+        const bestItem = data.items.reduce((prev, curr) => (prev.score >= curr.score ? prev : curr));
+        setChampionImage({ name: bestItem.name, url: bestItem.imageOriginal });
+        window.clearInterval(int);
+        setTestState('done');
+      }
+    }, 2000);
   };
 
   return (
@@ -52,83 +49,48 @@ export function TestPage() {
       <div className="rai-test-page">
         <h2>Upload ads to test</h2>
         <small>
-          You can test up to 10 Ad images. Max file size is 5mb. Supported file
-          types are <i>.jpg</i> and <i>.png</i>.
+          You can test up to 10 Ad images. Max file size is 5mb. Supported file types are <i>.jpg</i> and <i>.png</i>.
         </small>
         <UploadFile onFilesAdded={onFilesAdded} />
-        {isMobile && files.length > 0 && <>
-          <div style={{display: "flex", gap: 8, width: "23rem", justifyContent: "space-between" }}>
-            <h4>Your ad images ({files.length})</h4>
-            <Button kind="ghost" size="sm" onClick={() => setFiles([])}>Remove all</Button>
-          </div>
-          <UploadedFilesList files={files} onFileDelete={onFileDelete} />
-          <Button
-            style={{ width: "100%", position: "fixed", bottom: 0, maxWidth: "unset", left: 0 }}
-            disabled={files.length === 0}
-            onClick={startTest}
-            renderIcon={ChartMultitype}
-          >
-            Start testing Ads
-          </Button>
-        </>}
-      </div>
-      {!isMobile && <UploadedFilesDesktop files={files} onFileDelete={onFileDelete} onRemoveAll={() => setFiles([])} startTest={startTest} />}
-      {testState === "loading" && (
-        <Modal
-          open
-          modalHeading={`Test #${runs.length + 1}`}
-          modalLabel="In progress"
-          passiveModal
-          selectorPrimaryFocus=".cds--modal-content"
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-            <div>
-              This report present the test results of the image ads, including
-              the champion ad that had the highest performance in terms of
-              click-through rate, conversion rate, and cost-per-click.
+        {isMobile && files.length > 0 && (
+          <>
+            <div style={{ display: 'flex', gap: 8, width: '23rem', justifyContent: 'space-between' }}>
+              <h4>Your ad images ({files.length})</h4>
+              <Button kind="ghost" size="sm" onClick={() => setFiles([])}>
+                Remove all
+              </Button>
             </div>
-            <CustomLoader />
-            <div style={{ alignSelf: "center" }}>Testing Ads...</div>
-            <small style={{ alignSelf: "center" }}>
-              Please wait, this might take few minutes
-            </small>
-          </div>
-        </Modal>
+            <UploadedFilesList files={files} onFileDelete={onFileDelete} />
+            <Button
+              style={{ width: '100%', position: 'fixed', bottom: 0, maxWidth: 'unset', left: 0 }}
+              disabled={files.length === 0}
+              onClick={startTest}
+              renderIcon={ChartMultitype}
+            >
+              Start testing Ads
+            </Button>
+          </>
+        )}
+      </div>
+      {!isMobile && (
+        <UploadedFilesDesktop
+          files={files}
+          onFileDelete={onFileDelete}
+          onRemoveAll={() => setFiles([])}
+          startTest={startTest}
+        />
       )}
-      {testState === "done" && (
-        <Modal
-          open
-          modalHeading={`Test #${runs.length}`}
-          modalLabel="Finished"
-          primaryButtonText="See full report"
-          secondaryButtonText="Close"
-          onRequestClose={() => {
+      {testState === 'loading' && <LoadingModal heading={currentBatchId.toString()} />}
+      {testState === 'done' && !!championImage && (
+        <CompletedModal
+          onComplete={() => navigate(`./projects/${currentBatchId}`)}
+          onClose={() => {
             setTestState(undefined);
             setFiles([]);
           }}
-          onRequestSubmit={() =>
-            navigate(`./projects/${runs.length - 1}`)
-          }
-          selectorPrimaryFocus=".cds--modal-content"
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 32, height: "100%", overflow: "hidden" }}>
-            {/* <div>
-              This report present the test results of the image ads, including
-              the champion ad that had the highest performance in terms of
-              click-through rate, conversion rate, and cost-per-click.
-            </div> */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, overflow: "hidden" }}>
-              <PredictedChampionText />
-              <div style={{wordBreak: "break-all"}}>{files[0].name}</div>
-              <div style={{overflow: "hidden"}}>
-                <PreviewImage
-                  image={files[0]}
-                  style={{ width: "unset", height: "100%", maxWidth: "100%", aspectRatio: "unset" }}
-                  />
-              </div>
-            </div>
-          </div>
-        </Modal>
+          heading={currentBatchId.toString()}
+          championImage={championImage}
+        />
       )}
     </>
   );

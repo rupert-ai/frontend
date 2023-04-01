@@ -1,5 +1,5 @@
 interface ResearchUploadResponse {
-  batch_id: number;
+  batchId: number;
   images: number;
   success: boolean;
 }
@@ -20,7 +20,7 @@ interface VerticesEntity {
   y?: number | null;
 }
 
-type FaceLikelihood = "VERY_UNLIKELY" | "VERY_LIKELY";
+type FaceLikelihood = 'VERY_UNLIKELY' | 'VERY_LIKELY';
 
 interface BoundingPolyOrFdBoundingPolyOrBoundingBox {
   vertices?: VerticesEntityOrNormalizedVerticesEntity[] | null;
@@ -186,51 +186,49 @@ type AdVision = {
   error?: { code: number; message: string };
 };
 
-interface ResearchResultResponse {
-  created_at: string;
-  finished_at: string;
+export interface ResearchResultResponse {
+  createdAt: string;
+  finishedAt: string;
   id: number;
   items: ResearchItem[];
   name: string;
-  started_at: string;
-  updated_at: string;
+  startedAt: string;
+  updatedAt: string;
 }
 
 export interface ResearchItem {
-  batch_id: number;
-  clarity_score: string;
-  created_at: string;
-  finished_at: string;
+  clarityScore: string;
+  createdAt: string;
+  finishedAt: string;
   id: number;
   // link to image
-  image_heatmap: string;
+  imageHeatmap: string;
   // link to image
-  image_original: string;
+  imageOriginal: string;
   // link to image
-  image_saliency: string;
+  imageSaliency: string;
   name: string;
-  started_at: string;
-  study_id: string;
-  updated_at: string;
-  vision_result: AdVision;
+  researchId: string;
+  score: string;
+  startedAt: string;
+  studyId: string;
+  updatedAt: string;
+  visionApiResult: AdVision;
 }
 
 export class Backend {
-  public static upload = async (
-    accessToken: string,
-    files: File[]
-  ): Promise<ResearchUploadResponse> => {
+  public static upload = async (accessToken: string, files: File[]): Promise<ResearchUploadResponse> => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      formData.set("images", files[i]);
+      formData.append('images', files[i]);
     }
-    console.log(formData.getAll("files"));
-    const response = await fetch(`https://ai.getrupert.com/api/v1/research`, {
-      headers: {
-        Authorization: accessToken,
-        // "Content-Type": "multipart/form-data",
-      },
-      method: "POST",
+    console.log(formData.getAll('images'));
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
+      // headers: {
+      //   Authorization: accessToken,
+      //   // "Content-Type": "multipart/form-data",
+      // },
+      method: 'POST',
       body: formData,
     });
     if (response.ok) {
@@ -239,20 +237,28 @@ export class Backend {
     throw new Error(response.statusText);
   };
 
-  public static getResult = async (
-    accessToken: string,
-    id: number
-  ): Promise<ResearchResultResponse> => {
-    const response = await fetch(
-      `https://ai.getrupert.com/api/v1/research/${id}`,
-      {
-        headers: {
-          Authorization: accessToken,
-          Accept: "application/json",
-        },
-        method: "GET",
-      }
-    );
+  public static getResult = async (accessToken: string, id: number): Promise<ResearchResultResponse> => {
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}`, {
+      headers: {
+        // Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'GET',
+    });
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error(response.statusText);
+  };
+
+  public static getResults = async (accessToken: string): Promise<ResearchResultResponse[]> => {
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
+      headers: {
+        // Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'GET',
+    });
     if (response.ok) {
       return response.json();
     }

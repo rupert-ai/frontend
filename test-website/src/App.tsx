@@ -1,21 +1,19 @@
-import { Content } from "carbon-components-react";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
-import "./App.scss";
-import AppHeader from "./components/AppHeader";
-import { Run, TestsContext } from "./hooks/useTestsContext";
+import { Content } from 'carbon-components-react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Outlet } from 'react-router-dom';
+import './App.scss';
+import AppHeader from './components/AppHeader';
+
+const queryClient = new QueryClient();
 
 function App() {
-  const [runs, setRuns] = useState<Run[]>([]);
   return (
-    <>
-      <TestsContext.Provider value={{ runs, setRuns }}>
-        <AppHeader />
-        <Content className="rai-page-content">
-          <Outlet />
-        </Content>
-      </TestsContext.Provider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <AppHeader />
+      <Content className="rai-page-content">
+        <Outlet />
+      </Content>
+    </QueryClientProvider>
   );
 }
 

@@ -1,22 +1,41 @@
-
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ProjectTile } from "../components/ProjectTile";
-import TilesList from "../components/TilesList";
-import { useTestsContext } from "../hooks/useTestsContext";
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { ProjectTile } from '../components/ProjectTile';
+import TilesList from '../components/TilesList';
+import { Backend, ResearchItem } from '../services/backend';
+import { useAuth } from '../services/useAuth';
+import { findChamp } from '../utils/helpers';
 
 export function ProjectsPage() {
-  const { runs } = useTestsContext();
   const navigate = useNavigate();
+  const auth = useAuth();
 
-  const projects: {image: File}[] = React.useMemo(() => {
-    return runs.map((r) => ({image: r.files[0]}))
-  }, [runs]);
+  const {
+    data: projects,
+    isLoading,
+    isError,
+  } = useQuery(['projects', auth?.user?.accessToken], () => {
+    return Backend.getResults(auth?.user?.accessToken || '');
+  });
 
   return (
-    <div style={{display: "flex", flexDirection: "column", gap: 16, width: "100%"}}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
       <h4>Projects</h4>
-      <TilesList<{image: File}> data={projects} renderer={(instance, index) => <ProjectTile label={`Test #${index + 1}`} image={instance.image} onClick={() => navigate(`./${index}`)} />} />
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>Could not fetch researches. Try again later.</div>}
+      <TilesList
+        data={projects ?? []}
+        renderer={instance => {
+          const champ = findChamp(instance.items);
+          return (
+            <ProjectTile
+              label={`Test #${instance.id}`}
+              imageUrl={champ.imageOriginal}
+              onClick={() => navigate(`./${instance.id}`, { state: { research: instance } })}
+            />
+          );
+        }}
+      />
     </div>
   );
 }

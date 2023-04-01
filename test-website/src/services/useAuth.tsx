@@ -1,5 +1,5 @@
-import React from "react";
-import { FacebookAuth, FACEBOOK_SCRIPT_ID, UserResponse } from "./facebook";
+import React from 'react';
+import { FacebookAuth, FACEBOOK_SCRIPT_ID, UserResponse } from './facebook';
 
 export interface FBUser extends UserResponse {
   accessToken?: string;
@@ -27,13 +27,13 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [isSdkLoaded, setIsSdkLoaded] = React.useState(false);
-  const [user, setUser] = React.useState<FBUser>();
+  const [user, setUser] = React.useState<FBUser>({ accessToken: '' });
   const [checked, setChecked] = React.useState(false);
 
   const loginStatus = React.useCallback(async () => {
     const loginStatus = await FacebookAuth.getLoginStatus();
 
-    if (loginStatus.status === "connected") {
+    if (loginStatus.status === 'connected') {
       const me = await FacebookAuth.getMe();
       if (!me.error) {
         setUser({
@@ -50,7 +50,7 @@ function useProvideAuth() {
 
   const checkStatus = async () => {
     const loginStatus = await FacebookAuth.getLoginStatus();
-    if (loginStatus.status === "connected") {
+    if (loginStatus.status === 'connected') {
       const me = await FacebookAuth.getMe();
       if (!me.error) {
         setUser({
@@ -67,35 +67,37 @@ function useProvideAuth() {
     return loginStatus.status;
   };
 
-  React.useLayoutEffect(() => {
-    if (document.getElementById(FACEBOOK_SCRIPT_ID)) {
-      setIsSdkLoaded(true);
-      return;
-    }
+  // React.useLayoutEffect(() => {
+  //   if (document.getElementById(FACEBOOK_SCRIPT_ID)) {
+  //     console.log('INITIALIZED');
+  //     setIsSdkLoaded(true);
+  //     return;
+  //   }
 
-    const init = async () => {
-      await FacebookAuth.init();
-      setIsSdkLoaded(true);
-    };
+  //   const init = async () => {
+  //     await FacebookAuth.init();
+  //     console.log('INITIALIZED');
+  //     setIsSdkLoaded(true);
+  //   };
 
-    init();
-    FacebookAuth.loadSdkAsynchronously();
-  }, []);
+  //   init();
+  //   FacebookAuth.loadSdkAsynchronously();
+  // }, []);
 
-  React.useLayoutEffect(() => {
-    if (!isSdkLoaded) {
-      return;
-    }
+  // React.useLayoutEffect(() => {
+  //   if (!isSdkLoaded) {
+  //     return;
+  //   }
 
-    checkStatus().then(() => setChecked(true));
-  }, [isSdkLoaded, loginStatus]);
+  //   checkStatus().then(() => setChecked(true));
+  // }, [isSdkLoaded, loginStatus]);
 
   const login = async (): Promise<void> => {
     return new Promise(async (resolve, reject) => {
       const status = await checkStatus();
-      if (status !== "connected") {
+      if (status !== 'connected') {
         const loginResult = await FacebookAuth.login();
-        if (loginResult.status === "connected") {
+        if (loginResult.status === 'connected') {
           const me = await FacebookAuth.getMe();
           if (!me.error) {
             setUser({
@@ -118,7 +120,7 @@ function useProvideAuth() {
 
   const logout = async () => {
     const loginStatus = await FacebookAuth.getLoginStatus();
-    if (loginStatus.status === "connected") {
+    if (loginStatus.status === 'connected') {
       await FacebookAuth.logout();
     }
   };
