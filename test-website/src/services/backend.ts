@@ -190,7 +190,7 @@ export interface ResearchResultResponse {
   createdAt: string;
   finishedAt: string;
   id: number;
-  items: ResearchItem[];
+  items?: ResearchItem[];
   name: string;
   startedAt: string;
   updatedAt: string;

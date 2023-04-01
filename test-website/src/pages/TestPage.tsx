@@ -10,14 +10,12 @@ import { ChartMultitype } from '@carbon/icons-react';
 import { Backend } from '../services/backend';
 import { useAuth } from '../services/useAuth';
 import { LoadingModal } from '../components/LoadingModal';
-import { CompletedModal } from '../components/CompletedModal';
 
 export function TestPage() {
   const auth = useAuth();
   const [files, setFiles] = React.useState<File[]>([]);
   const [testState, setTestState] = React.useState<'loading' | 'done'>();
   const [currentBatchId, setCurrentBatchId] = useState(0);
-  const [championImage, setChampionImage] = useState<{ name: string; url: string }>();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -36,10 +34,9 @@ export function TestPage() {
     const int = window.setInterval(async () => {
       const data = await Backend.getResult(auth?.user?.accessToken || '', response.batchId);
       if (!!data.finishedAt) {
-        const bestItem = data.items.reduce((prev, curr) => (prev.score >= curr.score ? prev : curr));
-        setChampionImage({ name: bestItem.name, url: bestItem.imageOriginal });
         window.clearInterval(int);
         setTestState('done');
+        navigate(`./projects/${response.batchId}`);
       }
     }, 2000);
   };
@@ -81,17 +78,6 @@ export function TestPage() {
         />
       )}
       {testState === 'loading' && <LoadingModal heading={currentBatchId.toString()} />}
-      {testState === 'done' && !!championImage && (
-        <CompletedModal
-          onComplete={() => navigate(`./projects/${currentBatchId}`)}
-          onClose={() => {
-            setTestState(undefined);
-            setFiles([]);
-          }}
-          heading={currentBatchId.toString()}
-          championImage={championImage}
-        />
-      )}
     </>
   );
 }

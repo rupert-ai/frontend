@@ -1,14 +1,15 @@
 import { Tile } from 'carbon-components-react';
+import { ResearchItem } from '../services/backend';
 import PredictedChampionText from './PredictedChampionText';
 import PreviewImage from './PreviewImage';
 
 type RunTileProps = {
-  imageUrl: string;
-  label: string;
+  instance: ResearchItem;
   isChamp: boolean;
+  index: number;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export function RunTile({ imageUrl, label, isChamp, style, ...rest }: RunTileProps) {
+export function RunTile({ instance, isChamp, index, style, ...rest }: RunTileProps) {
   return (
     <Tile
       style={{
@@ -21,9 +22,9 @@ export function RunTile({ imageUrl, label, isChamp, style, ...rest }: RunTilePro
       }}
       {...rest}
     >
-      {isChamp ? <PredictedChampionText /> : <div>{label}</div>}
+      {isChamp ? <PredictedChampionText /> : <div>{`# ${index}`}</div>}
       <PreviewImage
-        image={{ name: label, url: imageUrl }}
+        image={{ name: instance.name, url: instance.imageOriginal }}
         style={{ width: 'auto', height: 'auto', objectFit: 'cover' }}
       />
       <div
@@ -35,7 +36,7 @@ export function RunTile({ imageUrl, label, isChamp, style, ...rest }: RunTilePro
           overflow: 'hidden',
         }}
       >
-        {label}
+        {instance.name}
       </div>
     </Tile>
   );
