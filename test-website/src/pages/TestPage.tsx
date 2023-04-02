@@ -10,11 +10,12 @@ import { ChartMultitype } from '@carbon/icons-react';
 import { Backend } from '../services/backend';
 import { useAuth } from '../services/useAuth';
 import { LoadingModal } from '../components/LoadingModal';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export function TestPage() {
   const auth = useAuth();
   const [files, setFiles] = React.useState<File[]>([]);
-  const [testState, setTestState] = React.useState<'loading' | 'done'>();
+  const [researchState, setResearchState] = useState<'loading' | 'done'>('done');
   const [currentBatchId, setCurrentBatchId] = useState(0);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -27,18 +28,38 @@ export function TestPage() {
     return setFiles(f => f.filter(({ name }) => fileName !== name));
   }, []);
 
+  const uploadImagesMutation = useMutation(Backend.upload, {
+    onSuccess(response) {
+      setCurrentBatchId(response.batchId);
+    },
+    onError() {
+      setResearchState('done');
+    },
+  });
+
+  const getResultQuery = useQuery(
+    ['Result', currentBatchId],
+    () => Backend.getResult(auth?.user?.accessToken || '', currentBatchId),
+    {
+      enabled: !!currentBatchId,
+      onSuccess: data => {
+        if (!!data.finishedAt) {
+          setResearchState('done');
+          navigate(`./projects/${currentBatchId}`);
+        }
+      },
+      refetchInterval: data => {
+        return !!data?.finishedAt ? false : 2000;
+      },
+      onError() {
+        setResearchState('done');
+      },
+    },
+  );
+
   const startTest = async () => {
-    setTestState('loading');
-    const response = await Backend.upload(auth?.user?.accessToken || '', files);
-    setCurrentBatchId(response.batchId);
-    const int = window.setInterval(async () => {
-      const data = await Backend.getResult(auth?.user?.accessToken || '', response.batchId);
-      if (!!data.finishedAt) {
-        window.clearInterval(int);
-        setTestState('done');
-        navigate(`./projects/${response.batchId}`);
-      }
-    }, 2000);
+    setResearchState('loading');
+    uploadImagesMutation.mutate({ accessToken: auth?.user?.accessToken || '', files });
   };
 
   return (
@@ -77,7 +98,7 @@ export function TestPage() {
           startTest={startTest}
         />
       )}
-      {testState === 'loading' && <LoadingModal heading={currentBatchId.toString()} />}
+      {researchState === 'loading' && <LoadingModal heading={currentBatchId.toString()} />}
     </>
   );
 }

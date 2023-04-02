@@ -216,8 +216,23 @@ export interface ResearchItem {
   visionApiResult: AdVision;
 }
 
+export interface BackendError {
+  errorMessage: string;
+  errors: string[];
+  statusCode: number;
+}
+
+const getErrorObject = (err: any, response: Response) => {
+  return { ...err, statusCode: response.status };
+};
 export class Backend {
-  public static upload = async (accessToken: string, files: File[]): Promise<ResearchUploadResponse> => {
+  public static upload = async ({
+    accessToken,
+    files,
+  }: {
+    accessToken: string;
+    files: File[];
+  }): Promise<ResearchUploadResponse> => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
@@ -234,7 +249,8 @@ export class Backend {
     if (response.ok) {
       return response.json();
     }
-    throw new Error(response.statusText);
+    const err = await response.json();
+    throw getErrorObject(err, response);
   };
 
   public static getResult = async (accessToken: string, id: number): Promise<ResearchResultResponse> => {
@@ -248,7 +264,8 @@ export class Backend {
     if (response.ok) {
       return response.json();
     }
-    throw new Error(response.statusText);
+    const err = await response.json();
+    throw getErrorObject(err, response);
   };
 
   public static getResults = async (accessToken: string): Promise<ResearchResultResponse[]> => {
@@ -262,6 +279,7 @@ export class Backend {
     if (response.ok) {
       return response.json();
     }
-    throw new Error(response.statusText);
+    const err = await response.json();
+    throw getErrorObject(err, response);
   };
 }

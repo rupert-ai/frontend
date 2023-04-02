@@ -1,6 +1,6 @@
 import { Breadcrumb, BreadcrumbItem } from 'carbon-components-react';
 import { useMemo } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { RunTile } from '../components/RunTile';
 import TilesList from '../components/TilesList';
