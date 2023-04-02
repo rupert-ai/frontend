@@ -14,7 +14,7 @@ const isServerError = (err: unknown): err is BackendError => {
 
 const getErrorMessage = (err: BackendError) => {
   if (err.statusCode === 422) {
-    return `${err.errorMessage}. ${err.errors.join('. ')}`;
+    return `${err.errors.join('. ')}`;
   } else {
     return `${err.errorMessage}`;
   }
