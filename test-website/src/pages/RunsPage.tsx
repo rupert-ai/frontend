@@ -40,7 +40,7 @@ export function RunsPage() {
           <h4>{`Test #${finalData.id}`}</h4>
           {!!finalData.items?.length && (
             <TilesList
-              data={finalData.items.sort((a, b) => (a.score > b.score ? 1 : -1))}
+              data={[...finalData.items].sort((a, b) => (a.score < b.score ? 1 : -1))}
               renderer={(instance, index) => <RunTile instance={instance} index={index + 1} isChamp={index === 0} />}
             />
           )}
