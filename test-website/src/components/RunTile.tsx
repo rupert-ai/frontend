@@ -1,4 +1,4 @@
-import { Tile } from 'carbon-components-react';
+import { SkeletonText, Tile } from 'carbon-components-react';
 import { ResearchItem } from '../services/backend';
 import PredictedChampionText from './PredictedChampionText';
 import PreviewImage from './PreviewImage';
@@ -7,9 +7,10 @@ type RunTileProps = {
   instance: ResearchItem;
   isChamp: boolean;
   index: number;
+  isLoading: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export function RunTile({ instance, isChamp, index, style, ...rest }: RunTileProps) {
+export function RunTile({ instance, isChamp, index, style, isLoading, ...rest }: RunTileProps) {
   return (
     <Tile
       style={{
@@ -22,7 +23,7 @@ export function RunTile({ instance, isChamp, index, style, ...rest }: RunTilePro
       }}
       {...rest}
     >
-      {isChamp ? <PredictedChampionText /> : <div>{`# ${index}`}</div>}
+      {isLoading ? <SkeletonText /> : isChamp ? <PredictedChampionText /> : <div>{`# ${index}`}</div>}
       <PreviewImage
         image={{ name: instance.name, url: instance.imageOriginal }}
         style={{ width: 'auto', height: 'auto', objectFit: 'cover' }}

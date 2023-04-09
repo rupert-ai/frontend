@@ -19,7 +19,12 @@ export function RunsPage() {
     () => {
       return Backend.getResult(auth?.user?.accessToken || '', Number(id));
     },
-    { enabled: !research },
+    {
+      enabled: !research || !research.finishedAt,
+      refetchInterval: data => {
+        return !!data?.finishedAt ? false : 2000;
+      },
+    },
   );
 
   const finalData = useMemo(() => {
@@ -41,7 +46,14 @@ export function RunsPage() {
           {!!finalData.items?.length && (
             <TilesList
               data={[...finalData.items].sort((a, b) => (a.score < b.score ? 1 : -1))}
-              renderer={(instance, index) => <RunTile instance={instance} index={index + 1} isChamp={index === 0} />}
+              renderer={(instance, index) => (
+                <RunTile
+                  isLoading={!instance.finishedAt}
+                  instance={instance}
+                  index={index + 1}
+                  isChamp={!!instance.finishedAt && index === 0}
+                />
+              )}
             />
           )}
         </>

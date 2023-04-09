@@ -37,25 +37,16 @@ export function TestPage() {
     },
   });
 
-  const getResultQuery = useQuery(
-    ['Result', currentBatchId],
-    () => Backend.getResult(auth?.user?.accessToken || '', currentBatchId),
-    {
-      enabled: !!currentBatchId,
-      onSuccess: data => {
-        if (!!data.finishedAt) {
-          setResearchState('done');
-          navigate(`./projects/${currentBatchId}`);
-        }
-      },
-      refetchInterval: data => {
-        return !!data?.finishedAt ? false : 2000;
-      },
-      onError() {
-        setResearchState('done');
-      },
+  useQuery(['Result', currentBatchId], () => Backend.getResult(auth?.user?.accessToken || '', currentBatchId), {
+    enabled: !!currentBatchId,
+    onSuccess: () => {
+      setResearchState('done');
+      navigate(`./projects/${currentBatchId}`);
     },
-  );
+    onError() {
+      setResearchState('done');
+    },
+  });
 
   const startTest = async () => {
     setResearchState('loading');
