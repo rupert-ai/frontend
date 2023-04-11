@@ -26,7 +26,7 @@ export function PreviewImage({ image, style }: PreviewImageProps) {
     return onDestroy;
   }, [image]);
 
-  return <img src={url} alt={`Ad image ${image.name}`} className="rai-preview-image" style={style} />;
+  return <img src={url} alt={`Ad image ${image.name}`} className="rai-preview-image" style={style} loading="lazy" />;
 }
 
 export default PreviewImage;
