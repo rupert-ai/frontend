@@ -48,10 +48,10 @@ export function RunsPage() {
               data={[...finalData.items].sort((a, b) => (a.score < b.score ? 1 : -1))}
               renderer={(instance, index) => (
                 <RunTile
-                  isLoading={!instance.finishedAt}
+                  isLoading={!finalData.finishedAt}
                   instance={instance}
                   index={index + 1}
-                  isChamp={!!instance.finishedAt && index === 0}
+                  isChamp={index === 0}
                 />
               )}
             />

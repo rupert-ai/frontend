@@ -1,4 +1,5 @@
 import {
+  ExpandableSearch,
   Header,
   HeaderContainer,
   HeaderGlobalAction,
@@ -42,19 +43,14 @@ export function AppHeader() {
             <HeaderName element={Link} to="/" prefix="" className="rai-header-name">
               Rupert AI
             </HeaderName>
-            {!isMobile && (
-              <Search
-                labelText="Search projects and assets"
-                placeholder="Search projects and assets"
-                size="lg"
-                className="rai-header-search-input"
-              />
-            )}
-            {/* <HeaderGlobalBar>
-              <HeaderGlobalAction aria-label="Login">
-                <UserAvatar size="20" onClick={handleLogin} />
+            <HeaderGlobalBar>
+              <HeaderGlobalAction aria-label="Search">
+                <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction>
-            </HeaderGlobalBar> */}
+              <HeaderGlobalAction aria-label="Login">
+                <UserAvatar size="20" />
+              </HeaderGlobalAction>
+            </HeaderGlobalBar>
             <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
               <SideNavItems className="rai-side-nav-items">
                 <SideNavLink
