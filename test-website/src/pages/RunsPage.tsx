@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbItem } from 'carbon-components-react';
+import { Breadcrumb, BreadcrumbItem, ToastNotification, Theme } from 'carbon-components-react';
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -43,6 +43,19 @@ export function RunsPage() {
             <BreadcrumbItem isCurrentPage>{`Test #${finalData.id}`}</BreadcrumbItem>
           </Breadcrumb>
           <h4>{`Test #${finalData.id}`}</h4>
+          {!finalData.finishedAt && (
+            <Theme theme="white">
+              <ToastNotification
+                title="Analyzing your Ads..."
+                subtitle="We're processing your images, and we appreciate your patience. Due to the complexity of the analysis and the number of images submitted, it may take a bit longer than usual."
+                notificationType="inline"
+                kind="info"
+                style={{ width: '100%' }}
+                role="alert"
+                hideCloseButton
+              />
+            </Theme>
+          )}
           {!!finalData.items?.length && (
             <TilesList
               data={[...finalData.items].sort((a, b) => (a.score < b.score ? 1 : -1))}
