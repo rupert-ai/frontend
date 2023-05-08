@@ -1,6 +1,5 @@
 import { ClickableTile, SkeletonPlaceholder, SkeletonText, Tag, Tile } from 'carbon-components-react';
 import { ResearchItem } from '../services/backend';
-import PredictedChampionText from './PredictedChampionText';
 import PreviewImage from './PreviewImage';
 
 type RunTileProps = {
@@ -29,7 +28,7 @@ export function RunTile({ instance, isChamp, index, style, isLoading, ...rest }:
       ) : (
         <PreviewImage
           image={{ name: instance.name, url: instance.imageOriginal }}
-          style={{ width: 'auto', height: 'auto', objectFit: 'cover' }}
+          style={{ width: '100%', height: 'unset', objectFit: 'cover' }}
         />
       )}
       <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>

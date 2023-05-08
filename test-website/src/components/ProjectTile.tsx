@@ -23,7 +23,7 @@ export function ProjectTile({ imageUrl, label, style, ...rest }: ProjectTileProp
       <PredictedChampionText />
       <PreviewImage
         image={{ name: label, url: imageUrl }}
-        style={{ width: 'auto', height: 'auto', objectFit: 'cover' }}
+        style={{ width: '100%', height: 'unset', objectFit: 'cover' }}
       />
     </ClickableTile>
   );
