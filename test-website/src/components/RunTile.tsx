@@ -36,6 +36,9 @@ export function RunTile({ instance, isChamp, index, style, isLoading, ...rest }:
           <Tag type="cool-gray" size="md" style={{ marginInline: 0 }}>
             #{index}
           </Tag>
+          <Tag type="blue" size="md" style={{ marginLeft: 0 }}>
+            {Number(instance.score).toFixed(1)}
+          </Tag>
           {isChamp && (
             <Tag type="green" size="md" style={{ marginLeft: 0 }}>
               Test winner
