@@ -1,22 +1,23 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App";
-import "./index.css";
-import { TestPage } from "./pages/TestPage";
-import { Theme } from "carbon-components-react";
-import PrivateRoute from "./PrivateRoute";
-import { ProvideAuth } from "./services/useAuth";
-import { ProjectsPage } from "./pages/ProjectsPage";
-import { RunsPage } from "./pages/RunsPage";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import App from './App';
+import './index.css';
+import { TestPage } from './pages/TestPage';
+import { Theme } from 'carbon-components-react';
+import PrivateRoute from './PrivateRoute';
+import { ProvideAuth } from './services/useAuth';
+import { ProjectsPage } from './pages/ProjectsPage';
+import { RunsPage } from './pages/RunsPage';
+import { ItemPage } from './pages/ItemPage';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: (
           <PrivateRoute>
             <TestPage />
@@ -24,15 +25,23 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/projects/:id",
+        path: '/projects/:id/:itemId',
+        element: (
+          <PrivateRoute>
+            <ItemPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/projects/:id',
         element: (
           <PrivateRoute>
             <RunsPage />
           </PrivateRoute>
-        )
+        ),
       },
       {
-        path: "/projects",
+        path: '/projects',
         element: (
           <PrivateRoute>
             <ProjectsPage />
@@ -46,13 +55,10 @@ const router = createBrowserRouter([
 ReactDOM.render(
   <React.StrictMode>
     <ProvideAuth>
-      <Theme
-        theme="g100"
-        style={{ height: "100vh", overflow: "hidden", display: "flex" }}
-      >
+      <Theme theme="g100" style={{ height: '100vh', overflow: 'hidden', display: 'flex' }}>
         <RouterProvider router={router} />
       </Theme>
     </ProvideAuth>
   </React.StrictMode>,
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );

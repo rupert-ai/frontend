@@ -1,7 +1,7 @@
 import { Breadcrumb, BreadcrumbItem, ToastNotification, Theme } from 'carbon-components-react';
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { RunTile } from '../components/RunTile';
 import TilesList from '../components/TilesList';
 import { Backend, ResearchResultResponse } from '../services/backend';
@@ -13,6 +13,7 @@ export function RunsPage() {
   const location = useLocation();
   const research: ResearchResultResponse | undefined = location.state?.research;
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const { data } = useQuery(
     ['research', auth?.user?.accessToken, id, research],
@@ -40,7 +41,6 @@ export function RunsPage() {
             <BreadcrumbItem>
               <Link to="/projects">Projects</Link>
             </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>{`Test #${finalData.id}`}</BreadcrumbItem>
           </Breadcrumb>
           <h4>{`Test #${finalData.id}`}</h4>
           {!finalData.finishedAt && (
@@ -65,6 +65,11 @@ export function RunsPage() {
                   instance={instance}
                   index={index + 1}
                   isChamp={index === 0}
+                  onClick={
+                    !!finalData.finishedAt
+                      ? () => navigate(`./${instance.id}`, { state: { research: instance } })
+                      : undefined
+                  }
                 />
               )}
             />

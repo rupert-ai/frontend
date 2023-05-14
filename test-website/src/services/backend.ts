@@ -253,6 +253,21 @@ export class Backend {
     throw getErrorObject(err, response);
   };
 
+  public static getResultItem = async (accessToken: string, id: number, itemId: number): Promise<ResearchItem> => {
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}/${itemId}`, {
+      headers: {
+        // Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'GET',
+    });
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
   public static getResult = async (accessToken: string, id: number): Promise<ResearchResultResponse> => {
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}`, {
       headers: {

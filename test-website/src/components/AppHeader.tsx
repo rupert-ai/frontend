@@ -1,20 +1,16 @@
 import {
-  ExpandableSearch,
   Header,
   HeaderContainer,
   HeaderGlobalAction,
   HeaderGlobalBar,
   HeaderMenuButton,
   HeaderName,
-  Search,
   SideNav,
   SideNavDivider,
-  SideNavItem,
   SideNavItems,
   SideNavLink,
-  SideNavLinkText,
 } from 'carbon-components-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AddAlt, ListChecked, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
 import './AppHeader.css';
 import useIsMobile from '../hooks/useIsMobile';
@@ -44,9 +40,9 @@ export function AppHeader() {
               Rupert AI
             </HeaderName>
             <HeaderGlobalBar>
-              <HeaderGlobalAction aria-label="Search">
+              {/* <HeaderGlobalAction aria-label="Search">
                 <ExpandableSearch labelText="Search" />
-              </HeaderGlobalAction>
+              </HeaderGlobalAction> */}
               <HeaderGlobalAction aria-label="Login">
                 <UserAvatar size="20" />
               </HeaderGlobalAction>

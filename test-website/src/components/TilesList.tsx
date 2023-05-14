@@ -1,9 +1,9 @@
 type TilesListProps<T> = {
   data: T[];
   renderer: (instance: T, index: number) => React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export function TilesList<T>({ data, renderer }: TilesListProps<T>) {
+export function TilesList<T>({ data, renderer, style, ...rest }: TilesListProps<T>) {
   return (
     <div
       style={{
@@ -11,7 +11,9 @@ export function TilesList<T>({ data, renderer }: TilesListProps<T>) {
         gridGap: 24,
         gridTemplateColumns: 'repeat(auto-fill, minmax(MIN(100%, 256px), 1fr))',
         width: '100%',
+        ...style,
       }}
+      {...rest}
     >
       {data.map((instance, index) => (
         <div key={index}>{renderer(instance, index)}</div>
