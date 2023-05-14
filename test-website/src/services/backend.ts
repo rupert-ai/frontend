@@ -237,7 +237,6 @@ export class Backend {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    console.log(formData.getAll('images'));
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
       // headers: {
       //   Authorization: accessToken,

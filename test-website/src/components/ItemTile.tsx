@@ -9,7 +9,6 @@ type ItemTileProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export function ItemTile({ imageUrl, imageName, tagText, style, ...rest }: ItemTileProps) {
-  console.log(imageUrl);
   return (
     <Tile
       style={{

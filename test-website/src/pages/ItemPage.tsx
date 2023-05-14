@@ -40,14 +40,13 @@ export function ItemPage() {
     return research ?? data;
   }, [research, data]);
 
-  console.log(finalData);
   const imageTiles = useMemo(() => {
     const original = { imageUrl: finalData?.imageOriginal, imageName: 'Original' };
     const heatmap = { imageUrl: finalData?.imageHeatmap, imageName: 'Heatmap' };
     const focusMap = { imageUrl: finalData?.imageSaliency, imageName: 'Focus map' };
 
     return [original, heatmap, focusMap].filter(Boolean);
-  }, []);
+  }, [finalData]);
 
   return (
     <div className="rai-runs-page">

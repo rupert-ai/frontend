@@ -77,24 +77,18 @@ export function ItemDataTable({ item }: ItemDataTableProps) {
               <TableCell>Colors</TableCell>
             </TableExpandRow>
             <TableExpandedRow colSpan={2}>
-              {item.visionApiResult.imagePropertiesAnnotation?.dominantColors.colors?.map(color => {
-                console.log(
-                  color.color,
-                  `rgba(${color.color.red}, ${color.color.green}, ${color.color.blue}, ${color.color.alpha ?? 1}`,
-                );
-                return (
-                  <div
-                    title={String(color.score)}
-                    style={{
-                      width: 16,
-                      height: 16,
-                      backgroundColor: `rgba(${color.color.red}, ${color.color.green}, ${color.color.blue}, ${
-                        color.color.alpha ?? 1
-                      }`,
-                    }}
-                  />
-                );
-              })}
+              {item.visionApiResult.imagePropertiesAnnotation?.dominantColors.colors?.map(color => (
+                <div
+                  title={String(color.score)}
+                  style={{
+                    width: 16,
+                    height: 16,
+                    backgroundColor: `rgba(${color.color.red}, ${color.color.green}, ${color.color.blue}, ${
+                      color.color.alpha ?? 1
+                    }`,
+                  }}
+                />
+              ))}
             </TableExpandedRow>
           </>
         )}
