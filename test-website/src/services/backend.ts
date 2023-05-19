@@ -197,7 +197,7 @@ export interface ResearchResultResponse {
 }
 
 export interface ResearchItem {
-  clarityScore: string;
+  clarityScore: number;
   createdAt: string;
   finishedAt: string;
   id: number;
@@ -209,7 +209,7 @@ export interface ResearchItem {
   imageSaliency: string;
   name: string;
   researchId: string;
-  score: string;
+  score: number;
   startedAt: string;
   studyId: string;
   updatedAt: string;

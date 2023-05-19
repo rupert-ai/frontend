@@ -1,0 +1,24 @@
+.rai-expanded-content {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rai-view-type-button.rai-view-type-button {
+  width: max-content;
+}
+
+.rai-table-container {
+  overflow: auto;
+}
+
+.rai-projects-header-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rai-projects-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
