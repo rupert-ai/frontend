@@ -1,6 +1,12 @@
 .rai-expanded-content {
   display: flex;
   gap: 0.5rem;
+  padding-block: 0.5rem;
+}
+
+.rai-view-type-container {
+  display: inline-flex;
+  width: unset;
 }
 
 .rai-view-type-button.rai-view-type-button {

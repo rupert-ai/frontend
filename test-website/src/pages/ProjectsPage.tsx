@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import {
-  Button,
-  ButtonSet,
+  ContentSwitcher,
   DataTable,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -83,24 +83,13 @@ export function ProjectsPage() {
     <div className="rai-projects-container">
       <div className="rai-projects-header-row">
         <h4>Projects</h4>
-        <ButtonSet>
-          <Button
-            size="sm"
-            kind={dataView === 'table' ? 'secondary' : 'tertiary'}
-            onClick={() => setDataView('table')}
-            className="rai-view-type-button"
-          >
-            Table
-          </Button>
-          <Button
-            size="sm"
-            kind={dataView === 'tiles' ? 'secondary' : 'tertiary'}
-            onClick={() => setDataView('tiles')}
-            className="rai-view-type-button"
-          >
-            Cards
-          </Button>
-        </ButtonSet>
+        <ContentSwitcher
+          onChange={data => setDataView(data.name as typeof dataView)}
+          className="rai-view-type-container"
+        >
+          <Switch name="table" text="Table" className="rai-view-type-button" />
+          <Switch name="tiles" text="Cards" className="rai-view-type-button" />
+        </ContentSwitcher>
       </div>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Could not fetch researches. Try again later.</div>}
