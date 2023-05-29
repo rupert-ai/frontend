@@ -238,10 +238,10 @@ export class Backend {
       formData.append('images', files[i]);
     }
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
-      // headers: {
-      //   Authorization: accessToken,
-      //   // "Content-Type": "multipart/form-data",
-      // },
+      headers: {
+        Authorization: accessToken,
+        // "Content-Type": "multipart/form-data",
+      },
       method: 'POST',
       body: formData,
     });
@@ -255,7 +255,7 @@ export class Backend {
   public static getResultItem = async (accessToken: string, id: number, itemId: number): Promise<ResearchItem> => {
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}/${itemId}`, {
       headers: {
-        // Authorization: accessToken,
+        Authorization: accessToken,
         Accept: 'application/json',
       },
       method: 'GET',
@@ -270,7 +270,7 @@ export class Backend {
   public static getResult = async (accessToken: string, id: number): Promise<ResearchResultResponse> => {
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}`, {
       headers: {
-        // Authorization: accessToken,
+        Authorization: accessToken,
         Accept: 'application/json',
       },
       method: 'GET',
@@ -285,7 +285,7 @@ export class Backend {
   public static getResults = async (accessToken: string): Promise<ResearchResultResponse[]> => {
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
       headers: {
-        // Authorization: accessToken,
+        Authorization: accessToken,
         Accept: 'application/json',
       },
       method: 'GET',

@@ -8,7 +8,7 @@ import { UploadedFilesDesktop } from '../components/UploadedFilesDesktop';
 import { UploadedFilesList } from '../components/UploadedFilesList';
 import { ChartMultitype } from '@carbon/icons-react';
 import { Backend } from '../services/backend';
-import { useAuth } from '../services/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { LoadingModal } from '../components/LoadingModal';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -37,20 +37,28 @@ export function TestPage() {
     },
   });
 
-  useQuery(['Result', currentBatchId], () => Backend.getResult(auth?.user?.accessToken || '', currentBatchId), {
-    enabled: !!currentBatchId,
-    onSuccess: () => {
-      setResearchState('done');
-      navigate(`./projects/${currentBatchId}`);
+  useQuery(
+    ['Result', currentBatchId],
+    async () => {
+      const token = await auth.user?.getIdToken();
+      return Backend.getResult(token || '', currentBatchId);
     },
-    onError() {
-      setResearchState('done');
+    {
+      enabled: !!currentBatchId,
+      onSuccess: () => {
+        setResearchState('done');
+        navigate(`./projects/${currentBatchId}`);
+      },
+      onError() {
+        setResearchState('done');
+      },
     },
-  });
+  );
 
   const startTest = async () => {
     setResearchState('loading');
-    uploadImagesMutation.mutate({ accessToken: auth?.user?.accessToken || '', files });
+    const token = await auth.user?.getIdToken();
+    uploadImagesMutation.mutate({ accessToken: token || '', files });
   };
 
   return (

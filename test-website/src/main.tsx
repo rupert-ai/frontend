@@ -10,6 +10,8 @@ import { ProvideAuth } from './services/useAuth';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { RunsPage } from './pages/RunsPage';
 import { ItemPage } from './pages/ItemPage';
+import { LoginPage } from './pages/LoginPage';
+import { SignUpPage } from './pages/SignupPage';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,14 @@ const router = createBrowserRouter([
             <TestPage />
           </PrivateRoute>
         ),
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/register',
+        element: <SignUpPage />,
       },
       {
         path: '/projects/:id/:itemId',

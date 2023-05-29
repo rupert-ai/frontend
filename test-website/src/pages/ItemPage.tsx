@@ -14,7 +14,7 @@ import { ItemDataTable } from '../components/ItemDataTable';
 import { ItemTile } from '../components/ItemTile';
 import TilesList from '../components/TilesList';
 import { Backend, ResearchItem } from '../services/backend';
-import { useAuth } from '../services/useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 export function ItemPage() {
   const { id, itemId } = useParams();
@@ -24,12 +24,13 @@ export function ItemPage() {
   const [activeTab, setActiveTab] = useState('Original');
 
   const { data } = useQuery(
-    ['research', auth?.user?.accessToken, id, research],
-    () => {
-      return Backend.getResultItem(auth?.user?.accessToken || '', Number(id), Number(itemId));
+    ['research', auth.user?.uid, id, research],
+    async () => {
+      const token = await auth.user?.getIdToken();
+      return Backend.getResultItem(token || '', Number(id), Number(itemId));
     },
     {
-      enabled: !research || !research.finishedAt,
+      enabled: (!research || !research.finishedAt) && !!auth.user?.uid,
       refetchInterval: data => {
         return !!data?.finishedAt ? false : 2000;
       },

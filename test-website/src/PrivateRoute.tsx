@@ -1,23 +1,14 @@
-// import { useEffect } from 'react';
-// import { useAuth } from './services/useAuth';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
 
 type PrivateRouteProps = {
   children: JSX.Element;
 };
 
 function PrivateRoute({ children }: PrivateRouteProps) {
-  // const auth = useAuth();
+  const { user, isLoading } = useAuth();
 
-  // useEffect(() => {
-  //     if (!auth?.user?.accessToken && auth?.checked) {
-  //         auth?.login();
-  //     }
-  // }, [auth?.checked]);
-  // return true ? (
-  return <>{children}</>;
-  // ) : (
-  // <></>
-  // );
+  return !!user && !isLoading ? children : !user && !isLoading ? <Navigate to="/login" /> : <></>;
 }
 
 export default PrivateRoute;

@@ -1,6 +1,6 @@
 import { Content } from 'carbon-components-react';
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import './App.scss';
 import AppHeader from './components/AppHeader';
 import { ToastContainer, toast } from 'react-toastify';
@@ -43,6 +43,7 @@ const queryClient = new QueryClient({
 
 function App() {
   const isMobile = useIsMobile();
+  const location = useLocation();
   return (
     <QueryClientProvider client={queryClient}>
       <AppHeader />
@@ -53,9 +54,15 @@ function App() {
         hideProgressBar
         autoClose={5000}
       />
-      <Content className="rai-page-content">
-        <Outlet />
-      </Content>
+      {location.pathname === '/login' || location.pathname === '/register' ? (
+        <Content style={{ width: '100%' }}>
+          <Outlet />
+        </Content>
+      ) : (
+        <Content className="rai-page-content">
+          <Outlet />
+        </Content>
+      )}
     </QueryClientProvider>
   );
 }

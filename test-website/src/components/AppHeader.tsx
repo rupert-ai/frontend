@@ -5,18 +5,26 @@ import {
   HeaderGlobalBar,
   HeaderMenuButton,
   HeaderName,
+  OverflowMenuItem,
   SideNav,
   SideNavDivider,
   SideNavItems,
   SideNavLink,
+  Popover,
+  PopoverContent,
 } from 'carbon-components-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AddAlt, ListChecked, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
 import './AppHeader.css';
-import useIsMobile from '../hooks/useIsMobile';
+import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../services/firebase';
 
 export function AppHeader() {
-  // const auth = useAuth();
+  const { user } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const navigate = useNavigate();
   // const navigate = useNavigate();
 
   // const handleLogin = async () => {
@@ -28,7 +36,10 @@ export function AppHeader() {
   //   }
   // };
   const { pathname } = useLocation();
-  const isMobile = useIsMobile();
+
+  const logOut = () => {
+    signOut(auth).then(() => navigate('/login'));
+  };
 
   return (
     <HeaderContainer
@@ -43,42 +54,51 @@ export function AppHeader() {
               {/* <HeaderGlobalAction aria-label="Search">
                 <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction> */}
-              <HeaderGlobalAction aria-label="Login">
-                <UserAvatar size="20" />
-              </HeaderGlobalAction>
+              {!!user && (
+                <Popover open={showUserMenu} autoAlign>
+                  <HeaderGlobalAction aria-label="User" onClick={() => setShowUserMenu(v => !v)}>
+                    <UserAvatar size="20" />
+                  </HeaderGlobalAction>
+                  <PopoverContent>
+                    <OverflowMenuItem hasDivider itemText="Sign out" onClick={logOut} />
+                  </PopoverContent>
+                </Popover>
+              )}
             </HeaderGlobalBar>
-            <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
-              <SideNavItems className="rai-side-nav-items">
-                <SideNavLink
-                  renderIcon={AddAlt}
-                  element={Link}
-                  to="/"
-                  aria-current={pathname === '/' ? 'page' : undefined}
-                  onClick={onClickSideNavExpand}
-                >
-                  Create new project
-                </SideNavLink>
-                <SideNavLink
-                  renderIcon={ListChecked}
-                  element={Link}
-                  to="/projects"
-                  aria-current={pathname.includes('/projects') ? 'page' : undefined}
-                  onClick={onClickSideNavExpand}
-                >
-                  Projects
-                </SideNavLink>
-                <SideNavDivider />
-                <SideNavLink aria-disabled renderIcon={MachineLearning} onClick={onClickSideNavExpand}>
-                  Rupert AI tools
-                </SideNavLink>
-                <SideNavLink aria-disabled renderIcon={MachineLearningModel} onClick={onClickSideNavExpand}>
-                  AI training
-                </SideNavLink>
-                <SideNavLink aria-disabled renderIcon={Folder} onClick={onClickSideNavExpand}>
-                  Assets
-                </SideNavLink>
-              </SideNavItems>
-            </SideNav>
+            {pathname !== '/login' && pathname !== '/register' && (
+              <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
+                <SideNavItems className="rai-side-nav-items">
+                  <SideNavLink
+                    renderIcon={AddAlt}
+                    element={Link}
+                    to="/"
+                    aria-current={pathname === '/' ? 'page' : undefined}
+                    onClick={onClickSideNavExpand}
+                  >
+                    Create new project
+                  </SideNavLink>
+                  <SideNavLink
+                    renderIcon={ListChecked}
+                    element={Link}
+                    to="/projects"
+                    aria-current={pathname.includes('/projects') ? 'page' : undefined}
+                    onClick={onClickSideNavExpand}
+                  >
+                    Projects
+                  </SideNavLink>
+                  <SideNavDivider />
+                  <SideNavLink aria-disabled renderIcon={MachineLearning} onClick={onClickSideNavExpand}>
+                    Rupert AI tools
+                  </SideNavLink>
+                  <SideNavLink aria-disabled renderIcon={MachineLearningModel} onClick={onClickSideNavExpand}>
+                    AI training
+                  </SideNavLink>
+                  <SideNavLink aria-disabled renderIcon={Folder} onClick={onClickSideNavExpand}>
+                    Assets
+                  </SideNavLink>
+                </SideNavItems>
+              </SideNav>
+            )}
           </Header>
         </>
       )}

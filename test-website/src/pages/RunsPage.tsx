@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { RunTile } from '../components/RunTile';
 import TilesList from '../components/TilesList';
 import { Backend, ResearchResultResponse } from '../services/backend';
-import { useAuth } from '../services/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import './RunsPage.css';
 
 export function RunsPage() {
@@ -16,12 +16,13 @@ export function RunsPage() {
   const navigate = useNavigate();
 
   const { data } = useQuery(
-    ['research', auth?.user?.accessToken, id, research],
-    () => {
-      return Backend.getResult(auth?.user?.accessToken || '', Number(id));
+    ['research', auth.user?.uid, id, research],
+    async () => {
+      const token = await auth.user?.getIdToken();
+      return Backend.getResult(token || '', Number(id));
     },
     {
-      enabled: !research || !research.finishedAt,
+      enabled: (!research || !research.finishedAt) && !!auth.user?.uid,
       refetchInterval: data => {
         return !!data?.finishedAt ? false : 2000;
       },

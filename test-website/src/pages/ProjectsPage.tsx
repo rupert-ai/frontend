@@ -20,7 +20,7 @@ import PreviewImage from '../components/PreviewImage';
 import { ProjectTile } from '../components/ProjectTile';
 import TilesList from '../components/TilesList';
 import { Backend, ResearchItem, ResearchResultResponse } from '../services/backend';
-import { useAuth } from '../services/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { findChamp } from '../utils/helpers';
 import './ProjectsPage.css';
 
@@ -57,9 +57,14 @@ export function ProjectsPage() {
     data: projects,
     isLoading,
     isError,
-  } = useQuery(['projects', auth?.user?.accessToken], () => {
-    return Backend.getResults(auth?.user?.accessToken || '');
-  });
+  } = useQuery(
+    ['projects', auth.user?.uid],
+    async () => {
+      const token = await auth.user?.getIdToken();
+      return Backend.getResults(token || '');
+    },
+    { enabled: !!auth.user?.uid },
+  );
 
   const tableData = React.useMemo(() => {
     return (projects ?? []).map(proj => {
