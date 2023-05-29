@@ -38,7 +38,13 @@ export function LoginPage() {
           onChange={e => setPassword(e.target.value)}
         />
         <a>Forgot password?</a>
-        <Button renderIcon={ArrowRight} iconDescription="Login" style={{ width: '100%' }} onClick={signInAccount}>
+        <Button
+          renderIcon={ArrowRight}
+          iconDescription="Login"
+          style={{ width: '100%' }}
+          onClick={signInAccount}
+          size="md"
+        >
           Login
         </Button>
         <SwitcherDivider style={{ marginInline: 0, width: '100%' }} />
@@ -51,7 +57,27 @@ export function LoginPage() {
           </Button>
         </div>
       </div>
-      <img src="./login.png" style={{ marginBlock: '-2rem', marginRight: '-2rem', width: '100%' }} />
+      <div
+        style={{
+          backgroundImage: 'url(./login.png)',
+          width: '100%',
+          backgroundSize: 'cover',
+          marginRight: '-2rem',
+          marginBlock: '-3rem',
+          backgroundPosition: 'center',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '50%', gap: '1rem' }}>
+          <p style={{ fontSize: '1.5rem', fontWeight: '500' }}>
+            Research shows that humans have 52% accuracy at selecting winning creative. This implies that half of your
+            marketing budget is being wasted if you don’t pre-test.
+          </p>
+          <small style={{ alignSelf: 'flex-end', fontWeight: 300 }}>Advertising Research Foundation</small>
+        </div>
+      </div>
     </div>
   );
 }
