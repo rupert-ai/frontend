@@ -69,13 +69,13 @@ export const signInWithFacebook = async (): Promise<string> => {
   return signIn(provider);
 };
 
-export const signInWithEmail = async (email: string, password: string) =>
+export const signInWithEmail = async ({ email, password }: { email: string; password: string }) =>
   signInWithEmailAndPassword(auth, email, password).then(async result => {
     const token = await result.user.getIdToken();
     return postToBackend(token);
   });
 
-export const createWithEmail = async (email: string, password: string) =>
+export const createWithEmail = async ({ email, password }: { email: string; password: string }) =>
   createUserWithEmailAndPassword(auth, email, password).then(async result => {
     const token = await result.user.getIdToken();
     return postToBackend(token);

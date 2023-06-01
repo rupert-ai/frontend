@@ -1,0 +1,49 @@
+.rai-base-login-container {
+  display: flex;
+  gap: 2rem;
+  height: 100%;
+}
+
+.rai-base-login-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-self: center;
+}
+
+.rai-base-login-text {
+  white-space: nowrap;
+}
+
+.rai-base-login-button {
+  width: 100%;
+}
+
+.rai-base-login-image {
+  background-image: url(./login.png);
+  width: 100%;
+  background-size: cover;
+  margin-right: -2rem;
+  margin-block: -3rem;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rai-base-login-text-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 50%;
+  gap: 1rem;
+}
+
+.rai-base-login-long-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.rai-base-login-short-text {
+  align-self: flex-end;
+  font-weight: 300;
+}
