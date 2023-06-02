@@ -64,16 +64,6 @@ export function BaseLogin({ onGoogleLogin, mode, onEmailLogin }: BaseLoginProps)
               <Button
                 size="sm"
                 kind="tertiary"
-                onClick={() => setPageMode('email')}
-                className="rai-base-login-button"
-                iconDescription="Use email"
-                renderIcon={Email}
-              >
-                {modeString} with Email
-              </Button>
-              <Button
-                size="sm"
-                kind="tertiary"
                 onClick={onGoogleLogin}
                 className="rai-base-login-button"
                 iconDescription="Use Google"
@@ -113,6 +103,16 @@ export function BaseLogin({ onGoogleLogin, mode, onEmailLogin }: BaseLoginProps)
                 )}
               >
                 {modeString} with Google
+              </Button>
+              <Button
+                size="sm"
+                kind="tertiary"
+                onClick={() => setPageMode('email')}
+                className="rai-base-login-button"
+                iconDescription="Use email"
+                renderIcon={Email}
+              >
+                {modeString} with Email
               </Button>
             </div>
           </>
