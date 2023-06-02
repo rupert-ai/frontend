@@ -20,7 +20,6 @@
 }
 
 .rai-base-login-image {
-  background-image: url(./login.png);
   width: 100%;
   background-size: cover;
   margin-right: -2rem;
@@ -46,4 +45,12 @@
 .rai-base-login-short-text {
   align-self: flex-end;
   font-weight: 300;
+}
+
+.rai-google-icon {
+  position: absolute;
+  right: 1rem;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
 }
