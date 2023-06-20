@@ -50,7 +50,7 @@ const tableHeaders = [
 export function ProjectsPage() {
   const navigate = useNavigate();
   const auth = useAuth();
-  const [dataView, setDataView] = React.useState<'table' | 'tiles'>('table');
+  const [dataView, setDataView] = React.useState<'table' | 'tiles'>('tiles');
   const projectsMap = React.useRef<Record<string, ResearchResultResponse>>({});
 
   const {
@@ -92,8 +92,8 @@ export function ProjectsPage() {
           onChange={data => setDataView(data.name as typeof dataView)}
           className="rai-view-type-container"
         >
-          <Switch name="table" text="Table" className="rai-view-type-button" />
           <Switch name="tiles" text="Cards" className="rai-view-type-button" />
+          <Switch name="table" text="Table" className="rai-view-type-button" />
         </ContentSwitcher>
       </div>
       {isLoading && <div>Loading...</div>}

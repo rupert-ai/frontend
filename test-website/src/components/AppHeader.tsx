@@ -1,7 +1,6 @@
 import {
   Header,
   HeaderContainer,
-  HeaderGlobalAction,
   HeaderGlobalBar,
   HeaderMenuButton,
   HeaderName,
@@ -12,6 +11,7 @@ import {
   SideNavLink,
   Popover,
   PopoverContent,
+  Button,
 } from 'carbon-components-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AddAlt, ListChecked, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
@@ -38,6 +38,7 @@ export function AppHeader() {
   const { pathname } = useLocation();
 
   const logOut = () => {
+    setShowUserMenu(false);
     signOut(auth).then(() => navigate('/login'));
   };
 
@@ -56,9 +57,13 @@ export function AppHeader() {
               </HeaderGlobalAction> */}
               {!!user && (
                 <Popover open={showUserMenu} autoAlign>
-                  <HeaderGlobalAction aria-label="User" onClick={() => setShowUserMenu(v => !v)}>
+                  <Button
+                    className="cds--header__action"
+                    style={{ justifyContent: 'center' }}
+                    onClick={() => setShowUserMenu(v => !v)}
+                  >
                     <UserAvatar size="20" />
-                  </HeaderGlobalAction>
+                  </Button>
                   <PopoverContent>
                     <OverflowMenuItem hasDivider itemText="Sign out" onClick={logOut} />
                   </PopoverContent>
