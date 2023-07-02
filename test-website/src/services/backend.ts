@@ -225,6 +225,32 @@ export interface BackendError {
 const getErrorObject = (err: any, response: Response) => {
   return { ...err, statusCode: response.status };
 };
+
+export interface PaintImageResponse {
+  completed_at?: string;
+  created_at: string;
+  error?: { code: number; message: string };
+  id: 'string';
+  input: Options & { image_path: string };
+  logs: string;
+  status: 'starting' | 'processing' | 'succeeded' | 'failed';
+  urls: { cancel: string; get: string };
+  version: string;
+  output?: string[];
+}
+
+export type Options = {
+  prompt: string; // required, max: 100
+  negative_prompt: string; // optional, max: 100
+  regen_prompt: boolean; // optional, true/false. default: false. If true, ChatGPT will generate a new prompt
+  image_num: number; // optional, default: 1, max: 4
+  manual_seed: number; // optional, default: -1
+  guidance_scale: string; // optional, default: 7.5
+  num_inference_steps: number; // optional, default: 20,
+  product_size: string; // optional, default: Original, options: 'Original' | '0.6 * width' | '0.5 * width' | '0.4 * width' | '0.3 * width' | '0.2 * width'
+  hd_image: boolean; // optional, default: false
+  upscale_image: boolean; // optional, default: false
+};
 export class Backend {
   public static upload = async ({
     accessToken,
@@ -290,6 +316,60 @@ export class Backend {
       },
       method: 'GET',
     });
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static paintImage = async (accessToken: string, file: File, options: Options): Promise<PaintImageResponse> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    Object.keys(options).forEach(key => {
+      formData.append(key, options[key as keyof Options] as string);
+    });
+    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint', {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static getPaintImages = async (accessToken: string): Promise<PaintImageResponse[]> => {
+    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint', {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'GET',
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static getPaintImage = async (accessToken: string, id: string): Promise<PaintImageResponse> => {
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint/${id}`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'GET',
+    });
+
     if (response.ok) {
       return response.json();
     }

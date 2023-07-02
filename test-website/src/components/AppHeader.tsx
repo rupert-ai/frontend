@@ -21,6 +21,8 @@ import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
 
+const isNewProject = (path: string) => path === '/' || path.includes('/generate') || path === '/test';
+
 export function AppHeader() {
   const { user } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -59,7 +61,7 @@ export function AppHeader() {
                 <Popover open={showUserMenu} autoAlign>
                   <Button
                     className="cds--header__action"
-                    style={{ justifyContent: 'center' }}
+                    style={{ justifyContent: 'center', alignItems: 'center' }}
                     onClick={() => setShowUserMenu(v => !v)}
                   >
                     <UserAvatar size="20" />
@@ -77,7 +79,7 @@ export function AppHeader() {
                     renderIcon={AddAlt}
                     element={Link}
                     to="/"
-                    aria-current={pathname === '/' ? 'page' : undefined}
+                    aria-current={isNewProject(pathname) ? 'page' : undefined}
                     onClick={onClickSideNavExpand}
                   >
                     Create new project

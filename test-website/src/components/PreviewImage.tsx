@@ -14,6 +14,9 @@ export function PreviewImage({ image, style }: PreviewImageProps) {
   const [url, setUrl] = React.useState<string>();
 
   React.useEffect(() => {
+    if (!image) {
+      return;
+    }
     let onDestroy = () => {};
     if (isFileType(image)) {
       const objUrl = URL.createObjectURL(image);

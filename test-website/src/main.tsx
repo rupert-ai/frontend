@@ -11,6 +11,9 @@ import { ProjectsPage } from './pages/ProjectsPage';
 import { RunsPage } from './pages/RunsPage';
 import { ItemPage } from './pages/ItemPage';
 import { LoginPage } from './pages/LoginPage';
+import NewProject from './pages/NewProject';
+import { GeneratePage } from './pages/GeneratePage';
+import { GeneratedImagePage } from './pages/GeneratedImagePage';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +22,30 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
+        element: (
+          <PrivateRoute>
+            <NewProject />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/generate/:id',
+        element: (
+          <PrivateRoute>
+            <GeneratedImagePage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/generate',
+        element: (
+          <PrivateRoute>
+            <GeneratePage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/test',
         element: (
           <PrivateRoute>
             <TestPage />
