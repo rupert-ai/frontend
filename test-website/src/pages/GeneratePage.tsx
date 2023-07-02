@@ -27,7 +27,7 @@ export function GeneratePage() {
       { token: token ?? '', file: files[0], options },
       {
         onSuccess: data => {
-          navigate(`./${data.id}`, { state: { data } });
+          navigate(`../generated/${data.id}`, { state: { data } });
         },
       },
     );

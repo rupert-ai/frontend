@@ -19,8 +19,10 @@ export function GeneratedImagePage() {
   const location = useLocation();
   const generatedImage: PaintImageResponse | undefined = location.state?.data;
   const auth = useAuth();
-  const [finalData, setFinalData] = useState<PaintImageResponse[]>([]);
-  const [currentId, setCurrentId] = useState(id);
+  const [finalData, setFinalData] = useState<PaintImageResponse[]>(
+    generatedImage?.status === 'succeeded' ? [generatedImage] : [],
+  );
+  const [currentId, setCurrentId] = useState(generatedImage?.status != 'succeeded' ? id : undefined);
   const [requiresFetch, setRequiresFetch] = useState(true);
 
   const { data } = useQuery(

@@ -11,3 +11,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.rai-side-nav-new-project {
+  flex: unset;
+}

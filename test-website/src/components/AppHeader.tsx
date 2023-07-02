@@ -12,6 +12,8 @@ import {
   Popover,
   PopoverContent,
   Button,
+  SideNavMenu,
+  SideNavMenuItem,
 } from 'carbon-components-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AddAlt, ListChecked, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
@@ -21,7 +23,7 @@ import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
 
-const isNewProject = (path: string) => path === '/' || path.includes('/generate') || path === '/test';
+const isNewProject = (path: string) => path === '/' || path === '/generate/' || path === '/test';
 
 export function AppHeader() {
   const { user } = useAuth();
@@ -74,7 +76,7 @@ export function AppHeader() {
             </HeaderGlobalBar>
             {pathname !== '/login' && pathname !== '/register' && (
               <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
-                <SideNavItems className="rai-side-nav-items">
+                <SideNavItems className="rai-side-nav-new-project">
                   <SideNavLink
                     renderIcon={AddAlt}
                     element={Link}
@@ -84,15 +86,26 @@ export function AppHeader() {
                   >
                     Create new project
                   </SideNavLink>
-                  <SideNavLink
-                    renderIcon={ListChecked}
-                    element={Link}
-                    to="/projects"
-                    aria-current={pathname.includes('/projects') ? 'page' : undefined}
-                    onClick={onClickSideNavExpand}
-                  >
-                    Projects
-                  </SideNavLink>
+                </SideNavItems>
+                <SideNavItems className="rai-side-nav-items">
+                  <SideNavMenu title="My projects">
+                    <SideNavMenuItem
+                      element={Link}
+                      to="/generated"
+                      aria-current={pathname === '/generated' ? 'page' : undefined}
+                      onClick={onClickSideNavExpand}
+                    >
+                      My generated ads
+                    </SideNavMenuItem>
+                    <SideNavMenuItem
+                      element={Link}
+                      to="/projects"
+                      aria-current={pathname.includes('/projects') ? 'page' : undefined}
+                      onClick={onClickSideNavExpand}
+                    >
+                      My tests
+                    </SideNavMenuItem>
+                  </SideNavMenu>
                   <SideNavDivider />
                   <SideNavLink aria-disabled renderIcon={MachineLearning} onClick={onClickSideNavExpand}>
                     Rupert AI tools
