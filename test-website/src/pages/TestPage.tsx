@@ -47,7 +47,7 @@ export function TestPage() {
       enabled: !!currentBatchId,
       onSuccess: () => {
         setResearchState('done');
-        navigate(`./projects/${currentBatchId}`);
+        navigate(`../projects/${currentBatchId}`);
       },
       onError() {
         setResearchState('done');
