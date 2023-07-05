@@ -30,18 +30,18 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/generated',
-        element: (
-          <PrivateRoute>
-            <GeneratedImagesPage />
-          </PrivateRoute>
-        ),
-      },
-      {
         path: '/generated/:id',
         element: (
           <PrivateRoute>
             <GeneratedImagePage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/generated',
+        element: (
+          <PrivateRoute>
+            <GeneratedImagesPage />
           </PrivateRoute>
         ),
       },

@@ -33,11 +33,11 @@ export function GeneratedImagesPage() {
           </Breadcrumb> */}
           <h4>My generated Ads</h4>
           <TilesList
-            data={data?.filter(d => d.status === 'succeeded') ?? []}
+            data={data?.filter(d => d.jobs.every(job => job.status === 'succeeded')) ?? []}
             renderer={instance => (
               <GeneratedTile
-                text={instance.input.prompt}
-                image={{ url: instance.input.image_path, name: 'original' }}
+                text={''}
+                image={{ url: instance.jobs[0].input.image_path, name: 'original' }}
                 isLoading={false}
                 isOriginal
                 onClick={() => navigate(`./${instance.id}`, { state: { data: instance } })}

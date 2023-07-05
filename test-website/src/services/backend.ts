@@ -227,12 +227,20 @@ const getErrorObject = (err: any, response: Response) => {
 };
 
 export interface PaintImageResponse {
-  completed_at?: string;
-  created_at: string;
+  id: number;
+  jobs: PaintImageJob[];
+  output: unknown[];
+}
+
+export interface PaintImageJob {
+  completedAt?: string;
+  createdAt: string;
   error?: { code: number; message: string };
   id: 'string';
   input: Options & { image_path: string };
   logs: string;
+  seed: number;
+  prompt: string;
   status: 'starting' | 'processing' | 'succeeded' | 'failed';
   urls: { cancel: string; get: string };
   version: string;
@@ -368,6 +376,31 @@ export class Backend {
         Accept: 'application/json',
       },
       method: 'GET',
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static regeneratePaintImage = async (
+    accessToken: string,
+    id: string,
+    options: Options,
+  ): Promise<PaintImageResponse> => {
+    const formData = new FormData();
+    Object.keys(options).forEach(key => {
+      formData.append(key, options[key as keyof Options] as string);
+    });
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint/${id}`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+      body: formData,
     });
 
     if (response.ok) {

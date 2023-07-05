@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { GeneratedTile } from '../components/GeneratedTile';
 import { GenerateSidePanel } from '../components/GenerateSidePanel';
@@ -18,79 +18,89 @@ export function GeneratedImagePage() {
   const { id } = useParams();
   const location = useLocation();
   const generatedImage: PaintImageResponse | undefined = location.state?.data;
-  const auth = useAuth();
-  const [finalData, setFinalData] = useState<PaintImageResponse[]>(
-    generatedImage?.status === 'succeeded' ? [generatedImage] : [],
-  );
-  const [currentId, setCurrentId] = useState(generatedImage?.status != 'succeeded' ? id : undefined);
+  const { user } = useAuth();
   const [requiresFetch, setRequiresFetch] = useState(true);
 
   const { data } = useQuery(
-    ['paintedImage', currentId],
+    ['paintedImage', id],
     async () => {
-      const token = await auth.user?.getIdToken();
-      return Backend.getPaintImage(token ?? '', currentId ?? '');
+      const token = await user?.getIdToken();
+      return Backend.getPaintImage(token ?? '', id ?? '');
     },
     {
-      enabled: !!auth.user?.uid && !!currentId && generatedImage?.status != 'succeeded' && requiresFetch,
+      enabled:
+        !!user?.uid && !!id && (generatedImage?.jobs.some(job => !job.completedAt) || !generatedImage) && requiresFetch,
       refetchInterval: data => {
-        return data?.status === 'succeeded' || data?.status === 'failed' ? false : 2000;
+        return data?.jobs.some(job => !job.completedAt) ? 2000 : false;
       },
       onSuccess: data => {
-        if (data.status === 'succeeded') {
+        if (data.jobs.every(job => job.status === 'succeeded' || job.status === 'failed')) {
           setRequiresFetch(false);
-          setFinalData(d => [...d, data]);
         }
       },
     },
   );
 
-  // const { mutate, isLoading: mutationLoading } = usePaintImageMutation();
-
+  const { mutate } = useMutation(({ token, id, options }: { token: string; id: string; options: Options }) =>
+    Backend.regeneratePaintImage(token, id, options),
+  );
   const startTest = async (options: Options) => {
-    console.log('Future enhancement');
-    // const token = await auth.user?.getIdToken();
-    // const file = await convertUrlToFile(generatedImage?.input.image_path ?? '');
-    // // currentOptions.current = options;
-    // mutate(
-    //   { token: token ?? '', file, options },
-    //   {
-    //     onSuccess: data => {
-    //       setCurrentId(data.id);
-    //       setRequiresFetch(true);
-    //     },
-    //   },
-    // );
+    const token = await user?.getIdToken();
+    // currentOptions.current = options;
+    mutate(
+      { token: token ?? '', id: id ?? '', options },
+      {
+        onSuccess: data => {
+          setRequiresFetch(true);
+        },
+      },
+    );
   };
+
+  const mappedData: { prompt?: string; url?: string; isLoading: boolean }[] = useMemo(() => {
+    const finalData = data ?? generatedImage;
+    return finalData?.jobs.length
+      ? [
+          { prompt: '', url: finalData?.jobs[0].input.image_path, isLoading: false },
+          ...(finalData ?? { jobs: [] }).jobs.flatMap(job =>
+            !!job.output?.length
+              ? job.output.map(o => ({ prompt: job.prompt, url: o, isLoading: false }))
+              : new Array(1 + (job.input.image_num ?? 0)).fill(1).map(() => ({ isLoading: true })),
+          ),
+        ]
+      : [];
+  }, [data, generatedImage]);
+
+  const initialOptions = useMemo(() => {
+    const validData = generatedImage ?? data;
+    return validData?.jobs?.[validData?.jobs.length - 1].input ?? undefined;
+  }, [generatedImage, data]);
 
   return (
     <>
       <div className="rai-test-page">
-        {!!finalData.length && (
+        {!!mappedData.length && (
           <TilesList
-            data={[
-              { prompt: '', url: finalData[0].input.image_path },
-              ...finalData.flatMap(d => (d.output ?? ['']).map(o => ({ prompt: d.input.prompt, url: o }))),
-            ]}
+            data={mappedData ?? []}
             renderer={(image, index) => (
               <GeneratedTile
-                isLoading={false}
+                isLoading={image.isLoading}
                 text={index > 1 ? image?.prompt : ''}
                 isOriginal={index === 0}
                 isTop={index === 1}
-                image={{ url: image.url, name: image.prompt }}
+                image={{ url: image.url ?? '', name: image.prompt ?? '' }}
               />
             )}
           />
         )}
-        {!!currentId && data?.status != 'succeeded' && data?.status != 'failed' && (
-          <TilesList
-            data={new Array(2 + (generatedImage?.input.image_num ?? 0)).fill(1)}
-            renderer={() => <GeneratedTile isLoading isOriginal={false} isTop={false} />}
-          />
-        )}
       </div>
-      <GenerateSidePanel initialOptions={generatedImage?.input} startTest={startTest} isDisabled={true} />
+      {!!initialOptions && (
+        <GenerateSidePanel
+          initialOptions={initialOptions}
+          startTest={startTest}
+          isDisabled={mappedData?.some(d => d.isLoading)}
+        />
+      )}
     </>
   );
 }

@@ -18,8 +18,14 @@ type GeneratedTileProps = {
   isTop?: boolean;
   isOriginal?: boolean;
   isLoading: boolean;
-} & GeneratedTileLoadingProps &
-  React.HTMLAttributes<HTMLDivElement>;
+  image?:
+    | File
+    | {
+        name: string;
+        url: string;
+      };
+  text?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading, ...rest }: GeneratedTileProps) {
   return (
@@ -35,7 +41,7 @@ export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading
       {...rest}
       disabled
     >
-      {isLoading ? (
+      {isLoading || !image ? (
         <SkeletonPlaceholder style={{ width: '100%', height: '100%', aspectRatio: '1/1' }} />
       ) : (
         <PreviewImage image={image} style={{ width: '100%', height: 'unset', objectFit: 'cover' }} />
@@ -62,12 +68,13 @@ export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading
           ) : (
             <div
               style={{
-                wordBreak: 'break-all',
+                wordBreak: 'break-word',
                 display: '-webkit-box',
-                '-webkit-line-clamp': '2',
+                '-webkit-line-clamp': '3',
                 '-webkit-box-orient': 'vertical',
                 overflow: 'hidden',
               }}
+              title={text}
             >
               {text}
             </div>
