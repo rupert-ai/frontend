@@ -142,8 +142,8 @@ export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: Gen
                 style={{ width: '100%' }}
                 labelText="Prompt guidance"
                 name="guidance_scale"
-                onChange={val => onPropChange('guidance_scale', val.value)}
-                value={options.current.guidance_scale}
+                onChange={val => onPropChange('guidance_scale', String(val.value))}
+                value={Number(options.current.guidance_scale)}
                 min={1}
                 max={30}
                 step={0.5}

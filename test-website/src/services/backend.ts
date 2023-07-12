@@ -259,6 +259,7 @@ export type Options = {
   hd_image: boolean; // optional, default: false
   upscale_image: boolean; // optional, default: false
 };
+
 export class Backend {
   public static upload = async ({
     accessToken,
@@ -390,17 +391,20 @@ export class Backend {
     id: string,
     options: Options,
   ): Promise<PaintImageResponse> => {
-    const formData = new FormData();
-    Object.keys(options).forEach(key => {
-      formData.append(key, options[key as keyof Options] as string);
+    const newOptions: Record<string, string | number | boolean> = {};
+    Object.entries(options).forEach(([key, value]) => {
+      if (key !== 'image_path') {
+        newOptions[key] = value;
+      }
     });
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint/${id}`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: formData,
+      body: JSON.stringify(newOptions),
     });
 
     if (response.ok) {

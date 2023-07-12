@@ -29,7 +29,7 @@ export function GeneratedImagePage() {
     },
     {
       enabled:
-        !!user?.uid && !!id && (generatedImage?.jobs.some(job => !job.completedAt) || !generatedImage) && requiresFetch,
+        !!user?.uid && !!id && (generatedImage?.jobs.some(job => !job.completedAt) || !generatedImage || requiresFetch),
       refetchInterval: data => {
         return data?.jobs.some(job => !job.completedAt) ? 2000 : false;
       },
@@ -41,8 +41,14 @@ export function GeneratedImagePage() {
     },
   );
 
-  const { mutate } = useMutation(({ token, id, options }: { token: string; id: string; options: Options }) =>
-    Backend.regeneratePaintImage(token, id, options),
+  const { mutate, isLoading } = useMutation(
+    ({ token, id, options }: { token: string; id: string; options: Options }) =>
+      Backend.regeneratePaintImage(token, id, options),
+    {
+      onSuccess: () => {
+        setRequiresFetch(true);
+      },
+    },
   );
   const startTest = async (options: Options) => {
     const token = await user?.getIdToken();
@@ -98,7 +104,7 @@ export function GeneratedImagePage() {
         <GenerateSidePanel
           initialOptions={initialOptions}
           startTest={startTest}
-          isDisabled={mappedData?.some(d => d.isLoading)}
+          isDisabled={mappedData?.some(d => d.isLoading) || isLoading}
         />
       )}
     </>
