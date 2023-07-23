@@ -1,4 +1,4 @@
-import { SkeletonPlaceholder, SkeletonText, Tag, Tile } from 'carbon-components-react';
+import { SkeletonPlaceholder, SkeletonText, Tag, SelectableTile } from 'carbon-components-react';
 import PreviewImage from './PreviewImage';
 
 type GeneratedTileLoadingProps =
@@ -25,11 +25,12 @@ type GeneratedTileProps = {
         url: string;
       };
   text?: string;
+  selected?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading, ...rest }: GeneratedTileProps) {
   return (
-    <Tile
+    <SelectableTile
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -39,7 +40,6 @@ export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading
         ...style,
       }}
       {...rest}
-      disabled
     >
       {isLoading || !image ? (
         <SkeletonPlaceholder style={{ width: '100%', height: '100%', aspectRatio: '1/1' }} />
@@ -81,6 +81,6 @@ export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading
           )}
         </div>
       </div>
-    </Tile>
+    </SelectableTile>
   );
 }

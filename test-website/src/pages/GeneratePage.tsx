@@ -1,30 +1,24 @@
-import React, { useRef } from 'react';
-import UploadFile from '../components/UploadFile';
-// import './GeneratePage.css';
+import React, { useRef, useState } from 'react';
 import { Options } from '../services/backend';
 import { useAuth } from '../hooks/useAuth';
-import { GenerateSidePanel } from '../components/GenerateSidePanel';
-import PreviewImage from '../components/PreviewImage';
 import { useNavigate } from 'react-router-dom';
 import { usePaintImageMutation } from '../hooks/usePaintImageMutation';
+import { defaultOptions, GenerateSidePanel } from '../components/GenerateSidePanel';
+import { GenerateToolbar } from '../components/GenerateToolbar';
 
 export function GeneratePage() {
   const auth = useAuth();
   const [files, setFiles] = React.useState<File[]>([]);
-  const currentOptions = useRef<Options>();
+  const currentOptions = useRef<Options>(defaultOptions);
   const navigate = useNavigate();
-
-  const onFilesAdded = React.useCallback((files: File[]) => {
-    setFiles(files);
-  }, []);
+  const [showPanel, setShowPanel] = useState(false);
 
   const { mutate, isLoading: mutationLoading } = usePaintImageMutation();
 
-  const startTest = async (options: Options) => {
+  const startTest = async () => {
     const token = await auth.user?.getIdToken();
-    currentOptions.current = options;
     mutate(
-      { token: token ?? '', file: files[0], options },
+      { token: token ?? '', file: files[0], options: currentOptions.current },
       {
         onSuccess: data => {
           navigate(`../generated/${data.id}`, { state: { data } });
@@ -33,21 +27,34 @@ export function GeneratePage() {
     );
   };
 
+  const generate = (prompt: string) => {
+    currentOptions.current.prompt = prompt;
+    startTest();
+  };
+
+  const onOptionChange: React.ComponentProps<typeof GenerateSidePanel>['onChange'] = (key, val) => {
+    currentOptions.current[key] = val;
+  };
+
   return (
     <>
       <div className="rai-test-page">
-        <h2>Generate</h2>
-        <small>
-          You can generate up to 4 Ads in one take. Max file size is 500kb. Supported file types are <i>.jpg</i> and{' '}
-          <i>.png</i>.
-        </small>
-        {!files.length ? (
-          <UploadFile onFilesAdded={onFilesAdded} multiple={false} />
-        ) : (
-          <PreviewImage image={files[0]} style={{ width: '50%', objectFit: 'cover', flexGrow: 1 }} />
+        <h2>Generate Ad</h2>
+        <GenerateToolbar
+          isLoading={mutationLoading}
+          onGenerate={generate}
+          onShowPanel={() => setShowPanel(v => !v)}
+          onImageChange={f => setFiles([f])}
+        />
+        {showPanel && (
+          <GenerateSidePanel
+            onChange={onOptionChange}
+            onClose={() => setShowPanel(false)}
+            image={files[0]}
+            onImageRemove={() => setFiles([])}
+          />
         )}
       </div>
-      <GenerateSidePanel startTest={startTest} isDisabled={!files.length || mutationLoading} />
     </>
   );
 }

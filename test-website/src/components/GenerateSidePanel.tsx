@@ -9,20 +9,25 @@ import {
   SelectItem,
   Slider,
   TextArea,
-  TextInput,
   Toggle,
 } from 'carbon-components-react';
 import { useRef } from 'react';
 import { Options } from '../services/backend';
+import { Close } from '@carbon/icons-react';
+import './GenerateSidePanel.css';
+import { UploadedFilesList } from './UploadedFilesList';
+
+type initialOptions = Omit<Options, 'prompt'>;
 
 type GenerateSidePanelProps = {
-  startTest: (options: Options) => void;
-  isDisabled: boolean;
-  initialOptions?: Options;
+  initialOptions?: initialOptions;
+  onChange: <OptionsKey extends keyof initialOptions>(key: OptionsKey, value: initialOptions[OptionsKey]) => void;
+  onClose: () => void;
+  image?: File | string;
+  onImageRemove: () => void;
 };
 
-const defaultOptions: Options = {
-  prompt: '{Product title}',
+export const defaultOptions: Options = {
   negative_prompt: 'illustration, 3d, sepia, painting, cartoons, sketch, (worst quality:2)',
   regen_prompt: true,
   image_num: 4,
@@ -32,39 +37,55 @@ const defaultOptions: Options = {
   product_size: 'Original',
   hd_image: false,
   upscale_image: false,
+  prompt: '',
 };
 
-export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: GenerateSidePanelProps) {
-  const options = useRef<Options>(initialOptions ?? defaultOptions);
+export function GenerateSidePanel({ initialOptions, onChange, onClose, image, onImageRemove }: GenerateSidePanelProps) {
+  const options = useRef<initialOptions>(initialOptions ?? defaultOptions);
 
-  const onPropChange = <OptionsKey extends keyof Options>(name: OptionsKey, value: Options[OptionsKey]) => {
+  const onPropChange = <OptionsKey extends keyof initialOptions>(
+    name: OptionsKey,
+    value: initialOptions[OptionsKey],
+  ) => {
     options.current[name] = value;
+    onChange(name, value);
   };
 
   return (
     <HeaderPanel
       aria-label="Generate image panel"
       expanded
-      style={{
-        overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        width: '20rem',
-        zIndex: 5000,
-        padding: '1rem',
-      }}
+      className="rai-settings-panel"
       onClick={e => e.stopPropagation()}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <h3>Settings</h3>
-        <TextInput
+      <div className="rai-settings-panel-content">
+        <div className="rai-settings-panel-header">
+          <h3>Settings</h3>
+          <Button
+            className="cds--header__action rai-settings-panel-close-button"
+            onClick={onClose}
+            kind="tertiary"
+            size="small"
+          >
+            <Close size="20" />
+          </Button>
+        </div>
+        {/* <TextInput
           id="rai-product-title"
           labelText="Product title"
           helperText="Name your product (ex: Shoes)"
           placeholder="ex: Shoes"
           // onChange={(e) =>onPropChange()}
-        />
+        /> */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <h5>Uploaded file</h5>
+          {!!image && (
+            <UploadedFilesList
+              files={typeof image === 'string' ? [{ name: '', url: image }] : [image]}
+              onFileDelete={onImageRemove}
+            />
+          )}
+        </div>
         <Select
           id="rai-prompt-template"
           labelText="Prompt template"
@@ -74,11 +95,12 @@ export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: Gen
           <SelectItem value="Custom" text="Custom" />
         </Select>
         <TextArea
-          labelText="Custom prompt"
+          labelText="Negative prompt"
           rows={4}
-          id="rai-custom-prompt"
-          onChange={e => onPropChange('prompt', e.target.value)}
-          defaultValue={options.current.prompt}
+          id="rai-negative-prompt"
+          name="negative_prompt"
+          onChange={e => onPropChange('negative_prompt', e.target.value)}
+          defaultValue={options.current.negative_prompt}
         />
         <Toggle
           labelA="Prompt Magic"
@@ -120,14 +142,6 @@ export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: Gen
         <Accordion>
           <AccordionItem title="Advanced settings" style={{ paddingRight: 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <TextArea
-                labelText="Negative prompt"
-                rows={4}
-                id="rai-negative-prompt"
-                name="negative_prompt"
-                onChange={e => onPropChange('negative_prompt', e.target.value)}
-                defaultValue={options.current.negative_prompt}
-              />
               <NumberInput
                 id="rai-seed"
                 label="Seed"
@@ -139,7 +153,7 @@ export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: Gen
                 }
               />
               <Slider
-                style={{ width: '100%' }}
+                style={{ minWidth: '8rem', width: '8rem' }}
                 labelText="Prompt guidance"
                 name="guidance_scale"
                 onChange={val => onPropChange('guidance_scale', String(val.value))}
@@ -149,6 +163,7 @@ export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: Gen
                 step={0.5}
               />
               <Slider
+                style={{ minWidth: '8rem', width: '8rem' }}
                 labelText="Inference steps"
                 name="num_inference_steps"
                 onChange={val => onPropChange('num_inference_steps', val.value)}
@@ -161,9 +176,6 @@ export function GenerateSidePanel({ startTest, isDisabled, initialOptions }: Gen
           </AccordionItem>
         </Accordion>
       </div>
-      <Button style={{ width: '100%' }} onClick={() => startTest(options.current)} disabled={isDisabled}>
-        Start testing Ads
-      </Button>
     </HeaderPanel>
   );
 }

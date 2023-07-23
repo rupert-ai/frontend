@@ -287,6 +287,31 @@ export class Backend {
     throw getErrorObject(err, response);
   };
 
+  public static uploadGenerated = async ({
+    accessToken,
+    files,
+    name,
+  }: {
+    accessToken: string;
+    files: string[];
+    name: string;
+  }): Promise<ResearchUploadResponse> => {
+    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/url`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ images: files, name }),
+    });
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
   public static getResultItem = async (accessToken: string, id: number, itemId: number): Promise<ResearchItem> => {
     const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}/${itemId}`, {
       headers: {
