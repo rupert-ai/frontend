@@ -152,7 +152,7 @@ export function GeneratedImagePage() {
 
   return (
     <>
-      <div className="rai-test-page">
+      <div className="rai-test-page" style={{ flexGrow: !showPanel ? '1' : undefined }}>
         <GenerateToolbar
           isLoading={isLoading}
           onGenerate={generate}
@@ -163,8 +163,10 @@ export function GeneratedImagePage() {
           initialPrompt={originalImage?.prompt}
         />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span>{selectedItems.length} item(s) selected</span>
-          {selectedItems.length === mappedData.length ? (
+          <span>
+            {selectedItems.length}/{mappedData.length} item(s) selected
+          </span>
+          {selectedItems.length > 0 ? (
             <div>
               <Button kind="ghost" onClick={startTesting}>
                 Pre test

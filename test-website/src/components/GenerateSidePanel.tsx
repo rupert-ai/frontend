@@ -11,11 +11,12 @@ import {
   TextArea,
   Toggle,
 } from 'carbon-components-react';
-import { useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 import { Options } from '../services/backend';
 import { Close } from '@carbon/icons-react';
 import './GenerateSidePanel.css';
 import { UploadedFilesList } from './UploadedFilesList';
+import useIsMobile from '../hooks/useIsMobile';
 
 type initialOptions = Omit<Options, 'prompt'>;
 
@@ -25,6 +26,23 @@ type GenerateSidePanelProps = {
   onClose: () => void;
   image?: File | string;
   onImageRemove: () => void;
+};
+
+const PanelContainer = ({ children }: { children: ReactNode }) => {
+  const isMobile = useIsMobile();
+
+  return isMobile ? (
+    <div>{children}</div>
+  ) : (
+    <HeaderPanel
+      aria-label="Generate image panel"
+      expanded
+      className="rai-settings-panel"
+      onClick={e => e.stopPropagation()}
+    >
+      {children}
+    </HeaderPanel>
+  );
 };
 
 export const defaultOptions: Options = {
@@ -52,12 +70,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
   };
 
   return (
-    <HeaderPanel
-      aria-label="Generate image panel"
-      expanded
-      className="rai-settings-panel"
-      onClick={e => e.stopPropagation()}
-    >
+    <PanelContainer>
       <div className="rai-settings-panel-content">
         <div className="rai-settings-panel-header">
           <h3>Settings</h3>
@@ -176,6 +189,6 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
           </AccordionItem>
         </Accordion>
       </div>
-    </HeaderPanel>
+    </PanelContainer>
   );
 }

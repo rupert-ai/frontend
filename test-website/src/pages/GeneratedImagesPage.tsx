@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TilesList from '../components/TilesList';
 import { Backend } from '../services/backend';
 import { useAuth } from '../hooks/useAuth';
-import { GeneratedTile } from '../components/GeneratedTile';
+import { GeneratedProjectTile } from '../components/GeneratedProjectTile';
 
 export function GeneratedImagesPage() {
   const auth = useAuth();
@@ -35,11 +35,8 @@ export function GeneratedImagesPage() {
           <TilesList
             data={data?.filter(d => d.jobs.every(job => job.status === 'succeeded')) ?? []}
             renderer={instance => (
-              <GeneratedTile
-                text={''}
+              <GeneratedProjectTile
                 image={{ url: instance.jobs[0].input.image_path, name: 'original' }}
-                isLoading={false}
-                isOriginal
                 onClick={() => navigate(`./${instance.id}`, { state: { data: instance } })}
               />
             )}

@@ -1,19 +1,6 @@
 import { SkeletonPlaceholder, SkeletonText, Tag, SelectableTile } from 'carbon-components-react';
 import PreviewImage from './PreviewImage';
 
-type GeneratedTileLoadingProps =
-  | { isLoading: true; text?: undefined; image?: undefined }
-  | {
-      isLoading?: false;
-      image:
-        | File
-        | {
-            name: string;
-            url: string;
-          };
-      text: string;
-    };
-
 type GeneratedTileProps = {
   isTop?: boolean;
   isOriginal?: boolean;

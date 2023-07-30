@@ -38,7 +38,7 @@ export function GeneratePage() {
 
   return (
     <>
-      <div className="rai-test-page">
+      <div className="rai-test-page" style={{ flexGrow: !showPanel ? '1' : undefined }}>
         <h2>Generate Ad</h2>
         <GenerateToolbar
           isLoading={mutationLoading}
