@@ -52,7 +52,7 @@ export function AppHeader() {
         <>
           <Header aria-label="Rupert">
             <HeaderMenuButton aria-label="Open menu" isActive={isSideNavExpanded} onClick={onClickSideNavExpand} />
-            <HeaderName element={Link} to="/" prefix="" className="rai-header-name">
+            <HeaderName as={Link} to="/" prefix="" className="rai-header-name">
               Rupert AI
             </HeaderName>
             <HeaderGlobalBar>
@@ -79,7 +79,7 @@ export function AppHeader() {
                 <SideNavItems className="rai-side-nav-new-project">
                   <SideNavLink
                     renderIcon={AddAlt}
-                    element={Link}
+                    as={Link}
                     to="/"
                     aria-current={isNewProject(pathname) ? 'page' : undefined}
                     onClick={onClickSideNavExpand}

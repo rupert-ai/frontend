@@ -9,9 +9,10 @@ type GeneratedProjectTileProps = {
         url: string;
       };
   selected?: boolean;
+  index: number;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export function GeneratedProjectTile({ image, style, ...rest }: GeneratedProjectTileProps) {
+export function GeneratedProjectTile({ image, style, index, ...rest }: GeneratedProjectTileProps) {
   return (
     <ClickableTile
       style={{
@@ -25,13 +26,7 @@ export function GeneratedProjectTile({ image, style, ...rest }: GeneratedProject
       {...rest}
     >
       <PreviewImage image={image} style={{ width: '100%', height: 'unset', objectFit: 'cover' }} />
-      <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <Tag type="gray" size="md" style={{ marginLeft: 0 }}>
-            Original
-          </Tag>
-        </div>
-      </div>
+      <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>#{index}</div>
     </ClickableTile>
   );
 }

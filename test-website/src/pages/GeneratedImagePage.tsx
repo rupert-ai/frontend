@@ -1,3 +1,4 @@
+import { QuadrantPlot } from '@carbon/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button } from 'carbon-components-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -157,26 +158,35 @@ export function GeneratedImagePage() {
           isLoading={isLoading}
           onGenerate={generate}
           onShowPanel={() => setShowPanel(v => !v)}
-          isDisabled={mappedData?.some(d => d.isLoading) || isLoading}
+          isDisabled={mappedData?.some(d => d.isLoading) || isLoading || !!selectedItems.length}
           onImageChange={() => navigate('/generate')}
           image={originalImage?.image_path}
           initialPrompt={originalImage?.prompt}
         />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: selectedItems.length > 0 ? 'var(--cds-button-primary, #0f62fe)' : undefined,
+            color: selectedItems.length > 0 ? 'var(--cds-text-on-color, #ffffff)' : undefined,
+            paddingLeft: '1rem',
+          }}
+        >
           <span>
             {selectedItems.length}/{mappedData.length} item(s) selected
           </span>
           {selectedItems.length > 0 ? (
             <div>
-              <Button kind="ghost" onClick={startTesting}>
+              <Button size="sm" onClick={startTesting} renderIcon={QuadrantPlot} style={{ paddingRight: '3rem' }}>
                 Pre test
               </Button>
-              <Button kind="ghost" onClick={() => setSelectedItems([])}>
+              <Button size="sm" onClick={() => setSelectedItems([])} style={{ paddingRight: '1rem' }}>
                 Cancel
               </Button>
             </div>
           ) : (
-            <Button kind="ghost" onClick={() => setSelectedItems([...mappedData])}>
+            <Button kind="ghost" size="sm" onClick={() => setSelectedItems([...mappedData])}>
               Select all
             </Button>
           )}

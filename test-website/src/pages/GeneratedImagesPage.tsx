@@ -38,6 +38,7 @@ export function GeneratedImagesPage() {
               <GeneratedProjectTile
                 image={{ url: instance.jobs[0].input.image_path, name: 'original' }}
                 onClick={() => navigate(`./${instance.id}`, { state: { data: instance } })}
+                index={instance.id}
               />
             )}
           />
