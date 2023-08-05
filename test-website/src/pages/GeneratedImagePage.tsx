@@ -1,9 +1,8 @@
 import { QuadrantPlot } from '@carbon/icons-react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from 'carbon-components-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { GeneratedTile } from '../components/GeneratedTile';
 import { GenerateSidePanel } from '../components/GenerateSidePanel';
 import { GenerateToolbar } from '../components/GenerateToolbar';
@@ -31,6 +30,7 @@ export function GeneratedImagePage() {
   const [selectedItems, setSelectedItems] = useState<CustomImageInstance[]>([]);
   const [currentBatchId, setCurrentBatchId] = useState(0);
   const [isTesting, setIsTesting] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data } = useQuery(
     ['paintedImage', id],
@@ -57,6 +57,7 @@ export function GeneratedImagePage() {
       Backend.regeneratePaintImage(token, id, options),
     {
       onSuccess: () => {
+        queryClient.invalidateQueries(['paintedImage', id]);
         setRequiresFetch(true);
       },
     },
@@ -92,7 +93,7 @@ export function GeneratedImagePage() {
                     isLoading: false,
                     selected: selectedItems.some(e => e.url === o),
                   }))
-              : new Array(1 + (job.input.image_num ?? 0)).fill(1).map(() => ({ isLoading: true })),
+              : new Array(job.input.image_num ?? 0).fill(1).map(() => ({ isLoading: true })),
           ),
         ]
       : [];

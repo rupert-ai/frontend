@@ -256,8 +256,7 @@ export type Options = {
   guidance_scale: string; // optional, default: 7.5
   num_inference_steps: number; // optional, default: 20,
   product_size: string; // optional, default: Original, options: 'Original' | '0.6 * width' | '0.5 * width' | '0.4 * width' | '0.3 * width' | '0.2 * width'
-  hd_image: boolean; // optional, default: false
-  upscale_image: boolean; // optional, default: false
+  scale: number; // optional, range 1 - 4
 };
 
 export class Backend {
@@ -418,7 +417,7 @@ export class Backend {
   ): Promise<PaintImageResponse> => {
     const newOptions: Record<string, string | number | boolean> = {};
     Object.entries(options).forEach(([key, value]) => {
-      if (key !== 'image_path') {
+      if (key !== 'image_path' && key !== 'api_key') {
         newOptions[key] = value;
       }
     });

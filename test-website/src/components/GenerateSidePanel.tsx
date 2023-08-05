@@ -53,8 +53,7 @@ export const defaultOptions: Options = {
   guidance_scale: '1.0',
   num_inference_steps: 20,
   product_size: 'Original',
-  hd_image: false,
-  upscale_image: false,
+  scale: 1,
   prompt: '',
 };
 
@@ -139,17 +138,13 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
           <SelectItem value="Original" text="Original" />
         </Select>
         <div>
-          <Checkbox
-            labelText="HD (768 * 768)"
+          <NumberInput
             id="rai-hd-quality"
-            onChange={(e: { target: { checked: boolean } }) => onPropChange('hd_image', e.target.checked)}
-            defaultChecked={options.current.hd_image}
-          />
-          <Checkbox
-            labelText="Upscale (1536 * 1536)"
-            id="rai-upscale-quality"
-            onChange={(e: { target: { checked: boolean } }) => onPropChange('upscale_image', e.target.checked)}
-            defaultChecked={options.current.upscale_image}
+            label="Quality"
+            min={1}
+            max={4}
+            value={Number(options.current.scale)}
+            onChange={(_e: unknown, state: { value: string | number }) => onPropChange('scale', Number(state.value))}
           />
         </div>
         <Accordion>
