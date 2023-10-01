@@ -1,22 +1,13 @@
-import { QuadrantPlot } from '@carbon/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button } from 'carbon-components-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { CustomImageInstance, GeneratedImagePreTestToolbar } from '../components/GeneratedImagePreTestToolbar';
 import { GeneratedTile } from '../components/GeneratedTile';
 import { GenerateSidePanel } from '../components/GenerateSidePanel';
 import { GenerateToolbar } from '../components/GenerateToolbar';
-import { LoadingModal } from '../components/LoadingModal';
 import TilesList from '../components/TilesList';
 import { useAuth } from '../hooks/useAuth';
 import { Backend, Options, PaintImageResponse } from '../services/backend';
-
-type CustomImageInstance = {
-  prompt?: string;
-  url?: string;
-  isLoading: boolean;
-  selected?: boolean;
-};
 
 export function GeneratedImagePage() {
   const { id } = useParams();
@@ -28,8 +19,6 @@ export function GeneratedImagePage() {
   const navigate = useNavigate();
   const [currentOptions, setCurrentOptions] = useState<Options>();
   const [selectedItems, setSelectedItems] = useState<CustomImageInstance[]>([]);
-  const [currentBatchId, setCurrentBatchId] = useState(0);
-  const [isTesting, setIsTesting] = useState(false);
   const queryClient = useQueryClient();
 
   const { data } = useQuery(
@@ -63,14 +52,14 @@ export function GeneratedImagePage() {
     },
   );
 
-  const startTest = async () => {
+  const startTest = async (prompt: string) => {
     if (!currentOptions) {
       return;
     }
 
     const token = await user?.getIdToken();
     mutate(
-      { token: token ?? '', id: id ?? '', options: currentOptions },
+      { token: token ?? '', id: id ?? '', options: { ...currentOptions, prompt } },
       {
         onSuccess: () => {
           setRequiresFetch(true);
@@ -104,94 +93,30 @@ export function GeneratedImagePage() {
     setCurrentOptions(validData?.jobs?.[validData?.jobs.length - 1].input);
   }, [generatedImage, data]);
 
-  const generate = (prompt: string) => {
-    setCurrentOptions(o => ({ ...o, prompt }));
-    startTest();
-  };
-
   const onOptionChange: React.ComponentProps<typeof GenerateSidePanel>['onChange'] = (key, val) => {
-    setCurrentOptions(o => ({ ...o, [key]: val }));
+    setCurrentOptions(o => (o ? { ...o, [key]: val } : { [key]: val }));
   };
 
   const originalImage = useMemo(() => (data ?? generatedImage)?.jobs?.[0].input, [data, generatedImage]);
-
-  const uploadImagesMutation = useMutation(Backend.uploadGenerated, {
-    onSuccess(response) {
-      setCurrentBatchId(response.batchId);
-    },
-    onError() {
-      setIsTesting(false);
-    },
-  });
-
-  useQuery(
-    ['Result', currentBatchId],
-    async () => {
-      const token = await user?.getIdToken();
-      return Backend.getResult(token || '', currentBatchId);
-    },
-    {
-      enabled: !!currentBatchId,
-      onSuccess: () => {
-        setIsTesting(false);
-        navigate(`../projects/${currentBatchId}`);
-      },
-      onError() {
-        setIsTesting(false);
-      },
-    },
-  );
-
-  const startTesting = async () => {
-    setIsTesting(true);
-    const token = await user?.getIdToken();
-    uploadImagesMutation.mutate({
-      accessToken: token || '',
-      files: selectedItems.map(i => i.url ?? ''),
-      name: `#${id ?? Math.random()}`,
-    });
-  };
 
   return (
     <>
       <div className="rai-test-page" style={{ flexGrow: !showPanel ? '1' : undefined }}>
         <GenerateToolbar
           isLoading={isLoading}
-          onGenerate={generate}
+          onGenerate={startTest}
           onShowPanel={() => setShowPanel(v => !v)}
           isDisabled={mappedData?.some(d => d.isLoading) || isLoading || !!selectedItems.length}
           onImageChange={() => navigate('/generate')}
           image={originalImage?.image_path}
           initialPrompt={originalImage?.prompt}
         />
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            backgroundColor: selectedItems.length > 0 ? 'var(--cds-button-primary, #0f62fe)' : undefined,
-            color: selectedItems.length > 0 ? 'var(--cds-text-on-color, #ffffff)' : undefined,
-            paddingLeft: '1rem',
-          }}
-        >
-          <span>
-            {selectedItems.length}/{mappedData.length} item(s) selected
-          </span>
-          {selectedItems.length > 0 ? (
-            <div>
-              <Button size="sm" onClick={startTesting} renderIcon={QuadrantPlot} style={{ paddingRight: '3rem' }}>
-                Pre test
-              </Button>
-              <Button size="sm" onClick={() => setSelectedItems([])} style={{ paddingRight: '1rem' }}>
-                Cancel
-              </Button>
-            </div>
-          ) : (
-            <Button kind="ghost" size="sm" onClick={() => setSelectedItems([...mappedData])}>
-              Select all
-            </Button>
-          )}
-        </div>
+        <GeneratedImagePreTestToolbar
+          selectedItems={selectedItems}
+          data={mappedData}
+          onCancel={() => setSelectedItems([])}
+          onSelectAll={() => setSelectedItems(mappedData)}
+        />
         {!!mappedData.length && (
           <TilesList
             data={mappedData ?? []}
@@ -220,7 +145,6 @@ export function GeneratedImagePage() {
           onImageRemove={() => navigate('/generate')}
         />
       )}
-      {isTesting && <LoadingModal heading={currentBatchId.toString()} />}
     </>
   );
 }

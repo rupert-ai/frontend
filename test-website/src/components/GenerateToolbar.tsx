@@ -2,7 +2,7 @@ import { ArrowLeft, SettingsAdjust, MagicWand } from '@carbon/icons-react';
 import { FileUploaderButton, Button, TextInput, Loading } from 'carbon-components-react';
 import PreviewImage from './PreviewImage';
 import './GenerateToolbar.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const LoadingIcon = (props: React.ComponentProps<'div'>) => <Loading withOverlay={false} active small {...props} />;
@@ -30,6 +30,10 @@ export function GenerateToolbar({
   const [prompt, setPrompt] = React.useState<string | undefined>(initialPrompt);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    setPrompt(initialPrompt);
+  }, [initialPrompt]);
 
   const onChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {

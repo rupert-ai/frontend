@@ -2,7 +2,6 @@ import {
   Accordion,
   AccordionItem,
   Button,
-  Checkbox,
   HeaderPanel,
   NumberInput,
   Select,
@@ -11,7 +10,7 @@ import {
   TextArea,
   Toggle,
 } from 'carbon-components-react';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Options } from '../services/backend';
 import { Close } from '@carbon/icons-react';
 import './GenerateSidePanel.css';
@@ -50,21 +49,25 @@ export const defaultOptions: Options = {
   regen_prompt: true,
   image_num: 4,
   manual_seed: -1,
-  guidance_scale: '1.0',
+  guidance_scale: '7.5',
   num_inference_steps: 20,
   product_size: 'Original',
-  scale: 1,
+  scale: 3,
   prompt: '',
 };
 
 export function GenerateSidePanel({ initialOptions, onChange, onClose, image, onImageRemove }: GenerateSidePanelProps) {
-  const options = useRef<initialOptions>(initialOptions ?? defaultOptions);
+  const [options, setOptions] = useState<initialOptions>(initialOptions ?? defaultOptions);
+
+  useEffect(() => {
+    setOptions(initialOptions ?? defaultOptions);
+  }, [initialOptions]);
 
   const onPropChange = <OptionsKey extends keyof initialOptions>(
     name: OptionsKey,
     value: initialOptions[OptionsKey],
   ) => {
-    options.current[name] = value;
+    setOptions(o => ({ ...o, [name]: value }));
     onChange(name, value);
   };
 
@@ -77,7 +80,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
             className="cds--header__action rai-settings-panel-close-button"
             onClick={onClose}
             kind="tertiary"
-            size="small"
+            size="sm"
           >
             <Close size="20" />
           </Button>
@@ -102,7 +105,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
           id="rai-prompt-template"
           labelText="Prompt template"
           // onChange={(e) => onPropChange('prompt', e.target.value)}
-          value={'Custom'}
+          defaultValue="Custom"
         >
           <SelectItem value="Custom" text="Custom" />
         </Select>
@@ -112,13 +115,13 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
           id="rai-negative-prompt"
           name="negative_prompt"
           onChange={e => onPropChange('negative_prompt', e.target.value)}
-          defaultValue={options.current.negative_prompt}
+          value={options.negative_prompt}
         />
         <Toggle
           labelA="Prompt Magic"
           labelB="Prompt Magic"
-          onChange={e => onPropChange('regen_prompt', e.currentTarget.checked)}
-          toggled={options.current.regen_prompt}
+          onToggle={v => onPropChange('regen_prompt', v)}
+          toggled={options.regen_prompt}
           id="rai-prompt-magic"
         />
         <NumberInput
@@ -127,13 +130,13 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
           min={1}
           max={4}
           onChange={(_e: unknown, state: { value: string | number }) => onPropChange('image_num', Number(state.value))}
-          value={options.current.image_num}
+          value={options.image_num}
         />
         <Select
           id="rai-product-size"
           labelText="Product size"
           onChange={e => onPropChange('product_size', e.target.value)}
-          value={options.current.product_size}
+          value={options.product_size}
         >
           <SelectItem value="Original" text="Original" />
         </Select>
@@ -143,7 +146,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
             label="Quality"
             min={1}
             max={4}
-            value={Number(options.current.scale)}
+            value={Number(options.scale)}
             onChange={(_e: unknown, state: { value: string | number }) => onPropChange('scale', Number(state.value))}
           />
         </div>
@@ -155,7 +158,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
                 label="Seed"
                 min={-1}
                 max={100}
-                value={options.current.manual_seed}
+                value={options.manual_seed}
                 onChange={(_e: unknown, state: { value: string | number }) =>
                   onPropChange('manual_seed', Number(state.value))
                 }
@@ -165,7 +168,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
                 labelText="Prompt guidance"
                 name="guidance_scale"
                 onChange={val => onPropChange('guidance_scale', String(val.value))}
-                value={Number(options.current.guidance_scale)}
+                value={Number(options.guidance_scale)}
                 min={1}
                 max={30}
                 step={0.5}
@@ -175,7 +178,7 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
                 labelText="Inference steps"
                 name="num_inference_steps"
                 onChange={val => onPropChange('num_inference_steps', val.value)}
-                value={options.current.num_inference_steps}
+                value={options.num_inference_steps}
                 min={1}
                 max={50}
                 step={1}

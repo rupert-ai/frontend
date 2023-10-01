@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 interface ResearchUploadResponse {
   batchId: number;
   images: number;
@@ -388,7 +390,13 @@ export class Backend {
     });
 
     if (response.ok) {
-      return response.json();
+      const resp = (await response.json()) as PaintImageResponse[];
+      return [
+        ...resp.map(i => ({
+          ...i,
+          jobs: i.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
+        })),
+      ];
     }
     const err = await response.json();
     throw getErrorObject(err, response);
@@ -404,7 +412,11 @@ export class Backend {
     });
 
     if (response.ok) {
-      return response.json();
+      const resp = (await response.json()) as PaintImageResponse;
+      return {
+        ...resp,
+        jobs: resp.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
+      };
     }
     const err = await response.json();
     throw getErrorObject(err, response);
@@ -432,7 +444,11 @@ export class Backend {
     });
 
     if (response.ok) {
-      return response.json();
+      const resp = (await response.json()) as PaintImageResponse;
+      return {
+        ...resp,
+        jobs: resp.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
+      };
     }
     const err = await response.json();
     throw getErrorObject(err, response);
