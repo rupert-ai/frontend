@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { Backend } from '../services/backend';
 import { QuadrantPlot } from '@carbon/icons-react';
 import { LoadingModal } from './LoadingModal';
-import './generatedImagePreTestToolbar.css';
+import './GeneratedImagePreTestToolbar.css';
 
 export type CustomImageInstance = {
   prompt?: string;
