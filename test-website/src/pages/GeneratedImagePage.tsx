@@ -77,7 +77,7 @@ export function GeneratedImagePage() {
               ? job.output
                   .filter((_, index) => index !== 0)
                   .map(o => ({
-                    prompt: job.prompt,
+                    prompt: job.prompt ?? job.input.prompt,
                     url: o,
                     isLoading: false,
                     selected: selectedItems.some(e => e.url === o),

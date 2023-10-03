@@ -139,6 +139,11 @@ export function GenerateSidePanel({ initialOptions, onChange, onClose, image, on
           value={options.product_size}
         >
           <SelectItem value="Original" text="Original" />
+          <SelectItem value="0.6 * width" text="0.6 * width" />
+          <SelectItem value="0.5 * width" text="0.5 * width" />
+          <SelectItem value="0.4 * width" text="0.4 * width" />
+          <SelectItem value="0.3 * width" text="0.3 * width" />
+          <SelectItem value="0.2 * width" text="0.2 * width" />
         </Select>
         <div>
           <NumberInput
