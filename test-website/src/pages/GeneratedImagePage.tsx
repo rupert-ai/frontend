@@ -70,9 +70,12 @@ export function GeneratedImagePage() {
 
   const mappedData: CustomImageInstance[] = useMemo(() => {
     const finalData = (data ?? generatedImage)?.jobs.filter(j => j.status !== 'failed');
-    return finalData?.length
+    const sortedData = [...(finalData ?? [])].sort((a, b) =>
+      new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime() ? 1 : -1,
+    );
+    return sortedData?.length
       ? [
-          ...(finalData ?? []).flatMap(job =>
+          ...sortedData.flatMap(job =>
             !!job.output?.length
               ? job.output
                   .filter((_, index) => index !== 0)
