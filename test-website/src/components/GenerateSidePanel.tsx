@@ -51,7 +51,7 @@ export const defaultOptions: Options = {
   manual_seed: -1,
   guidance_scale: '7.5',
   num_inference_steps: 20,
-  product_size: 'Original',
+  product_size: '0.6 * width',
   scale: 3,
   prompt: '',
 };
