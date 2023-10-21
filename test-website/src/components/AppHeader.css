@@ -15,3 +15,7 @@
 .rai-side-nav-new-project {
   flex: unset;
 }
+
+.rai-credits-link {
+  align-self: center;
+}

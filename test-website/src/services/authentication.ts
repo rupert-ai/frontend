@@ -12,34 +12,31 @@ import { auth } from './firebase';
 export class AuthService {}
 
 export type AuthData = {
-  idToken: string;
   user: {
     id: number;
     profileId: string;
     name: string;
+    credits: Number;
+    plan: 'FREE' | 'PRO';
+    planExpiresAt?: Date;
+    stripeCustomerId?: string;
   };
 };
 
-export const getAuthData = (): Promise<AuthData> => {
-  return new Promise((resolve, reject) => {
-    const unsub = onAuthStateChanged(auth, user => {
-      if (user) {
-        auth.currentUser
-          ?.getIdToken()
-          .then(idToken =>
-            fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/auth')
-              .then(response => response.json())
-              .then(response => resolve({ ...response.data, idToken })),
-          )
-          .catch(() => reject(new Error('Not authorized')))
-          .finally(() => unsub());
-      } else {
-        unsub();
-        reject(new Error('Not authorized'));
-      }
-    });
-  });
-};
+// export const getAuthData = (): Promise<AuthData> => {
+//   return new Promise((resolve, reject) => {
+//     const unsub = onAuthStateChanged(auth, user => {
+//       if (user) {
+//           fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/auth')
+//             .then(response => response.json())
+//             .then(response => resolve({ ...response.data, user }));
+//       } else {
+//         unsub();
+//         reject(new Error('Not authorized'));
+//       }
+//     });
+//   });
+// };
 
 const postToBackend = (token: string) =>
   fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/auth', {

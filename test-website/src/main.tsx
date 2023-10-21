@@ -15,6 +15,7 @@ import NewProject from './pages/NewProject';
 import { GeneratePage } from './pages/GeneratePage';
 import { GeneratedImagePage } from './pages/GeneratedImagePage';
 import GeneratedImagesPage from './pages/GeneratedImagesPage';
+import { PaymentPage } from './pages/PaymentPage';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <NewProject />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/pricing',
+        element: (
+          <PrivateRoute>
+            <PaymentPage />
           </PrivateRoute>
         ),
       },

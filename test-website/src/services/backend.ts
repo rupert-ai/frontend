@@ -261,6 +261,11 @@ export type Options = {
   scale: number; // optional, range 1 - 4
 };
 
+interface ActivateProResponse {
+  ok: boolean;
+  redirect_url: string;
+}
+
 export class Backend {
   public static upload = async ({
     accessToken,
@@ -449,6 +454,38 @@ export class Backend {
         ...resp,
         jobs: resp.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
       };
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static activatePro = async (accessToken: string): Promise<ActivateProResponse> => {
+    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/user/payment', {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static getBilling = async (accessToken: string): Promise<ActivateProResponse> => {
+    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/user/payment/portal', {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      return response.json();
     }
     const err = await response.json();
     throw getErrorObject(err, response);

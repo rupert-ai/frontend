@@ -16,19 +16,30 @@ import {
   SideNavMenuItem,
 } from 'carbon-components-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AddAlt, ListChecked, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
+import { AddAlt, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
 import './AppHeader.css';
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
+import { useBillingPage } from '../hooks/useBillingPage';
 
 const isNewProject = (path: string) => path === '/' || path === '/generate/' || path === '/test';
 
 export function AppHeader() {
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
+  const { mutate } = useBillingPage();
+
+  const goToBilling = async () => {
+    const token = await user?.getIdToken();
+    mutate(token ?? '', {
+      onSuccess: data => {
+        window.open(data.redirect_url, '_self');
+      },
+    });
+  };
   // const navigate = useNavigate();
 
   // const handleLogin = async () => {
@@ -59,6 +70,9 @@ export function AppHeader() {
               {/* <HeaderGlobalAction aria-label="Search">
                 <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction> */}
+              <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./pricing">
+                {userData?.user?.credits ?? 0} credits
+              </Button>
               {!!user && (
                 <Popover open={showUserMenu} autoAlign>
                   <Button
@@ -69,6 +83,9 @@ export function AppHeader() {
                     <UserAvatar size="20" />
                   </Button>
                   <PopoverContent>
+                    {!!userData?.user?.stripeCustomerId && (
+                      <OverflowMenuItem hasDivider itemText="Billing" onClick={goToBilling} />
+                    )}
                     <OverflowMenuItem hasDivider itemText="Sign out" onClick={logOut} />
                   </PopoverContent>
                 </Popover>
