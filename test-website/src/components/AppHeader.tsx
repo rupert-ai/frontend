@@ -23,14 +23,16 @@ import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import { useBillingPage } from '../hooks/useBillingPage';
+import { useUserData } from '../hooks/useUserData';
 
 const isNewProject = (path: string) => path === '/' || path === '/generate/' || path === '/test';
 
 export function AppHeader() {
-  const { user, userData } = useAuth();
+  const { user } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
   const { mutate } = useBillingPage();
+  const { data: userData } = useUserData();
 
   const goToBilling = async () => {
     const token = await user?.getIdToken();

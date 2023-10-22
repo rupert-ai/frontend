@@ -35,6 +35,9 @@ const queryClient = new QueryClient({
     },
   }),
   mutationCache: new MutationCache({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['UserData']);
+    },
     onError: (error, query) => {
       showError(error);
     },

@@ -1,11 +1,12 @@
 import { PaymentTile } from '../components/payment/PaymentTile';
-import TilesList from '../components/TilesList';
 import { useActivatePro } from '../hooks/useActivatePro';
 import { useAuth } from '../hooks/useAuth';
+import { useUserData } from '../hooks/useUserData';
 
 export function PaymentPage() {
   const auth = useAuth();
   const { mutate } = useActivatePro();
+  const { data: userData, isFetching } = useUserData();
 
   const activatePro = async () => {
     const token = await auth.user?.getIdToken();
@@ -16,28 +17,43 @@ export function PaymentPage() {
     });
   };
 
+  const hasPro = userData?.user.plan == 'PRO';
+
   return (
-    <TilesList
-      data={[
+    <div
+      style={{
+        display: 'flex',
+        gap: '0.5rem',
+        height: '400px',
+        flexWrap: 'wrap',
+      }}
+    >
+      {[
         {
           title: 'Free',
           description: 'For people who want to try out Rupert AI risk free.',
           price: 0,
-          features: ['100 credits', 'Limited tool access'],
-          actionText: 'You already have Pro plan',
+          features: [{ title: '100 credits' }, { title: 'Limited tool access' }],
+          actionText: hasPro ? 'You already have Pro' : 'Current plan',
+          disabled: true,
         },
         {
           title: 'Pro',
           description: 'For creators and developers who need higher volumes.',
           price: 10,
-          features: ['Unlimited credits', 'Unlimited tool access'],
-          actionText: 'Upgrade to Pro',
-          onClick: activatePro,
+          features: [
+            { title: 'Unlimited credits / mo' },
+            { title: 'Unlimited tool access' },
+            { title: 'Model training', notAvailable: true },
+            { title: 'Workflow builder', notAvailable: true },
+          ],
+          actionText: hasPro ? 'Current plan' : 'Upgrade to Pro',
+          onClick: !hasPro ? activatePro : undefined,
+          disabled: hasPro,
         },
-      ]}
-      renderer={instance => {
-        return <PaymentTile {...instance} />;
-      }}
-    />
+      ].map(instance => (
+        <PaymentTile {...instance} />
+      ))}
+    </div>
   );
 }
