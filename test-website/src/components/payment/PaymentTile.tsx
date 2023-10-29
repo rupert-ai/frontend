@@ -6,22 +6,11 @@ type PaymentTileProps = {
   description: string;
   price: number;
   features: { title: string; notAvailable?: boolean }[];
-  actionText?: string;
-  onClick?: () => void;
-  disabled?: boolean;
   isLoading: boolean;
+  actionButton: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export function PaymentTile({
-  title,
-  description,
-  price,
-  features,
-  actionText,
-  onClick,
-  disabled,
-  isLoading,
-}: PaymentTileProps) {
+export function PaymentTile({ title, description, price, features, actionButton, isLoading }: PaymentTileProps) {
   return (
     <Tile
       style={{
@@ -37,13 +26,7 @@ export function PaymentTile({
         <span style={{ color: '#A7F0BA', fontSize: '3rem' }}>€{price}</span>
         <span style={{ verticalAlign: 'sub', fontSize: 'smaller' }}>/mo</span>
       </div>
-      {isLoading ? (
-        <ButtonSkeleton style={{ width: '100%' }} />
-      ) : (
-        <Button disabled={disabled} onClick={onClick} style={{ width: '100%' }}>
-          {actionText}
-        </Button>
-      )}
+      {isLoading ? <ButtonSkeleton style={{ width: '100%' }} /> : <>{actionButton}</>}
       {features.map(f => (
         <div
           style={{

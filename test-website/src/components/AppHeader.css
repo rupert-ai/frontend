@@ -19,3 +19,7 @@
 .rai-credits-link {
   align-self: center;
 }
+
+.rai-menu-content.rai-menu-content {
+  right: 16px;
+}

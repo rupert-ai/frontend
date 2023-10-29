@@ -1,12 +1,24 @@
+import { Button } from 'carbon-components-react';
 import { PaymentTile } from '../components/payment/PaymentTile';
 import { useActivatePro } from '../hooks/useActivatePro';
 import { useAuth } from '../hooks/useAuth';
+import { useBillingPage } from '../hooks/useBillingPage';
 import { useUserData } from '../hooks/useUserData';
 
 export function PaymentPage() {
   const auth = useAuth();
   const { mutate } = useActivatePro();
   const { data: userData, isLoading } = useUserData();
+  const { mutate: billingPage } = useBillingPage();
+
+  const goToBilling = async () => {
+    const token = await auth.user?.getIdToken();
+    billingPage(token ?? '', {
+      onSuccess: data => {
+        window.open(data.redirect_url, '_self');
+      },
+    });
+  };
 
   const activatePro = async () => {
     const token = await auth.user?.getIdToken();
@@ -34,9 +46,17 @@ export function PaymentPage() {
           description: 'For people who want to try out Rupert AI risk free.',
           price: 0,
           features: [{ title: '100 credits' }, { title: 'Limited tool access' }],
-          actionText: hasPro ? 'You already have Pro' : 'Current plan',
-          disabled: true,
           isLoading,
+          actionButton: (
+            <Button
+              disabled={!hasPro}
+              style={{ width: '100%' }}
+              onClick={hasPro ? goToBilling : undefined}
+              kind="secondary"
+            >
+              {!hasPro ? 'Current plan' : 'Downgrade to Free'}
+            </Button>
+          ),
         },
         {
           title: 'Pro',
@@ -48,10 +68,12 @@ export function PaymentPage() {
             { title: 'Model training', notAvailable: true },
             { title: 'Workflow builder', notAvailable: true },
           ],
-          actionText: hasPro ? 'Current plan' : 'Upgrade to Pro',
-          onClick: !hasPro ? activatePro : undefined,
-          disabled: hasPro,
           isLoading,
+          actionButton: (
+            <Button disabled={hasPro} onClick={!hasPro ? activatePro : undefined} style={{ width: '100%' }}>
+              {hasPro ? 'Current plan' : 'Upgrade to Pro'}
+            </Button>
+          ),
         },
       ].map(instance => (
         <PaymentTile {...instance} />

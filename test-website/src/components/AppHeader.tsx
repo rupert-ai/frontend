@@ -23,7 +23,6 @@ import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
-import { useBillingPage } from '../hooks/useBillingPage';
 import { useUserData } from '../hooks/useUserData';
 
 const isNewProject = (path: string) => path === '/' || path === '/generate/' || path === '/test';
@@ -32,18 +31,12 @@ export function AppHeader() {
   const { user } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
-  const { mutate } = useBillingPage();
   const { data: userData, isLoading } = useUserData();
 
-  const goToBilling = async () => {
-    const token = await user?.getIdToken();
-    mutate(token ?? '', {
-      onSuccess: data => {
-        window.open(data.redirect_url, '_self');
-      },
-    });
+  const goToPlans = async () => {
+    setShowUserMenu(false);
+    navigate('./plans');
   };
-  // const navigate = useNavigate();
 
   // const handleLogin = async () => {
   //   try {
@@ -76,8 +69,8 @@ export function AppHeader() {
               {isLoading ? (
                 <ButtonSkeleton className="rai-credits-link cds--layout--size-sm" size="sm" style={{ width: '5rem' }} />
               ) : (
-                <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./pricing">
-                  {userData?.user?.credits ?? 0} credits
+                <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./plans">
+                  {userData?.user.plan === 'PRO' ? 'Unlimited credits' : `${userData?.user?.credits ?? 0} credits`}
                 </Button>
               )}
               {!!user && (
@@ -89,9 +82,9 @@ export function AppHeader() {
                   >
                     <UserAvatar size="20" />
                   </Button>
-                  <PopoverContent>
+                  <PopoverContent className="rai-menu-content">
                     {!!userData?.user?.stripeCustomerId && (
-                      <OverflowMenuItem hasDivider itemText="Billing" onClick={goToBilling} />
+                      <OverflowMenuItem hasDivider itemText="Plans" onClick={goToPlans} />
                     )}
                     <OverflowMenuItem hasDivider itemText="Sign out" onClick={logOut} />
                   </PopoverContent>
