@@ -13,6 +13,7 @@ export function TilesList<T>({ data, renderer, style, ...rest }: TilesListProps<
         width: '100%',
         ...style,
         paddingBottom: '2rem',
+        scrollPaddingBottom: '2rem',
       }}
       {...rest}
     >
