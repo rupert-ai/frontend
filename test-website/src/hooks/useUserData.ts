@@ -6,7 +6,7 @@ export const useUserData = () => {
   const { user } = useAuth();
 
   return useQuery<AuthData>(
-    ['UserData'],
+    ['UserData', user],
     async () => {
       const token = (await user?.getIdToken()) ?? '';
       const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/auth', {
