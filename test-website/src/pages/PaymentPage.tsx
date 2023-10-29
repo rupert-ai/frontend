@@ -36,7 +36,7 @@ export function PaymentPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <h2>Plans</h2>
-        {!isLoading && (
+        {!!userData?.user.stripeCustomerId && (
           <Button kind="ghost" renderIcon={ArrowUpRight} size="sm" onClick={goToBilling}>
             Manage subscription
           </Button>
