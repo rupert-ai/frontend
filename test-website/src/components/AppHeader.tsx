@@ -14,6 +14,7 @@ import {
   Button,
   SideNavMenu,
   SideNavMenuItem,
+  ButtonSkeleton,
 } from 'carbon-components-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AddAlt, MachineLearning, MachineLearningModel, Folder, UserAvatar } from '@carbon/icons-react';
@@ -32,7 +33,7 @@ export function AppHeader() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
   const { mutate } = useBillingPage();
-  const { data: userData } = useUserData();
+  const { data: userData, isLoading } = useUserData();
 
   const goToBilling = async () => {
     const token = await user?.getIdToken();
@@ -72,9 +73,13 @@ export function AppHeader() {
               {/* <HeaderGlobalAction aria-label="Search">
                 <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction> */}
-              <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./pricing">
-                {userData?.user?.credits ?? 0} credits
-              </Button>
+              {isLoading ? (
+                <ButtonSkeleton className="rai-credits-link cds--layout--size-sm" size="sm" style={{ width: '5rem' }} />
+              ) : (
+                <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./pricing">
+                  {userData?.user?.credits ?? 0} credits
+                </Button>
+              )}
               {!!user && (
                 <Popover open={showUserMenu} autoAlign>
                   <Button

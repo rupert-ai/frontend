@@ -1,5 +1,5 @@
 import { CheckmarkOutline } from '@carbon/icons-react';
-import { Button, Tag, Tile } from 'carbon-components-react';
+import { Button, ButtonSkeleton, Tag, Tile } from 'carbon-components-react';
 
 type PaymentTileProps = {
   title: string;
@@ -9,9 +9,19 @@ type PaymentTileProps = {
   actionText?: string;
   onClick?: () => void;
   disabled?: boolean;
+  isLoading: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export function PaymentTile({ title, description, price, features, actionText, onClick, disabled }: PaymentTileProps) {
+export function PaymentTile({
+  title,
+  description,
+  price,
+  features,
+  actionText,
+  onClick,
+  disabled,
+  isLoading,
+}: PaymentTileProps) {
   return (
     <Tile
       style={{
@@ -27,9 +37,13 @@ export function PaymentTile({ title, description, price, features, actionText, o
         <span style={{ color: '#A7F0BA', fontSize: '3rem' }}>€{price}</span>
         <span style={{ verticalAlign: 'sub', fontSize: 'smaller' }}>/mo</span>
       </div>
-      <Button disabled={disabled} onClick={onClick} style={{ width: '100%' }}>
-        {actionText}
-      </Button>
+      {isLoading ? (
+        <ButtonSkeleton style={{ width: '100%' }} />
+      ) : (
+        <Button disabled={disabled} onClick={onClick} style={{ width: '100%' }}>
+          {actionText}
+        </Button>
+      )}
       {features.map(f => (
         <div
           style={{

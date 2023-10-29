@@ -6,7 +6,7 @@ import { useUserData } from '../hooks/useUserData';
 export function PaymentPage() {
   const auth = useAuth();
   const { mutate } = useActivatePro();
-  const { data: userData, isFetching } = useUserData();
+  const { data: userData, isLoading } = useUserData();
 
   const activatePro = async () => {
     const token = await auth.user?.getIdToken();
@@ -36,6 +36,7 @@ export function PaymentPage() {
           features: [{ title: '100 credits' }, { title: 'Limited tool access' }],
           actionText: hasPro ? 'You already have Pro' : 'Current plan',
           disabled: true,
+          isLoading,
         },
         {
           title: 'Pro',
@@ -50,6 +51,7 @@ export function PaymentPage() {
           actionText: hasPro ? 'Current plan' : 'Upgrade to Pro',
           onClick: !hasPro ? activatePro : undefined,
           disabled: hasPro,
+          isLoading,
         },
       ].map(instance => (
         <PaymentTile {...instance} />
