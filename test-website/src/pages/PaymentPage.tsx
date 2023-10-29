@@ -1,3 +1,4 @@
+import { ArrowUpRight } from '@carbon/icons-react';
 import { Button } from 'carbon-components-react';
 import { PaymentTile } from '../components/payment/PaymentTile';
 import { useActivatePro } from '../hooks/useActivatePro';
@@ -33,7 +34,14 @@ export function PaymentPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <h2>Plans</h2>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <h2>Plans</h2>
+        {!isLoading && (
+          <Button kind="ghost" renderIcon={ArrowUpRight} size="sm" onClick={goToBilling}>
+            Manage subscription
+          </Button>
+        )}
+      </div>
       <div
         style={{
           display: 'flex',
