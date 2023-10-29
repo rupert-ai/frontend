@@ -105,7 +105,7 @@ const router = createBrowserRouter([
 ReactDOM.render(
   <React.StrictMode>
     <ProvideAuth>
-      <Theme theme="g100" style={{ height: '100vh', overflow: 'hidden', display: 'flex' }}>
+      <Theme theme="g100" style={{ height: '100dvh', overflow: 'hidden', display: 'flex' }}>
         <RouterProvider router={router} />
       </Theme>
     </ProvideAuth>
