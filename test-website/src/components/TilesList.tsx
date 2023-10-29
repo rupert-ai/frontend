@@ -12,6 +12,7 @@ export function TilesList<T>({ data, renderer, style, ...rest }: TilesListProps<
         gridTemplateColumns: 'repeat(auto-fill, minmax(MIN(100%, 256px), 1fr))',
         width: '100%',
         ...style,
+        paddingBottom: '2rem',
       }}
       {...rest}
     >

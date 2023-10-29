@@ -66,13 +66,18 @@ export function AppHeader() {
               {/* <HeaderGlobalAction aria-label="Search">
                 <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction> */}
-              {isLoading ? (
-                <ButtonSkeleton className="rai-credits-link cds--layout--size-sm" size="sm" style={{ width: '5rem' }} />
-              ) : (
-                <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./plans">
-                  {userData?.user.plan === 'PRO' ? 'Unlimited credits' : `${userData?.user?.credits ?? 0} credits`}
-                </Button>
-              )}
+              {!!user &&
+                (isLoading ? (
+                  <ButtonSkeleton
+                    className="rai-credits-link cds--layout--size-sm"
+                    size="sm"
+                    style={{ width: '5rem' }}
+                  />
+                ) : (
+                  <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./plans">
+                    {userData?.user.plan === 'PRO' ? 'Unlimited credits' : `${userData?.user?.credits ?? 0} credits`}
+                  </Button>
+                ))}
               {!!user && (
                 <Popover open={showUserMenu} autoAlign>
                   <Button
