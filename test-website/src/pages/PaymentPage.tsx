@@ -32,52 +32,55 @@ export function PaymentPage() {
   const hasPro = userData?.user.plan == 'PRO';
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        gap: '0.5rem',
-        height: '400px',
-        flexWrap: 'wrap',
-      }}
-    >
-      {[
-        {
-          title: 'Free',
-          description: 'For people who want to try out Rupert AI risk free.',
-          price: 0,
-          features: [{ title: '100 credits' }, { title: 'Limited tool access' }],
-          isLoading,
-          actionButton: (
-            <Button
-              disabled={!hasPro}
-              style={{ width: '100%' }}
-              onClick={hasPro ? goToBilling : undefined}
-              kind="secondary"
-            >
-              {!hasPro ? 'Current plan' : 'Downgrade to Free'}
-            </Button>
-          ),
-        },
-        {
-          title: 'Pro',
-          description: 'For creators and developers who need higher volumes.',
-          price: 10,
-          features: [
-            { title: 'Unlimited credits / mo' },
-            { title: 'Unlimited tool access' },
-            { title: 'Model training', notAvailable: true },
-            { title: 'Workflow builder', notAvailable: true },
-          ],
-          isLoading,
-          actionButton: (
-            <Button disabled={hasPro} onClick={!hasPro ? activatePro : undefined} style={{ width: '100%' }}>
-              {hasPro ? 'Current plan' : 'Upgrade to Pro'}
-            </Button>
-          ),
-        },
-      ].map(instance => (
-        <PaymentTile {...instance} />
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <h2>Plans</h2>
+      <div
+        style={{
+          display: 'flex',
+          gap: '0.5rem',
+          height: '400px',
+          flexWrap: 'wrap',
+        }}
+      >
+        {[
+          {
+            title: 'Free',
+            description: 'For people who want to try out Rupert AI risk free.',
+            price: 0,
+            features: [{ title: '100 credits' }, { title: 'Limited tool access' }],
+            isLoading,
+            actionButton: (
+              <Button
+                disabled={!hasPro}
+                style={{ width: '100%' }}
+                onClick={hasPro ? goToBilling : undefined}
+                kind="secondary"
+              >
+                {!hasPro ? 'Current plan' : 'Downgrade to Free'}
+              </Button>
+            ),
+          },
+          {
+            title: 'Pro',
+            description: 'For creators and developers who need higher volumes.',
+            price: 10,
+            features: [
+              { title: 'Unlimited credits / mo' },
+              { title: 'Unlimited tool access' },
+              { title: 'Model training', notAvailable: true },
+              { title: 'Workflow builder', notAvailable: true },
+            ],
+            isLoading,
+            actionButton: (
+              <Button disabled={hasPro} onClick={!hasPro ? activatePro : undefined} style={{ width: '100%' }}>
+                {hasPro ? 'Current plan' : 'Upgrade to Pro'}
+              </Button>
+            ),
+          },
+        ].map(instance => (
+          <PaymentTile {...instance} />
+        ))}
+      </div>
     </div>
   );
 }
