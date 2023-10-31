@@ -75,7 +75,7 @@ export function AppHeader() {
                   />
                 ) : (
                   <Button className="rai-credits-link" kind="ghost" size="sm" as={Link} to="./plans">
-                    {userData?.user.plan === 'PRO' ? 'Unlimited credits' : `${userData?.user?.credits ?? 0} credits`}
+                    {userData?.user?.plan === 'PRO' ? 'Unlimited credits' : `${userData?.user?.credits ?? 0} credits`}
                   </Button>
                 ))}
               {!!user && (

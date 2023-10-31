@@ -30,13 +30,13 @@ export function PaymentPage() {
     });
   };
 
-  const hasPro = userData?.user.plan == 'PRO';
+  const hasPro = userData?.user?.plan == 'PRO';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <h2>Plans</h2>
-        {!!userData?.user.stripeCustomerId && (
+        {!!userData?.user?.stripeCustomerId && (
           <Button kind="ghost" renderIcon={ArrowUpRight} size="sm" onClick={goToBilling}>
             Manage subscription
           </Button>
