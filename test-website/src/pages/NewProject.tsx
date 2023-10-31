@@ -31,7 +31,7 @@ function ProjectTile({ img, onClick, tag, title, description }: ProjectTileProps
       </div>
       <div className="rai-option-tile-content">
         <div className="rai-option-tile-tag">{tag}</div>
-        <h3>{title}</h3>
+        <h4>{title}</h4>
         <p>{description}</p>
       </div>
     </ClickableTile>
