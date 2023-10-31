@@ -31,7 +31,8 @@ export function AppHeader() {
   const { user } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
-  const { data: userData, isLoading } = useUserData();
+  const { pathname } = useLocation();
+  const { data: userData, isLoading } = useUserData({ enabled: pathname !== '/login' });
 
   const goToPlans = async () => {
     setShowUserMenu(false);
@@ -46,7 +47,6 @@ export function AppHeader() {
   //     console.error('Failed to login. Try again later.');
   //   }
   // };
-  const { pathname } = useLocation();
 
   const logOut = () => {
     setShowUserMenu(false);
