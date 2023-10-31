@@ -16,11 +16,13 @@ import { GeneratePage } from './pages/GeneratePage';
 import { GeneratedImagePage } from './pages/GeneratedImagePage';
 import GeneratedImagesPage from './pages/GeneratedImagesPage';
 import { PaymentPage } from './pages/PaymentPage';
+import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
