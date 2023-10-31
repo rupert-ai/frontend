@@ -67,6 +67,7 @@ export function AppHeader() {
                 <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction> */}
               {!!user &&
+                pathname !== '/login' &&
                 (isLoading ? (
                   <ButtonSkeleton
                     className="rai-credits-link cds--layout--size-sm"

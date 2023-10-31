@@ -43,9 +43,12 @@ const postToBackend = (token: string) =>
     method: 'POST',
     body: JSON.stringify({ token: token }),
     headers: { 'Content-type': 'application/json; charset=UTF-8' },
-  }).then(() => {
-    console.log('resolve token', token);
-    return token;
+  }).then(r => {
+    if (r.ok) {
+      return token;
+    } else {
+      throw 'Failed to authenticate. Please try again later.';
+    }
   });
 
 const signIn = (provider: AuthProvider) =>
@@ -54,43 +57,43 @@ const signIn = (provider: AuthProvider) =>
     return postToBackend(token);
   });
 
-export const signUp = (email: string, password: string) => createUserWithEmailAndPassword(auth, email, password);
+// export const signUp = (email: string, password: string) => createUserWithEmailAndPassword(auth, email, password);
 
 export const signInWithGoogle = async (): Promise<string> => {
   const provider = new GoogleAuthProvider();
   return signIn(provider);
 };
 
-export const signInWithFacebook = async (): Promise<string> => {
-  const provider = new FacebookAuthProvider();
-  return signIn(provider);
-};
+// export const signInWithFacebook = async (): Promise<string> => {
+//   const provider = new FacebookAuthProvider();
+//   return signIn(provider);
+// };
 
-export const signInWithEmail = async ({ email, password }: { email: string; password: string }) =>
-  signInWithEmailAndPassword(auth, email, password).then(async result => {
-    const token = await result.user.getIdToken();
-    return postToBackend(token);
-  });
+// export const signInWithEmail = async ({ email, password }: { email: string; password: string }) =>
+//   signInWithEmailAndPassword(auth, email, password).then(async result => {
+//     const token = await result.user.getIdToken();
+//     return postToBackend(token);
+//   });
 
-export const createWithEmail = async ({ email, password }: { email: string; password: string }) =>
-  createUserWithEmailAndPassword(auth, email, password).then(async result => {
-    const token = await result.user.getIdToken();
-    return postToBackend(token);
-  });
+// export const createWithEmail = async ({ email, password }: { email: string; password: string }) =>
+//   createUserWithEmailAndPassword(auth, email, password).then(async result => {
+//     const token = await result.user.getIdToken();
+//     return postToBackend(token);
+//   });
 
-export const checkAuth = (): Promise<boolean> => {
-  return new Promise(resolve => {
-    const unsub = onAuthStateChanged(auth, user => {
-      if (user) {
-        auth.currentUser
-          ?.getIdToken()
-          .then(() => resolve(true))
-          .catch(() => resolve(false))
-          .finally(() => unsub());
-      } else {
-        unsub();
-        resolve(false);
-      }
-    });
-  });
-};
+// export const checkAuth = (): Promise<boolean> => {
+//   return new Promise(resolve => {
+//     const unsub = onAuthStateChanged(auth, user => {
+//       if (user) {
+//         auth.currentUser
+//           ?.getIdToken()
+//           .then(() => resolve(true))
+//           .catch(() => resolve(false))
+//           .finally(() => unsub());
+//       } else {
+//         unsub();
+//         resolve(false);
+//       }
+//     });
+//   });
+// };
