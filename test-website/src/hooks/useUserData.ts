@@ -2,7 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { AuthData } from '../services/authentication';
 import { useAuth } from './useAuth';
 
-export const useUserData = ({ enabled }: { enabled: boolean }) => {
+type useUserDataProps = {
+  enabled?: boolean;
+};
+
+export const useUserData = (props?: useUserDataProps) => {
   const { user } = useAuth();
 
   return useQuery<AuthData>(
@@ -17,6 +21,6 @@ export const useUserData = ({ enabled }: { enabled: boolean }) => {
       });
       return response.json();
     },
-    { enabled: !!user && enabled },
+    { enabled: !!user && (props?.enabled ?? true) },
   );
 };
