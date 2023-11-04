@@ -98,7 +98,7 @@ export function GenerateToolbar({
       <TextInput
         id="rai-prompt-input"
         labelText=""
-        placeholder="Enter prompt text"
+        placeholder="Name your product (i.e. Perfume bottle)"
         value={prompt}
         onInput={e => {
           setPrompt(e.currentTarget.value);
