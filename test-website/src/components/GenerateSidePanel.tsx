@@ -31,7 +31,7 @@ const PanelContainer = ({ children }: { children: ReactNode }) => {
   const isMobile = useIsMobile();
 
   return isMobile ? (
-    <div>{children}</div>
+    <div className="rai-settings-panel-mobile">{children}</div>
   ) : (
     <HeaderPanel
       aria-label="Generate image panel"

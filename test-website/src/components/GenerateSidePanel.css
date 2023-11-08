@@ -32,3 +32,17 @@
 .cds--slider-text-input.cds--slider-text-input {
   width: 3.9rem;
 }
+
+.rai-settings-panel-mobile {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  width: 100dvw;
+  overflow: auto;
+  background-color: var(--cds-background);
+  z-index: 9000;
+  padding: 1rem;
+}

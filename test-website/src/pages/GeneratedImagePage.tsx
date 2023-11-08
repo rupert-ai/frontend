@@ -7,6 +7,7 @@ import { GenerateSidePanel } from '../components/GenerateSidePanel';
 import { GenerateToolbar } from '../components/GenerateToolbar';
 import TilesList from '../components/TilesList';
 import { useAuth } from '../hooks/useAuth';
+import useIsMobile from '../hooks/useIsMobile';
 import { Backend, Options, PaintImageResponse } from '../services/backend';
 
 export function GeneratedImagePage() {
@@ -15,11 +16,16 @@ export function GeneratedImagePage() {
   const generatedImage: PaintImageResponse | undefined = location.state?.data;
   const { user } = useAuth();
   const [requiresFetch, setRequiresFetch] = useState(true);
+  const isMobile = useIsMobile();
   const [showPanel, setShowPanel] = useState(true);
   const navigate = useNavigate();
   const [currentOptions, setCurrentOptions] = useState<Options>();
   const [selectedItems, setSelectedItems] = useState<CustomImageInstance[]>([]);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setShowPanel(!isMobile);
+  }, [isMobile]);
 
   const { data } = useQuery(
     ['paintedImage', id],
@@ -122,6 +128,7 @@ export function GeneratedImagePage() {
         />
         {!!mappedData.length && (
           <TilesList
+            style={{ overflow: isMobile ? 'auto' : undefined }}
             data={mappedData ?? []}
             renderer={image => (
               <GeneratedTile
