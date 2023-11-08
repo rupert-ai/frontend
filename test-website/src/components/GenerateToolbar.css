@@ -9,9 +9,9 @@
 }
 
 .rai-generate-button-mobile {
-  width: 100vw;
+  width: 100dvw;
   margin-top: auto;
-  margin-bottom: -2rem;
+  margin-bottom: -1rem;
   margin-left: -1rem;
   max-width: unset;
   order: 1;

@@ -7,8 +7,6 @@
 
 @media (max-width: 65.98rem) {
   .rai-test-page {
-    min-width: 100vw;
-    width: 100vw;
-    padding-inline: 1rem;
+    width: 100%;
   }
 }

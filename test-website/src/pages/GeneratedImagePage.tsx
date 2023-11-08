@@ -128,7 +128,7 @@ export function GeneratedImagePage() {
         />
         {!!mappedData.length && (
           <TilesList
-            style={{ overflow: isMobile ? 'auto' : undefined }}
+            style={isMobile ? { overflow: 'auto', width: 'calc(100% + 1rem)', paddingRight: '1rem' } : undefined}
             data={mappedData ?? []}
             renderer={image => (
               <GeneratedTile
