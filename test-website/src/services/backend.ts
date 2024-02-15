@@ -234,12 +234,15 @@ export interface PaintImageResponse {
   output: unknown[];
 }
 
+export type PaintImageJobInputOptions = Options & { image_path: string };
+export type PaintImageJobInputNewOptions = NewOptions & { image: string };
+
 export interface PaintImageJob {
   completedAt?: string;
   createdAt: string;
   error?: { code: number; message: string };
   id: 'string';
-  input: Options & { image_path: string };
+  input: PaintImageJobInputOptions | PaintImageJobInputNewOptions;
   logs: string;
   seed: number;
   prompt: string;
@@ -259,12 +262,59 @@ export type Options = {
   num_inference_steps: number; // optional, default: 20,
   product_size: string; // optional, default: Original, options: 'Original' | '0.6 * width' | '0.5 * width' | '0.4 * width' | '0.3 * width' | '0.2 * width'
   scale: number; // optional, range 1 - 4
+  lora?: string;
 };
+
+// sdxl paint
+export type NewOptions = {
+  lora?: string;
+  apply_watermark: boolean;
+  condition_scale: number;
+  guidance_scale: number;
+  lora_scale: number;
+  negative_prompt: string;
+  num_inference_steps: number;
+  num_outputs: number;
+  prompt: string;
+  refine?: string;
+  refine_steps: number;
+  regen_prompt: boolean;
+  scheduler: string;
+  seed: number;
+  strength?: number;
+};
+
+// export type NewOptionsInput = {
+//   lora: string;
+//   apply_watermark: boolean;
+//   condition_scale: number;
+//   guidance_scale: number;
+//   lora_scale: number;
+//   lora_weights: string;
+//   negative_prompt: string;
+//   num_inference_steps: number;
+//   num_outputs: number;
+//   prompt: string;
+//   refine_steps: number;
+//   regen_prompt: boolean;
+//   scheduler: string;
+//   seed: number;
+// };
 
 interface ActivateProResponse {
   ok: boolean;
   redirect_url: string;
 }
+
+interface RemoveBackgroundResponse {
+  imageUrl: string;
+}
+
+interface IdentifyImageResponse {
+  imageDescription: string;
+}
+
+const BACKEND_URL = 'https://rupert-ai-server-ds2havyh3q-ew.a.run.app';
 
 export class Backend {
   public static upload = async ({
@@ -278,7 +328,7 @@ export class Backend {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
+    const response = await fetch(`${BACKEND_URL}/research`, {
       headers: {
         Authorization: accessToken,
         // "Content-Type": "multipart/form-data",
@@ -302,7 +352,7 @@ export class Backend {
     files: string[];
     name: string;
   }): Promise<ResearchUploadResponse> => {
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/url`, {
+    const response = await fetch(`${BACKEND_URL}/research/url`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -319,7 +369,7 @@ export class Backend {
   };
 
   public static getResultItem = async (accessToken: string, id: number, itemId: number): Promise<ResearchItem> => {
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}/${itemId}`, {
+    const response = await fetch(`${BACKEND_URL}/research/${id}/${itemId}`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -334,7 +384,7 @@ export class Backend {
   };
 
   public static getResult = async (accessToken: string, id: number): Promise<ResearchResultResponse> => {
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research/${id}`, {
+    const response = await fetch(`${BACKEND_URL}/research/${id}`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -349,7 +399,7 @@ export class Backend {
   };
 
   public static getResults = async (accessToken: string): Promise<ResearchResultResponse[]> => {
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/research`, {
+    const response = await fetch(`${BACKEND_URL}/research`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -369,7 +419,33 @@ export class Backend {
     Object.keys(options).forEach(key => {
       formData.append(key, options[key as keyof Options] as string);
     });
-    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint', {
+    const response = await fetch(`${BACKEND_URL}/repl/paint`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static paintImageNew = async (
+    accessToken: string,
+    file: Blob,
+    options: Options & { lora: string },
+  ): Promise<PaintImageResponse> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    Object.keys(options).forEach(key => {
+      formData.append(key, options[key as keyof Options] as string);
+    });
+    const response = await fetch(`${BACKEND_URL}/repl/paint-sdxl`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -386,7 +462,7 @@ export class Backend {
   };
 
   public static getPaintImages = async (accessToken: string): Promise<PaintImageResponse[]> => {
-    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint', {
+    const response = await fetch(`${BACKEND_URL}/repl/paint`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -408,7 +484,7 @@ export class Backend {
   };
 
   public static getPaintImage = async (accessToken: string, id: string): Promise<PaintImageResponse> => {
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint/${id}`, {
+    const response = await fetch(`${BACKEND_URL}/repl/paint/${id}`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -434,11 +510,11 @@ export class Backend {
   ): Promise<PaintImageResponse> => {
     const newOptions: Record<string, string | number | boolean> = {};
     Object.entries(options).forEach(([key, value]) => {
-      if (key !== 'image_path' && key !== 'api_key') {
+      if (key !== 'image_path' && key !== 'api_key' && key !== 'image') {
         newOptions[key] = value;
       }
     });
-    const response = await fetch(`https://rupert-ai-server-ds2havyh3q-ew.a.run.app/repl/paint/${id}`, {
+    const response = await fetch(`${BACKEND_URL}/repl/paint/${id}`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -460,7 +536,7 @@ export class Backend {
   };
 
   public static activatePro = async (accessToken: string): Promise<ActivateProResponse> => {
-    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/user/payment', {
+    const response = await fetch(`${BACKEND_URL}/user/payment`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
@@ -476,12 +552,50 @@ export class Backend {
   };
 
   public static getBilling = async (accessToken: string): Promise<ActivateProResponse> => {
-    const response = await fetch('https://rupert-ai-server-ds2havyh3q-ew.a.run.app/user/payment/portal', {
+    const response = await fetch(`${BACKEND_URL}/user/payment/portal`, {
       headers: {
         Authorization: accessToken,
         Accept: 'application/json',
       },
       method: 'POST',
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static removeBackground = async (accessToken: string, file: File): Promise<RemoveBackgroundResponse> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const response = await fetch(`${BACKEND_URL}/remove-background`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static identifyImage = async (accessToken: string, file: Blob): Promise<IdentifyImageResponse> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const response = await fetch(`${BACKEND_URL}/identify-image`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+      },
+      method: 'POST',
+      body: formData,
     });
 
     if (response.ok) {

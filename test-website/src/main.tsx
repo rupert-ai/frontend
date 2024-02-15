@@ -12,7 +12,7 @@ import { RunsPage } from './pages/RunsPage';
 import { ItemPage } from './pages/ItemPage';
 import { LoginPage } from './pages/LoginPage';
 import NewProject from './pages/NewProject';
-import { GeneratePage } from './pages/GeneratePage';
+import { GeneratePageNew } from './pages/GeneratePageNew';
 import { GeneratedImagePage } from './pages/GeneratedImagePage';
 import GeneratedImagesPage from './pages/GeneratedImagesPage';
 import { PaymentPage } from './pages/PaymentPage';
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
         path: '/generate',
         element: (
           <PrivateRoute>
-            <GeneratePage />
+            <GeneratePageNew />
           </PrivateRoute>
         ),
       },

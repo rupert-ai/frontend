@@ -8,7 +8,8 @@ import { GenerateToolbar } from '../components/GenerateToolbar';
 import TilesList from '../components/TilesList';
 import { useAuth } from '../hooks/useAuth';
 import useIsMobile from '../hooks/useIsMobile';
-import { Backend, Options, PaintImageResponse } from '../services/backend';
+import { Backend, NewOptions, Options, PaintImageResponse } from '../services/backend';
+import { isOldApi } from '../utils/helpers';
 
 export function GeneratedImagePage() {
   const { id } = useParams();
@@ -91,7 +92,9 @@ export function GeneratedImagePage() {
                     isLoading: false,
                     selected: selectedItems.some(e => e.url === o),
                   }))
-              : new Array(job.input.image_num ?? 0).fill(1).map(() => ({ isLoading: true })),
+              : new Array(isOldApi(job.input) ? job.input.image_num : job.input.num_outputs ?? 0)
+                  .fill(1)
+                  .map(() => ({ isLoading: true })),
           ),
         ]
       : [];
@@ -99,7 +102,10 @@ export function GeneratedImagePage() {
 
   useEffect(() => {
     const validData = generatedImage ?? data;
-    setCurrentOptions(validData?.jobs?.[validData?.jobs.length - 1].input);
+    const lastJob = validData?.jobs?.[validData?.jobs.length - 1];
+    if (!!lastJob && isOldApi(lastJob.input)) {
+      setCurrentOptions(lastJob?.input);
+    }
   }, [generatedImage, data]);
 
   const onOptionChange: React.ComponentProps<typeof GenerateSidePanel>['onChange'] = (key, val) => {
@@ -111,15 +117,18 @@ export function GeneratedImagePage() {
   return (
     <>
       <div className="rai-test-page" style={{ flexGrow: !showPanel ? '1' : undefined }}>
-        <GenerateToolbar
-          isLoading={isLoading}
-          onGenerate={startTest}
-          onShowPanel={() => setShowPanel(v => !v)}
-          isDisabled={mappedData?.some(d => d.isLoading) || isLoading || !!selectedItems.length}
-          onImageChange={() => navigate('/generate')}
-          image={originalImage?.image_path}
-          initialPrompt={originalImage?.prompt}
-        />
+        {!originalImage ||
+          (isOldApi(originalImage) && (
+            <GenerateToolbar
+              isLoading={isLoading}
+              onGenerate={startTest}
+              onShowPanel={() => setShowPanel(v => !v)}
+              isDisabled={mappedData?.some(d => d.isLoading) || isLoading || !!selectedItems.length}
+              onImageChange={() => navigate('/generate')}
+              image={originalImage?.image_path}
+              initialPrompt={originalImage?.prompt}
+            />
+          ))}
         <GeneratedImagePreTestToolbar
           selectedItems={selectedItems}
           data={mappedData}
@@ -146,7 +155,7 @@ export function GeneratedImagePage() {
           />
         )}
       </div>
-      {!!showPanel && (
+      {!!showPanel && (!originalImage || isOldApi(originalImage)) && (
         <GenerateSidePanel
           initialOptions={currentOptions}
           onChange={onOptionChange}
