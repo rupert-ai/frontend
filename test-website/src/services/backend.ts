@@ -262,12 +262,10 @@ export type Options = {
   num_inference_steps: number; // optional, default: 20,
   product_size: string; // optional, default: Original, options: 'Original' | '0.6 * width' | '0.5 * width' | '0.4 * width' | '0.3 * width' | '0.2 * width'
   scale: number; // optional, range 1 - 4
-  lora?: string;
 };
 
 // sdxl paint
 export type NewOptions = {
-  lora?: string;
   apply_watermark: boolean;
   condition_scale: number;
   guidance_scale: number;
@@ -282,24 +280,25 @@ export type NewOptions = {
   scheduler: string;
   seed: number;
   strength?: number;
+  lora_weights?: string;
 };
 
-// export type NewOptionsInput = {
-//   lora: string;
-//   apply_watermark: boolean;
-//   condition_scale: number;
-//   guidance_scale: number;
-//   lora_scale: number;
-//   lora_weights: string;
-//   negative_prompt: string;
-//   num_inference_steps: number;
-//   num_outputs: number;
-//   prompt: string;
-//   refine_steps: number;
-//   regen_prompt: boolean;
-//   scheduler: string;
-//   seed: number;
-// };
+export type NewOptionsInput = {
+  apply_watermark: boolean;
+  condition_scale: number;
+  guidance_scale: number;
+  lora_scale: number;
+  negative_prompt: string;
+  num_inference_steps: number;
+  num_outputs: number;
+  prompt: string;
+  refine?: string;
+  refine_steps: number;
+  scheduler: string;
+  seed?: number;
+  strength?: number;
+  lora_weights?: string;
+};
 
 interface ActivateProResponse {
   ok: boolean;
@@ -438,12 +437,12 @@ export class Backend {
   public static paintImageNew = async (
     accessToken: string,
     file: Blob,
-    options: Options & { lora: string },
+    options: NewOptionsInput,
   ): Promise<PaintImageResponse> => {
     const formData = new FormData();
     formData.append('image', file);
     Object.keys(options).forEach(key => {
-      formData.append(key, options[key as keyof Options] as string);
+      formData.append(key, options[key as keyof NewOptionsInput] as string);
     });
     const response = await fetch(`${BACKEND_URL}/repl/paint-sdxl`, {
       headers: {

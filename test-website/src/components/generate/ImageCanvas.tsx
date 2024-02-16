@@ -68,7 +68,17 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
       stageRef.current.scale({ x: 2.56, y: 2.56 });
       stageRef.current.setAttr('width', 1024);
       stageRef.current.setAttr('height', 1024);
-      return await stageRef.current.toBlob({ mimeType: 'image/png' });
+      const blob = await stageRef.current.toBlob({ mimeType: 'image/png' });
+      stageRef.current.hide();
+      stageRef.current.scale({ x: 1, y: 1 });
+      stageRef.current.setAttr('width', CANVAS_WIDTH);
+      stageRef.current.setAttr('height', CANVAS_HEIGHT);
+      trRef.current?.setAttr('resizeEnabled', true);
+      trRef.current?.setAttr('rotateEnabled', true);
+      trRef.current?.setAttr('borderEnabled', true);
+      imageRef.current?.setAttr('draggable', true);
+      stageRef.current.show();
+      return blob;
     }
   };
 

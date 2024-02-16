@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Options } from '../services/backend';
+import { NewOptionsInput } from '../services/backend';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { usePaintImageNewMutation } from '../hooks/usePaintImageNewMutation';
@@ -21,29 +21,28 @@ import { ImageCanvas } from '../components/generate/ImageCanvas';
 import PreviewImage from '../components/PreviewImage';
 import { useRemoveBackground } from '../hooks/useRemoveBackground';
 import { useIdentifyImage } from '../hooks/useIdentifyImage';
-import { defaultOptions } from '../components/GenerateSidePanel';
 
-// const defaultOptions: NewOptionsInput = {
-//   scheduler: 'K_EULER',
-//   lora_scale: 0.95,
-//   refine_steps: 20,
-//   apply_watermark: false,
-//   guidance_scale: 7.5,
-//   num_inference_steps: 20,
-//   condition_scale: 1.1,
-//   negative_prompt: 'illustration, 3d, sepia, painting, cartoons, sketch, (worst quality:2)',
-//   prompt: '',
-//   regen_prompt: true,
-//   num_outputs: 4,
-//   seed: -1,
-//   lora: 'https://replicate.delivery/pbxt/HDNeOEquDF2ETaE2MVThzRqvBrzSeeKVy8lPlePmNcrupumHB/trained_model.tar',
-// };
+const defaultOptions: NewOptionsInput = {
+  apply_watermark: false,
+  condition_scale: 1.1,
+  guidance_scale: 7.5,
+  lora_scale: 0.95,
+  lora_weights: 'https://replicate.delivery/pbxt/HDNeOEquDF2ETaE2MVThzRqvBrzSeeKVy8lPlePmNcrupumHB/trained_model.tar',
+  negative_prompt: 'illustration, 3d, sepia, painting, cartoons, sketch, (worst quality:2)',
+  num_inference_steps: 20,
+  num_outputs: 4,
+  prompt: '',
+  refine: 'base_image_refiner',
+  refine_steps: 20,
+  scheduler: 'K_EULER',
+  strength: 0.8,
+};
 
 export function GeneratePageNew() {
   const auth = useAuth();
   const [file, setFile] = React.useState<{ name: string; url: string }>();
   const [title, setTitle] = React.useState<string>();
-  const currentOptions = useRef<Options>(defaultOptions);
+  const currentOptions = useRef<NewOptionsInput>(defaultOptions);
   const navigate = useNavigate();
   const canvasRef = useRef<{ getImage: () => Promise<File> }>(null);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
@@ -56,9 +55,7 @@ export function GeneratePageNew() {
   const startTest = async () => {
     const token = await auth.user?.getIdToken();
     const image = await canvasRef.current?.getImage();
-    currentOptions.current.prompt = `${title}, in the style of TOK,` ?? '';
-    currentOptions.current.lora =
-      'https://replicate.delivery/pbxt/HDNeOEquDF2ETaE2MVThzRqvBrzSeeKVy8lPlePmNcrupumHB/trained_model.tar';
+    currentOptions.current.prompt = `${title}, in the style of TOK,`;
     mutate(
       { token: token ?? '', file: image ?? new File([], 'image.png'), options: currentOptions.current },
       {
