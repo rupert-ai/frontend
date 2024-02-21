@@ -84,14 +84,12 @@ export function GeneratedImagePage() {
       ? [
           ...sortedData.flatMap(job =>
             !!job.output?.length
-              ? job.output
-                  .filter((_, index) => index !== 0)
-                  .map(o => ({
-                    prompt: job.prompt ?? job.input.prompt,
-                    url: o,
-                    isLoading: false,
-                    selected: selectedItems.some(e => e.url === o),
-                  }))
+              ? job.output.map(o => ({
+                  prompt: job.prompt ?? job.input.prompt,
+                  url: o,
+                  isLoading: false,
+                  selected: selectedItems.some(e => e.url === o),
+                }))
               : new Array(isOldApi(job.input) ? job.input.image_num : job.input.num_outputs ?? 0)
                   .fill(1)
                   .map(() => ({ isLoading: true })),

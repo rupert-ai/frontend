@@ -21,16 +21,16 @@ import { ImageCanvas } from '../components/generate/ImageCanvas';
 import PreviewImage from '../components/PreviewImage';
 import { useRemoveBackground } from '../hooks/useRemoveBackground';
 import { useIdentifyImage } from '../hooks/useIdentifyImage';
+import { StylesList } from '../components/generate/StylesList';
 
 const defaultOptions: NewOptionsInput = {
   apply_watermark: false,
-  condition_scale: 1.1,
+  condition_scale: 1.5,
   guidance_scale: 7.5,
-  lora_scale: 0.95,
-  lora_weights: 'https://replicate.delivery/pbxt/HDNeOEquDF2ETaE2MVThzRqvBrzSeeKVy8lPlePmNcrupumHB/trained_model.tar',
-  negative_prompt: 'illustration, 3d, sepia, painting, cartoons, sketch, (worst quality:2)',
-  num_inference_steps: 20,
-  num_outputs: 4,
+  lora_scale: 1,
+  negative_prompt: 'ugly',
+  num_inference_steps: 40,
+  num_outputs: 2,
   prompt: '',
   refine: 'base_image_refiner',
   refine_steps: 20,
@@ -46,18 +46,19 @@ export function GeneratePageNew() {
   const navigate = useNavigate();
   const canvasRef = useRef<{ getImage: () => Promise<File> }>(null);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const updatedImage = useRef<File>();
 
   const { mutate } = usePaintImageNewMutation();
 
   const { mutate: removeBackground, isLoading: isBackgroundRemoving } = useRemoveBackground();
   const { mutate: identifyImage, isLoading: isIdentifyingImage } = useIdentifyImage();
 
-  const startTest = async () => {
+  const startTest = async (lora: string) => {
     const token = await auth.user?.getIdToken();
-    const image = await canvasRef.current?.getImage();
     currentOptions.current.prompt = `${title}, in the style of TOK,`;
+    currentOptions.current.lora_weights = lora;
     mutate(
-      { token: token ?? '', file: image ?? new File([], 'image.png'), options: currentOptions.current },
+      { token: token ?? '', file: updatedImage.current ?? new File([], 'image.png'), options: currentOptions.current },
       {
         onSuccess: data => {
           navigate(`../generated/${data.id}`, { state: { data } });
@@ -94,8 +95,16 @@ export function GeneratePageNew() {
     <>
       <div className="rai-test-page" style={{ flexGrow: '1', gap: '2rem' }}>
         <h2>Product photography</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignSelf: 'center', width: 400 }}>
-          <ProgressIndicator>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            alignSelf: 'center',
+            width: currentStep !== 3 ? 400 : undefined,
+          }}
+        >
+          <ProgressIndicator style={currentStep === 3 ? { width: 400, alignSelf: 'center' } : undefined}>
             <ProgressStep
               label="Upload image"
               current={currentStep === 1 || currentStep === 2}
@@ -160,7 +169,14 @@ export function GeneratePageNew() {
                             setTitle(e.currentTarget.value);
                           }}
                         />
-                        <Button onClick={startTest}>Select style</Button>
+                        <Button
+                          onClick={async () => {
+                            updatedImage.current = await canvasRef.current?.getImage();
+                            setCurrentStep(3);
+                          }}
+                        >
+                          Select style
+                        </Button>
                       </>
                     )}
                   </div>
@@ -168,6 +184,7 @@ export function GeneratePageNew() {
               </TabPanels>
             </Tabs>
           )}
+          {currentStep === 3 && <StylesList onClick={startTest} />}
         </div>
       </div>
     </>

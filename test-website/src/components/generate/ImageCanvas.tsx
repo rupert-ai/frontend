@@ -29,6 +29,7 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
   const stageRef = useRef<StageShape>(null);
   const [pos, setPos] = useState({ x: 50, y: 50 });
   const [scale, setScale] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (trRef.current && imageRef.current) {
@@ -61,6 +62,7 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
 
   const getImageFile = async () => {
     if (stageRef.current) {
+      setIsLoading(true);
       trRef.current?.setAttr('resizeEnabled', false);
       trRef.current?.setAttr('rotateEnabled', false);
       trRef.current?.setAttr('borderEnabled', false);
@@ -69,7 +71,6 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
       stageRef.current.setAttr('width', 1024);
       stageRef.current.setAttr('height', 1024);
       const blob = await stageRef.current.toBlob({ mimeType: 'image/png' });
-      stageRef.current.hide();
       stageRef.current.scale({ x: 1, y: 1 });
       stageRef.current.setAttr('width', CANVAS_WIDTH);
       stageRef.current.setAttr('height', CANVAS_HEIGHT);
@@ -77,7 +78,7 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
       trRef.current?.setAttr('rotateEnabled', true);
       trRef.current?.setAttr('borderEnabled', true);
       imageRef.current?.setAttr('draggable', true);
-      stageRef.current.show();
+      setIsLoading(false);
       return blob;
     }
   };
@@ -90,6 +91,7 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
         style={{
           height: CANVAS_HEIGHT,
           width: CANVAS_WIDTH,
+          visibility: isLoading ? 'hidden' : 'visible',
         }}
         className="rai-canvas"
         ref={stageRef}
