@@ -30,7 +30,7 @@ const defaultOptions: NewOptionsInput = {
   lora_scale: 1,
   negative_prompt: 'ugly',
   num_inference_steps: 40,
-  num_outputs: 2,
+  num_outputs: 1,
   prompt: '',
   refine: 'base_image_refiner',
   refine_steps: 20,
