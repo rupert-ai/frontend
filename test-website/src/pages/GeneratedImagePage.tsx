@@ -8,8 +8,9 @@ import { GenerateToolbar } from '../components/GenerateToolbar';
 import TilesList from '../components/TilesList';
 import { useAuth } from '../hooks/useAuth';
 import useIsMobile from '../hooks/useIsMobile';
-import { Backend, NewOptions, Options, PaintImageResponse } from '../services/backend';
+import { Backend, Options, PaintImageResponse } from '../services/backend';
 import { isOldApi } from '../utils/helpers';
+import { ToastNotification, Theme } from 'carbon-components-react';
 
 export function GeneratedImagePage() {
   const { id } = useParams();
@@ -133,11 +134,24 @@ export function GeneratedImagePage() {
           onCancel={() => setSelectedItems([])}
           onSelectAll={() => setSelectedItems(mappedData)}
         />
+        {mappedData.some(e => e.isLoading) && (
+          <Theme theme="white">
+            <ToastNotification
+              title="Queued..."
+              subtitle="This process may require some time, especially if your request is in line or the model is starting up. Typically, this takes around 1-2 minutes."
+              notificationType="inline"
+              kind="info"
+              style={{ width: '100%' }}
+              role="alert"
+              hideCloseButton
+            />
+          </Theme>
+        )}
         {!!mappedData.length && (
           <TilesList
             style={isMobile ? { overflow: 'auto', width: 'calc(100% + 1rem)', paddingRight: '1rem' } : undefined}
             data={mappedData ?? []}
-            renderer={image => (
+            renderer={(image, ind) => (
               <GeneratedTile
                 isLoading={image.isLoading}
                 text={image?.prompt}
@@ -146,7 +160,7 @@ export function GeneratedImagePage() {
                 onClick={() =>
                   image.selected
                     ? setSelectedItems(v => [...v.filter(e => e.url != image.url)])
-                    : setSelectedItems(v => [...v, image])
+                    : navigate(`./${ind}`, { state: { data } })
                 }
               />
             )}

@@ -29,8 +29,8 @@ const defaultOptions: NewOptionsInput = {
   guidance_scale: 7.5,
   lora_scale: 1,
   negative_prompt: 'ugly',
-  num_inference_steps: 40,
-  num_outputs: 1,
+  num_inference_steps: 30,
+  num_outputs: 2,
   prompt: '',
   refine: 'base_image_refiner',
   refine_steps: 20,
@@ -53,9 +53,9 @@ export function GeneratePageNew() {
   const { mutate: removeBackground, isLoading: isBackgroundRemoving } = useRemoveBackground();
   const { mutate: identifyImage, isLoading: isIdentifyingImage } = useIdentifyImage();
 
-  const startTest = async (lora: string) => {
+  const startTest = async (lora: string, prompt: string) => {
     const token = await auth.user?.getIdToken();
-    currentOptions.current.prompt = `${title}, in the style of TOK,`;
+    currentOptions.current.prompt = `${title}, ${prompt} in the style of TOK,`;
     currentOptions.current.lora_weights = lora;
     mutate(
       { token: token ?? '', file: updatedImage.current ?? new File([], 'image.png'), options: currentOptions.current },

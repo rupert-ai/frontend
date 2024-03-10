@@ -1,12 +1,13 @@
 import { Content } from 'carbon-components-react';
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, matchRoutes, useLocation } from 'react-router-dom';
 import './App.scss';
 import AppHeader from './components/AppHeader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { BackendError } from './services/backend';
 import useIsMobile from './hooks/useIsMobile';
+import { hideSideNav } from './utils/helpers';
 
 const isServerError = (err: unknown): err is BackendError => {
   return typeof err === 'object' && err !== null && 'errorMessage' in err;
@@ -57,7 +58,7 @@ function App() {
         hideProgressBar
         autoClose={5000}
       />
-      {location.pathname === '/login' || location.pathname === '/register' ? (
+      {hideSideNav(location) ? (
         <Content style={{ width: '100%' }}>
           <Outlet />
         </Content>

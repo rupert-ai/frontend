@@ -470,13 +470,7 @@ export class Backend {
     });
 
     if (response.ok) {
-      const resp = (await response.json()) as PaintImageResponse[];
-      return [
-        ...resp.map(i => ({
-          ...i,
-          jobs: i.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
-        })),
-      ];
+      return response.json();
     }
     const err = await response.json();
     throw getErrorObject(err, response);
@@ -492,11 +486,7 @@ export class Backend {
     });
 
     if (response.ok) {
-      const resp = (await response.json()) as PaintImageResponse;
-      return {
-        ...resp,
-        jobs: resp.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
-      };
+      return response.json();
     }
     const err = await response.json();
     throw getErrorObject(err, response);
@@ -529,6 +519,34 @@ export class Backend {
         ...resp,
         jobs: resp.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
       };
+    }
+    const err = await response.json();
+    throw getErrorObject(err, response);
+  };
+
+  public static regeneratePaintImageNew = async (
+    accessToken: string,
+    id: string,
+    options: NewOptionsInput,
+  ): Promise<PaintImageResponse> => {
+    const newOptions: Record<string, string | number | boolean> = {};
+    Object.entries(options).forEach(([key, value]) => {
+      if (key !== 'image_path' && key !== 'api_key' && key !== 'image') {
+        newOptions[key] = value;
+      }
+    });
+    const response = await fetch(`${BACKEND_URL}/repl/paint-sdxl/${id}`, {
+      headers: {
+        Authorization: accessToken,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(newOptions),
+    });
+
+    if (response.ok) {
+      return response.json();
     }
     const err = await response.json();
     throw getErrorObject(err, response);

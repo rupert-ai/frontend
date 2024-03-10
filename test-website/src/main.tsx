@@ -17,6 +17,7 @@ import { GeneratedImagePage } from './pages/GeneratedImagePage';
 import GeneratedImagesPage from './pages/GeneratedImagesPage';
 import { PaymentPage } from './pages/PaymentPage';
 import ErrorPage from './pages/ErrorPage';
+import { GeneratedImagePreviewPage } from './pages/GeneratedImagePreviewPage';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <PaymentPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/generated/:id/:itemId',
+        element: (
+          <PrivateRoute>
+            <GeneratedImagePreviewPage />
           </PrivateRoute>
         ),
       },
