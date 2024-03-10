@@ -25,7 +25,7 @@ import { StylesList } from '../components/generate/StylesList';
 
 const defaultOptions: NewOptionsInput = {
   apply_watermark: false,
-  condition_scale: 1.5,
+  condition_scale: 1.3,
   guidance_scale: 7.5,
   lora_scale: 1,
   negative_prompt: 'ugly',

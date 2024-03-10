@@ -85,7 +85,7 @@ export function GeneratedImagePreviewPage() {
   return (
     <>
       {!!image && (
-        <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ display: 'flex', height: '100%', marginRight: '-1.8rem' }}>
           <div style={{ flexGrow: 1 }}>
             <PreviewImage
               style={{ height: '100%', width: 'unset', objectFit: 'cover' }}
@@ -96,7 +96,6 @@ export function GeneratedImagePreviewPage() {
             style={{
               width: 300,
               display: 'flex',
-              marginRight: '-1.8rem',
               flexDirection: 'column',
               justifyContent: 'space-between',
               height: '100%',
