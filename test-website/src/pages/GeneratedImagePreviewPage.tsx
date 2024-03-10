@@ -96,7 +96,7 @@ export function GeneratedImagePreviewPage() {
             style={{
               width: 300,
               display: 'flex',
-              marginRight: '-2rem',
+              marginRight: '-1.8rem',
               flexDirection: 'column',
               justifyContent: 'space-between',
               height: '100%',
