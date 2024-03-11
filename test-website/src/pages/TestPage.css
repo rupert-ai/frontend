@@ -1,0 +1,12 @@
+.rai-test-page {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  width: calc(100% - 20rem);
+}
+
+@media (max-width: 65.98rem) {
+  .rai-test-page {
+    width: 100%;
+  }
+}

@@ -1,0 +1,11 @@
+.rai-runs-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.rai-runs-page-breadcrumbs .cds--breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+}

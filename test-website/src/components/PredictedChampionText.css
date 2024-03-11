@@ -1,0 +1,6 @@
+.rai-predicted-champion-text {
+  color: var(--cds-support-success-inverse);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

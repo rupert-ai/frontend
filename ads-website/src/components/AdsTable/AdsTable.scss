@@ -1,0 +1,19 @@
+.table-header-cell.table-header-cell {
+  word-break: break-word;
+}
+
+.table-ad-name-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  img {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.iui-button.iui-button.iui-active::after {
+  content: none;
+}

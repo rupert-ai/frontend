@@ -1,0 +1,129 @@
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Variable.woff2') format('woff2');
+       font-weight: 300 900;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-VariableItalic.woff2') format('woff2');
+       font-weight: 300 900;
+       font-display: swap;
+       font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Light.woff2') format('woff2');
+       font-weight: 300;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-LightItalic.woff2') format('woff2');
+       font-weight: 300;
+       font-display: swap;
+       font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Regular.woff2') format('woff2');
+       font-weight: 400;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Italic.woff2') format('woff2');
+       font-weight: 400;
+       font-display: swap;
+       font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Medium.woff2') format('woff2');
+       font-weight: 500;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-MediumItalic.woff2') format('woff2');
+       font-weight: 500;
+       font-display: swap;
+       font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Bold.woff2') format('woff2');
+       font-weight: 700;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-BoldItalic.woff2') format('woff2');
+       font-weight: 700;
+       font-display: swap;
+       font-style: italic;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-Black.woff2') format('woff2');
+       font-weight: 900;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/Satoshi-BlackItalic.woff2') format('woff2');
+       font-weight: 900;
+       font-display: swap;
+       font-style: italic;
+}
+
+.App {
+  height: 100vh;
+  background-color: #000;
+  font-family: Satoshi;
+  overflow-y: auto;
+  overflow-y: overlay;
+  font-size: 16px !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  .App {
+    height: -webkit-fill-available;
+  }
+}
+
+body {
+  --iui-color-background-border: rgba(255, 255, 255, 0.05);
+  --iui-color-background-2: #000;
+  --iui-color-background-1: #262626;
+  --iui-color-background-primary: #3e68ff;
+  --iui-color-foreground-primary: #3e68ff;
+  --iui-icons-color-primary: #3e68ff;
+  --iui-surface-background-color: var(--iui-color-background-3);
+  overflow: hidden;
+  position: relative;
+  /* height: 100%; */
+}
+
+ html, #root {
+  /* height: 100%; */
+  overflow: hidden;
+}

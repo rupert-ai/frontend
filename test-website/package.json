@@ -1,0 +1,33 @@
+{
+  "name": "rupert-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@carbon/icons-react": "^11.21.0",
+    "carbon-components-react": "^8.32.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.4.3",
+    "@tanstack/react-query": "^4.28.0",
+    "react-toastify": "^9.1.2",
+    "firebase": "^9.22.0"
+  },
+  "devDependencies": {
+    "@types/carbon__icons-react": "^11.10.0",
+    "@types/carbon-components-react": "^7.55.2",
+    "@types/node": "^18.11.9",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "@vitejs/plugin-react": "^4.0.1",
+    "sass": "^1.63.6",
+    "typescript": "^4.6.4",
+    "vite": "^4.3.9"
+  }
+}

@@ -1,0 +1,26 @@
+.rai-generate-toolbar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.rai-generate-toolbar-active {
+  background-color: var(--cds-tag-background-blue);
+}
+
+.rai-generate-button-mobile {
+  width: 100dvw;
+  margin-top: auto;
+  margin-bottom: -1rem;
+  margin-left: -1rem;
+  max-width: unset;
+  order: 1;
+}
+
+.rai-original-file-name-mobile {
+  width: 10rem;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

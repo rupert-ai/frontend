@@ -1,0 +1,48 @@
+.rai-settings-panel {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20rem;
+  z-index: 5000;
+  padding: 1rem;
+}
+
+.rai-settings-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rai-settings-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rai-settings-panel-close-button {
+  justify-content: center;
+  align-items: center;
+}
+
+.rai-settings-panel-close-button:hover {
+  color: var(--cds-button-tertiary-hover, #0050e6);
+}
+
+.cds--slider-text-input.cds--slider-text-input {
+  width: 3.9rem;
+}
+
+.rai-settings-panel-mobile {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  width: 100dvw;
+  overflow: auto;
+  background-color: var(--cds-background);
+  z-index: 9000;
+  padding: 1rem;
+}
