@@ -9,8 +9,11 @@ import {
   ProgressStep,
   Tab,
   Tabs,
+  // @ts-ignore
   TabList,
+  // @ts-ignore
   TabPanels,
+  // @ts-ignore
   TabPanel,
   TextInput,
   Button,

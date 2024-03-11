@@ -1,6 +1,6 @@
 import { Content } from 'carbon-components-react';
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Outlet, matchRoutes, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import './App.scss';
 import AppHeader from './components/AppHeader';
 import { ToastContainer, toast } from 'react-toastify';

@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/useAuth';
 import useIsMobile from '../hooks/useIsMobile';
 import { Backend, Options, PaintImageResponse } from '../services/backend';
 import { isOldApi } from '../utils/helpers';
+// @ts-ignore
 import { ToastNotification, Theme } from 'carbon-components-react';
 
 export function GeneratedImagePage() {
