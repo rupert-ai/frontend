@@ -1,0 +1,10 @@
+.rai-project-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.rai-project-tile-label {
+  word-break: break-all;
+}

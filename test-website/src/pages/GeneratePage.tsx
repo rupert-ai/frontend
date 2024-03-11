@@ -33,6 +33,7 @@ export function GeneratePage() {
   };
 
   const onOptionChange: React.ComponentProps<typeof GenerateSidePanel>['onChange'] = (key, val) => {
+    // @ts-ignore
     currentOptions.current[key] = val;
   };
 

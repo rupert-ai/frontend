@@ -23,3 +23,8 @@
 .rai-menu-content.rai-menu-content {
   right: 16px;
 }
+
+.rai-user-avatar {
+  justify-content: center;
+  align-items: center;
+}

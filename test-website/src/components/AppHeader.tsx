@@ -9,7 +9,9 @@ import {
   SideNavDivider,
   SideNavItems,
   SideNavLink,
+  // @ts-ignore
   Popover,
+  // @ts-ignore
   PopoverContent,
   Button,
   SideNavMenu,
@@ -60,6 +62,7 @@ export function AppHeader() {
         <>
           <Header aria-label="Rupert">
             <HeaderMenuButton aria-label="Open menu" isActive={isSideNavExpanded} onClick={onClickSideNavExpand} />
+            {/* @ts-ignore */}
             <HeaderName as={Link} to="/" prefix="" className="rai-header-name">
               Rupert AI
             </HeaderName>
@@ -82,11 +85,7 @@ export function AppHeader() {
                 ))}
               {!!user && (
                 <Popover open={showUserMenu} autoAlign>
-                  <Button
-                    className="cds--header__action"
-                    style={{ justifyContent: 'center', alignItems: 'center' }}
-                    onClick={() => setShowUserMenu(v => !v)}
-                  >
+                  <Button className="cds--header__action rai-user-avatar" onClick={() => setShowUserMenu(v => !v)}>
                     <UserAvatar size="20" />
                   </Button>
                   <PopoverContent className="rai-menu-content">
@@ -103,6 +102,7 @@ export function AppHeader() {
                 <SideNavItems className="rai-side-nav-new-project">
                   <SideNavLink
                     renderIcon={AddAlt}
+                    // @ts-ignore
                     as={Link}
                     to="/"
                     aria-current={isNewProject(location.pathname) ? 'page' : undefined}
@@ -114,6 +114,7 @@ export function AppHeader() {
                 <SideNavItems className="rai-side-nav-items">
                   <SideNavMenu title="My projects">
                     <SideNavMenuItem
+                      // @ts-ignore
                       element={Link}
                       to="/generated"
                       aria-current={location.pathname === '/generated' ? 'page' : undefined}
@@ -122,6 +123,7 @@ export function AppHeader() {
                       My generated ads
                     </SideNavMenuItem>
                     <SideNavMenuItem
+                      // @ts-ignore
                       element={Link}
                       to="/projects"
                       aria-current={location.pathname.includes('/projects') ? 'page' : undefined}

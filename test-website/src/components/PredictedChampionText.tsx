@@ -1,7 +1,13 @@
-import { Badge } from "@carbon/icons-react";
+import { Badge } from '@carbon/icons-react';
+import './PredictedChampionText.css';
 
 export function PredictedChampionText() {
-  return <div style={{color: "var(--cds-support-success-inverse)", display: "flex", gap: 8, alignItems: "center"}}><Badge />Predicted champion</div>
+  return (
+    <div className="rai-predicted-champion-text">
+      <Badge />
+      Predicted champion
+    </div>
+  );
 }
 
 export default PredictedChampionText;

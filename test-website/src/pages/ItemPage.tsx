@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   Tag,
   ToastNotification,
+  //@ts-ignore
   Theme,
   ContentSwitcher,
   Switch,
