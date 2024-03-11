@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
-import './index.css';
 import { TestPage } from './pages/TestPage';
 import { Theme } from 'carbon-components-react';
 import PrivateRoute from './PrivateRoute';
