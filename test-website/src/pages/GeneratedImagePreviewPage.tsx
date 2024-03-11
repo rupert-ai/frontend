@@ -86,7 +86,7 @@ export function GeneratedImagePreviewPage() {
     <>
       {!!image && (
         <div style={{ display: 'flex', height: '100%', marginRight: '-1.8rem' }}>
-          <div style={{ flexGrow: 1 }}>
+          <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <PreviewImage
               style={{ height: '100%', width: 'unset', objectFit: 'cover' }}
               image={{ name: '', url: image.url }}
