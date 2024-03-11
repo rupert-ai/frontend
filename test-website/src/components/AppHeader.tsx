@@ -9,7 +9,9 @@ import {
   SideNavDivider,
   SideNavItems,
   SideNavLink,
+  // @ts-ignore
   Popover,
+  // @ts-ignore
   PopoverContent,
   Button,
   SideNavMenu,
@@ -59,6 +61,7 @@ export function AppHeader() {
         <>
           <Header aria-label="Rupert">
             <HeaderMenuButton aria-label="Open menu" isActive={isSideNavExpanded} onClick={onClickSideNavExpand} />
+            {/* @ts-ignore */}
             <HeaderName as={Link} to="/" prefix="" className="rai-header-name">
               Rupert AI
             </HeaderName>
@@ -98,6 +101,7 @@ export function AppHeader() {
                 <SideNavItems className="rai-side-nav-new-project">
                   <SideNavLink
                     renderIcon={AddAlt}
+                    // @ts-ignore
                     as={Link}
                     to="/"
                     aria-current={isNewProject(pathname) ? 'page' : undefined}
@@ -109,6 +113,7 @@ export function AppHeader() {
                 <SideNavItems className="rai-side-nav-items">
                   <SideNavMenu title="My projects">
                     <SideNavMenuItem
+                      // @ts-ignore
                       element={Link}
                       to="/generated"
                       aria-current={pathname === '/generated' ? 'page' : undefined}
@@ -117,6 +122,7 @@ export function AppHeader() {
                       My generated ads
                     </SideNavMenuItem>
                     <SideNavMenuItem
+                      // @ts-ignore
                       element={Link}
                       to="/projects"
                       aria-current={pathname.includes('/projects') ? 'page' : undefined}

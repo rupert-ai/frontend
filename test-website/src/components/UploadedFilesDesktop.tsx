@@ -57,6 +57,7 @@ export function UploadedFilesDesktop({ files, startTest, onFileDelete, onRemoveA
               margin: 'auto 0',
             }}
           >
+            {/* @ts-ignore */}
             <Image size="128" />
             <div>No images uploaded</div>
           </div>

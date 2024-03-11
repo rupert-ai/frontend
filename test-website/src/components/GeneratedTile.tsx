@@ -44,6 +44,7 @@ export function GeneratedTile({ text, image, isLoading, onClick }: GeneratedTile
               style={{
                 wordBreak: 'break-word',
                 display: '-webkit-box',
+                // @ts-ignore
                 '-webkit-line-clamp': '3',
                 '-webkit-box-orient': 'vertical',
                 overflow: 'hidden',

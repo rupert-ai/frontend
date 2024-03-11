@@ -103,6 +103,7 @@ export function GeneratedImagePage() {
   }, [generatedImage, data]);
 
   const onOptionChange: React.ComponentProps<typeof GenerateSidePanel>['onChange'] = (key, val) => {
+    // @ts-ignore
     setCurrentOptions(o => (o ? { ...o, [key]: val } : { [key]: val }));
   };
 
