@@ -66,11 +66,11 @@ export function RunsPage() {
                   instance={instance}
                   index={index + 1}
                   isChamp={index === 0}
-                  onClick={
+                  onClick={() => {
                     !!finalData.finishedAt
-                      ? () => navigate(`./${instance.id}`, { state: { research: instance } })
-                      : undefined
-                  }
+                      ? navigate(`./${instance.id}`, { state: { research: instance } })
+                      : undefined;
+                  }}
                 />
               )}
             />

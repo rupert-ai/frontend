@@ -81,11 +81,7 @@ export function AppHeader() {
                 ))}
               {!!user && (
                 <Popover open={showUserMenu} autoAlign>
-                  <Button
-                    className="cds--header__action"
-                    style={{ justifyContent: 'center', alignItems: 'center' }}
-                    onClick={() => setShowUserMenu(v => !v)}
-                  >
+                  <Button className="cds--header__action rai-user-avatar" onClick={() => setShowUserMenu(v => !v)}>
                     <UserAvatar size="20" />
                   </Button>
                   <PopoverContent className="rai-menu-content">

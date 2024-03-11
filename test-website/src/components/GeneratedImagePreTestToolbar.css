@@ -4,3 +4,11 @@
   justify-content: space-between;
   padding-left: 1rem;
 }
+
+.pre-test-confirm-button {
+  padding-right: 3rem;
+}
+
+.pre-test-cancel-button {
+  padding-right: 1rem;
+}

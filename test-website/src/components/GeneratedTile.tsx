@@ -1,9 +1,7 @@
-import { SkeletonPlaceholder, SkeletonText, Tag, SelectableTile } from 'carbon-components-react';
+import { SkeletonPlaceholder, SkeletonText, SelectableTile } from 'carbon-components-react';
 import PreviewImage from './PreviewImage';
 
 type GeneratedTileProps = {
-  isTop?: boolean;
-  isOriginal?: boolean;
   isLoading: boolean;
   image?:
     | File
@@ -13,9 +11,10 @@ type GeneratedTileProps = {
       };
   text?: string;
   selected?: boolean;
-} & React.HTMLAttributes<HTMLDivElement>;
+  onClick: () => void;
+};
 
-export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading, ...rest }: GeneratedTileProps) {
+export function GeneratedTile({ text, image, isLoading, onClick }: GeneratedTileProps) {
   return (
     <SelectableTile
       style={{
@@ -24,9 +23,9 @@ export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading
         width: '100%',
         height: '100%',
         padding: 0,
-        ...style,
       }}
-      {...rest}
+      onClick={onClick}
+      value=""
     >
       {isLoading || !image ? (
         <SkeletonPlaceholder style={{ width: '100%', height: '100%', aspectRatio: '1/1' }} />
@@ -34,18 +33,6 @@ export function GeneratedTile({ text, image, isTop, isOriginal, style, isLoading
         <PreviewImage image={image} style={{ width: '100%', height: 'unset', objectFit: 'cover' }} />
       )}
       <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          {isOriginal && (
-            <Tag type="gray" size="md" style={{ marginLeft: 0 }}>
-              Original
-            </Tag>
-          )}
-          {isTop && (
-            <Tag type="gray" size="md" style={{ marginLeft: 0 }}>
-              Top layer
-            </Tag>
-          )}
-        </div>
         <div>
           {isLoading ? (
             <>

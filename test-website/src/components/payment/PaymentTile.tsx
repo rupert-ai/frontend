@@ -1,5 +1,6 @@
 import { CheckmarkOutline } from '@carbon/icons-react';
-import { Button, ButtonSkeleton, Tag, Tile } from 'carbon-components-react';
+import { ButtonSkeleton, Tag, Tile } from 'carbon-components-react';
+import './PaymentTile.css';
 
 type PaymentTileProps = {
   title: string;
@@ -12,37 +13,22 @@ type PaymentTileProps = {
 
 export function PaymentTile({ title, description, price, features, actionButton, isLoading }: PaymentTileProps) {
   return (
-    <Tile
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        width: '16.75rem',
-      }}
-    >
+    <Tile className="rai-payment-tile">
       <h3>{title}</h3>
       <div>{description}</div>
       <div>
-        <span style={{ color: '#A7F0BA', fontSize: '3rem' }}>€{price}</span>
-        <span style={{ verticalAlign: 'sub', fontSize: 'smaller' }}>/mo</span>
+        <span className="rai-payment-tile-price">€{price}</span>
+        <span className="rai-payment-tile-month">/mo</span>
       </div>
       {isLoading ? <ButtonSkeleton style={{ width: '100%' }} /> : <>{actionButton}</>}
       {features.map(f => (
-        <div
-          style={{
-            display: 'flex',
-            gap: '0.5rem',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            height: '1.2rem',
-          }}
-        >
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="rai-payment-tile-features">
+          <div className="rai-payment-tile-feature-title">
             <CheckmarkOutline fill="#A7F0BA" />
             {f.title}
           </div>
           {f.notAvailable && (
-            <Tag type="purple" size="sm" style={{ marginInline: 0, minHeight: '1.2rem' }}>
+            <Tag className="rai-payment-tile-feature-tag" type="purple" size="sm">
               Soon
             </Tag>
           )}

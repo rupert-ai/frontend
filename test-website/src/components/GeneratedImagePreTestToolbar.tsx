@@ -86,10 +86,10 @@ export function GeneratedImagePreTestToolbar({
         </span>
         {selectedItems.length > 0 ? (
           <div>
-            <Button size="sm" onClick={startTesting} renderIcon={QuadrantPlot} style={{ paddingRight: '3rem' }}>
+            <Button size="sm" onClick={startTesting} renderIcon={QuadrantPlot} className="pre-test-confirm-button">
               Pre test
             </Button>
-            <Button size="sm" onClick={onCancel} style={{ paddingRight: '1rem' }}>
+            <Button size="sm" onClick={onCancel} className="pre-test-cancel-button">
               Cancel
             </Button>
           </div>
