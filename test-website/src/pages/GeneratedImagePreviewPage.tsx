@@ -85,21 +85,20 @@ export function GeneratedImagePreviewPage() {
   return (
     <>
       {!!image && (
-        <div style={{ display: 'flex', height: '100%', marginRight: '-1.8rem' }}>
-          <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', height: '100%', marginRight: '-1.8rem', gap: '4rem' }}>
+          <div style={{ marginInline: 'auto' }}>
             <PreviewImage
-              style={{ height: '100%', width: 'unset', objectFit: 'cover' }}
+              style={{ height: 'unset', width: '100%', objectFit: 'cover', maxHeight: '100%' }}
               image={{ name: '', url: image.url }}
             />
           </div>
           <div
             style={{
+              minWidth: 300,
               width: 300,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              height: '100%',
-              flexGrow: 1,
             }}
           >
             <div style={{ alignSelf: 'flex-end' }} onClick={() => navigate('..', { relative: 'path' })}>

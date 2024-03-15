@@ -112,7 +112,7 @@ export function AppHeader() {
                   </SideNavLink>
                 </SideNavItems>
                 <SideNavItems className="rai-side-nav-items">
-                  <SideNavMenu title="My projects">
+                  <SideNavMenu title="My projects" defaultExpanded>
                     <SideNavMenuItem
                       // @ts-ignore
                       element={Link}
@@ -132,16 +132,6 @@ export function AppHeader() {
                       My tests
                     </SideNavMenuItem>
                   </SideNavMenu>
-                  <SideNavDivider />
-                  <SideNavLink aria-disabled renderIcon={MachineLearning} onClick={onClickSideNavExpand}>
-                    Rupert AI tools
-                  </SideNavLink>
-                  <SideNavLink aria-disabled renderIcon={MachineLearningModel} onClick={onClickSideNavExpand}>
-                    AI training
-                  </SideNavLink>
-                  <SideNavLink aria-disabled renderIcon={Folder} onClick={onClickSideNavExpand}>
-                    Assets
-                  </SideNavLink>
                 </SideNavItems>
               </SideNav>
             )}
