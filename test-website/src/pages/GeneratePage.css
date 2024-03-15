@@ -1,0 +1,25 @@
+.rai-progress-step.rai-progress-step {
+  flex-grow: 1;
+  width: unset;
+}
+
+.cds--progress-line.cds--progress-line {
+  width: 100%;
+}
+
+.cds--progress-label.cds--progress-label {
+  max-width: unset;
+}
+
+.rai-hint-text {
+  color: var(--text-text-primary, #f4f4f4);
+  width: 50%;
+  align-self: center;
+  font-size: 10px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.cds--tab-content.cds--tab-content {
+  padding: 0;
+}

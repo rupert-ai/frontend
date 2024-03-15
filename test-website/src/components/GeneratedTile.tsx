@@ -26,9 +26,10 @@ export function GeneratedTile({ text, image, isLoading, onClick }: GeneratedTile
       }}
       onClick={onClick}
       value=""
+      title={image?.name}
     >
       {isLoading || !image ? (
-        <SkeletonPlaceholder style={{ width: '100%', height: '100%', aspectRatio: '1/1' }} />
+        <SkeletonPlaceholder style={{ width: '100%', height: 'unset', aspectRatio: '1/1' }} />
       ) : (
         <PreviewImage image={image} style={{ width: '100%', height: 'unset', objectFit: 'cover' }} />
       )}

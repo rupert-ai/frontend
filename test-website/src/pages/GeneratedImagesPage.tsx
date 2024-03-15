@@ -4,6 +4,7 @@ import TilesList from '../components/TilesList';
 import { Backend } from '../services/backend';
 import { useAuth } from '../hooks/useAuth';
 import { GeneratedProjectTile } from '../components/GeneratedProjectTile';
+import { isOldApi } from '../utils/helpers';
 
 export function GeneratedImagesPage() {
   const auth = useAuth();
@@ -36,7 +37,12 @@ export function GeneratedImagesPage() {
             data={data?.filter(d => d.jobs.every(job => job.status === 'succeeded')) ?? []}
             renderer={instance => (
               <GeneratedProjectTile
-                image={{ url: instance.jobs[0].input.image_path, name: 'original' }}
+                image={{
+                  url: isOldApi(instance.jobs[0].input)
+                    ? instance.jobs[0].input.image_path
+                    : instance.jobs[0].input.image,
+                  name: 'original',
+                }}
                 onClick={() => navigate(`./${instance.id}`, { state: { data: instance } })}
                 index={instance.id}
               />
