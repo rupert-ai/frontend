@@ -18,6 +18,9 @@ import GeneratedImagesPage from './pages/GeneratedImagesPage';
 import { PaymentPage } from './pages/PaymentPage';
 import ErrorPage from './pages/ErrorPage';
 import { GeneratedImagePreviewPage } from './pages/GeneratedImagePreviewPage';
+import { UpscalePage } from './pages/UpscalePage';
+import { UpscaledImagePage } from './pages/UpscaledImagePage';
+import UpscaledImagesPage from './pages/UpscaledImagesPage';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +33,30 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <NewProject />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/upscaled/:id',
+        element: (
+          <PrivateRoute>
+            <UpscaledImagePage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/upscaled',
+        element: (
+          <PrivateRoute>
+            <UpscaledImagesPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/upscale',
+        element: (
+          <PrivateRoute>
+            <UpscalePage />
           </PrivateRoute>
         ),
       },

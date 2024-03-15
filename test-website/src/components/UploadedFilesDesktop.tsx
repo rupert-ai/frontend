@@ -7,9 +7,16 @@ type UploadedFilesDesktopProps = {
   startTest: () => void;
   onFileDelete: (fileName: string) => void;
   onRemoveAll: () => void;
+  actionText: string;
 };
 
-export function UploadedFilesDesktop({ files, startTest, onFileDelete, onRemoveAll }: UploadedFilesDesktopProps) {
+export function UploadedFilesDesktop({
+  files,
+  startTest,
+  onFileDelete,
+  onRemoveAll,
+  actionText,
+}: UploadedFilesDesktopProps) {
   return (
     <HeaderPanel
       aria-label="Uploaded images panel"
@@ -40,7 +47,7 @@ export function UploadedFilesDesktop({ files, startTest, onFileDelete, onRemoveA
             justifyContent: 'space-between',
           }}
         >
-          <h4>Your ad images{!!files.length && ` (${files.length})`}</h4>
+          <h4>Your images{!!files.length && ` (${files.length})`}</h4>
           {!!files.length && (
             <Button kind="ghost" size="sm" onClick={onRemoveAll}>
               Remove all
@@ -65,7 +72,7 @@ export function UploadedFilesDesktop({ files, startTest, onFileDelete, onRemoveA
         <UploadedFilesList onFileDelete={onFileDelete} files={files} />
       </div>
       <Button style={{ width: '100%' }} disabled={files.length === 0} onClick={startTest}>
-        Start testing Ads
+        {actionText}
       </Button>
     </HeaderPanel>
   );
