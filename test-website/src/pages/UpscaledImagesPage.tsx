@@ -30,11 +30,11 @@ export function UpscaledImagesPage() {
           {!!data?.length ? (
             <TilesList
               data={data}
-              renderer={instance => (
+              renderer={(instance, index) => (
                 <GeneratedProjectTile
                   image={{ url: instance.imageUrl, name: 'original' }}
                   onClick={() => navigate(`./${instance.id}`, { state: { data: instance } })}
-                  index={instance.id}
+                  index={index + 1}
                 />
               )}
             />

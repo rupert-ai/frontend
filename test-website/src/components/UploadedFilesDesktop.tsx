@@ -8,6 +8,7 @@ type UploadedFilesDesktopProps = {
   onFileDelete: (fileName: string) => void;
   onRemoveAll: () => void;
   actionText: string;
+  customSettings?: React.ReactNode;
 };
 
 export function UploadedFilesDesktop({
@@ -16,6 +17,7 @@ export function UploadedFilesDesktop({
   onFileDelete,
   onRemoveAll,
   actionText,
+  customSettings,
 }: UploadedFilesDesktopProps) {
   return (
     <HeaderPanel
@@ -71,6 +73,7 @@ export function UploadedFilesDesktop({
         )}
         <UploadedFilesList onFileDelete={onFileDelete} files={files} />
       </div>
+      {customSettings}
       <Button style={{ width: '100%' }} disabled={files.length === 0} onClick={startTest}>
         {actionText}
       </Button>

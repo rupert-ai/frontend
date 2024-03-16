@@ -12,9 +12,10 @@ type ImagesUploadProps = {
   description: string;
   actionText: string;
   onAction: (files: File[]) => void;
+  customSettings?: React.ReactNode;
 };
 
-export function ImagesUpload({ title, description, actionText, onAction }: ImagesUploadProps) {
+export function ImagesUpload({ title, description, actionText, onAction, customSettings }: ImagesUploadProps) {
   const [files, setFiles] = React.useState<File[]>([]);
   const isMobile = useIsMobile();
 
@@ -45,6 +46,7 @@ export function ImagesUpload({ title, description, actionText, onAction }: Image
               </Button>
             </div>
             <UploadedFilesList files={files} onFileDelete={onFileDelete} />
+            {customSettings}
             <Button
               style={{ width: '100%', position: 'fixed', bottom: 0, maxWidth: 'unset', left: 0 }}
               disabled={files.length === 0}
@@ -63,6 +65,7 @@ export function ImagesUpload({ title, description, actionText, onAction }: Image
           onRemoveAll={() => setFiles([])}
           startTest={action}
           actionText={actionText}
+          customSettings={customSettings}
         />
       )}
     </>
