@@ -10,7 +10,7 @@ import React from 'react';
 export function UpscalePage() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const options = React.useRef({ scale: 2, faceEnhance: true });
+  const options = React.useRef({ scale: 2, faceEnhance: false });
 
   const uploadImagesMutation = useMutation(Backend.upscale, {
     onSuccess(data) {
