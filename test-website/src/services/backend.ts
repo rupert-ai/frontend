@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { HttpClient } from './httpClient';
 
 interface ResearchUploadResponse {
   batchId: number;
@@ -224,10 +224,6 @@ export interface BackendError {
   statusCode: number;
 }
 
-const getErrorObject = (err: any, response: Response) => {
-  return { ...err, statusCode: response.status };
-};
-
 export interface PaintImageResponse {
   id: number;
   jobs: PaintImageJob[];
@@ -313,6 +309,17 @@ interface IdentifyImageResponse {
   imageDescription: string;
 }
 
+export interface UpscaleImageResponse {
+  createdAt: string;
+  faceEnhance: boolean;
+  id: number;
+  imageUrl: string;
+  model: string;
+  scale: number;
+  upscaledImageUrl: string;
+  userId: number;
+}
+
 const BACKEND_URL = 'https://rupert-ai-server-ds2havyh3q-ew.a.run.app';
 
 export class Backend {
@@ -327,19 +334,7 @@ export class Backend {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    const response = await fetch(`${BACKEND_URL}/research`, {
-      headers: {
-        Authorization: accessToken,
-        // "Content-Type": "multipart/form-data",
-      },
-      method: 'POST',
-      body: formData,
-    });
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/research`, accessToken, formData);
   };
 
   public static uploadGenerated = async ({
@@ -351,65 +346,22 @@ export class Backend {
     files: string[];
     name: string;
   }): Promise<ResearchUploadResponse> => {
-    const response = await fetch(`${BACKEND_URL}/research/url`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({ images: files, name }),
+    return HttpClient.post(`${BACKEND_URL}/research/url`, accessToken, JSON.stringify({ images: files, name }), {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     });
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
   };
 
   public static getResultItem = async (accessToken: string, id: number, itemId: number): Promise<ResearchItem> => {
-    const response = await fetch(`${BACKEND_URL}/research/${id}/${itemId}`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    });
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.get(`${BACKEND_URL}/research/${id}/${itemId}`, accessToken);
   };
 
   public static getResult = async (accessToken: string, id: number): Promise<ResearchResultResponse> => {
-    const response = await fetch(`${BACKEND_URL}/research/${id}`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    });
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.get(`${BACKEND_URL}/research/${id}`, accessToken);
   };
 
   public static getResults = async (accessToken: string): Promise<ResearchResultResponse[]> => {
-    const response = await fetch(`${BACKEND_URL}/research`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    });
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.get(`${BACKEND_URL}/research`, accessToken);
   };
 
   public static paintImage = async (accessToken: string, file: File, options: Options): Promise<PaintImageResponse> => {
@@ -418,20 +370,10 @@ export class Backend {
     Object.keys(options).forEach(key => {
       formData.append(key, options[key as keyof Options] as string);
     });
-    const response = await fetch(`${BACKEND_URL}/repl/paint`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'POST',
-      body: formData,
-    });
 
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/repl/paint`, accessToken, formData, {
+      Accept: 'application/json',
+    });
   };
 
   public static paintImageNew = async (
@@ -444,52 +386,18 @@ export class Backend {
     Object.keys(options).forEach(key => {
       formData.append(key, options[key as keyof NewOptionsInput] as string);
     });
-    const response = await fetch(`${BACKEND_URL}/repl/paint-sdxl`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'POST',
-      body: formData,
-    });
 
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/repl/paint-sdxl`, accessToken, formData, {
+      Accept: 'application/json',
+    });
   };
 
   public static getPaintImages = async (accessToken: string): Promise<PaintImageResponse[]> => {
-    const response = await fetch(`${BACKEND_URL}/repl/paint`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    });
-
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.get(`${BACKEND_URL}/repl/paint`, accessToken);
   };
 
   public static getPaintImage = async (accessToken: string, id: string): Promise<PaintImageResponse> => {
-    const response = await fetch(`${BACKEND_URL}/repl/paint/${id}`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    });
-
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.get(`${BACKEND_URL}/repl/paint/${id}`, accessToken);
   };
 
   public static regeneratePaintImage = async (
@@ -503,25 +411,11 @@ export class Backend {
         newOptions[key] = value;
       }
     });
-    const response = await fetch(`${BACKEND_URL}/repl/paint/${id}`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(newOptions),
-    });
 
-    if (response.ok) {
-      const resp = (await response.json()) as PaintImageResponse;
-      return {
-        ...resp,
-        jobs: resp.jobs.map(j => ({ ...j, input: { ...j.input, regen_prompt: j.input.regen_prompt ?? !!j.prompt } })),
-      };
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/repl/paint/${id}`, accessToken, JSON.stringify(newOptions), {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
   };
 
   public static regeneratePaintImageNew = async (
@@ -535,90 +429,66 @@ export class Backend {
         newOptions[key] = value;
       }
     });
-    const response = await fetch(`${BACKEND_URL}/repl/paint-sdxl/${id}`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(newOptions),
-    });
 
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/repl/paint-sdxl/${id}`, accessToken, JSON.stringify(newOptions), {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
   };
 
   public static activatePro = async (accessToken: string): Promise<ActivateProResponse> => {
-    const response = await fetch(`${BACKEND_URL}/user/payment`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'POST',
+    return HttpClient.post(`${BACKEND_URL}/user/payment`, accessToken, undefined, {
+      Accept: 'application/json',
     });
-
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
   };
 
   public static getBilling = async (accessToken: string): Promise<ActivateProResponse> => {
-    const response = await fetch(`${BACKEND_URL}/user/payment/portal`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'POST',
+    return HttpClient.post(`${BACKEND_URL}/user/payment/portal`, accessToken, undefined, {
+      Accept: 'application/json',
     });
-
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
   };
 
   public static removeBackground = async (accessToken: string, file: File): Promise<RemoveBackgroundResponse> => {
     const formData = new FormData();
     formData.append('image', file);
-    const response = await fetch(`${BACKEND_URL}/remove-background`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'POST',
-      body: formData,
-    });
 
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/remove-background`, accessToken, formData, {
+      Accept: 'application/json',
+    });
   };
 
   public static identifyImage = async (accessToken: string, file: Blob): Promise<IdentifyImageResponse> => {
     const formData = new FormData();
     formData.append('image', file);
-    const response = await fetch(`${BACKEND_URL}/identify-image`, {
-      headers: {
-        Authorization: accessToken,
-        Accept: 'application/json',
-      },
-      method: 'POST',
-      body: formData,
-    });
 
-    if (response.ok) {
-      return response.json();
-    }
-    const err = await response.json();
-    throw getErrorObject(err, response);
+    return HttpClient.post(`${BACKEND_URL}/identify-image`, accessToken, formData, {
+      Accept: 'application/json',
+    });
+  };
+
+  public static upscale = async ({
+    accessToken,
+    file,
+    options,
+  }: {
+    accessToken: string;
+    file: File;
+    options: { scale: number; faceEnhance: boolean };
+  }): Promise<UpscaleImageResponse> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('scale', options.scale.toString());
+    formData.append('faceEnhance', options.faceEnhance.toString());
+    return HttpClient.post(`${BACKEND_URL}/repl/upscale`, accessToken, formData, {
+      Accept: 'application/json',
+    });
+  };
+
+  public static getUpscaledImages = async (accessToken: string): Promise<UpscaleImageResponse[]> => {
+    return HttpClient.get(`${BACKEND_URL}/repl/upscale`, accessToken);
+  };
+
+  public static getUpscaledImage = async (accessToken: string, id: string): Promise<UpscaleImageResponse> => {
+    return HttpClient.get(`${BACKEND_URL}/repl/upscale/${id}`, accessToken);
   };
 }

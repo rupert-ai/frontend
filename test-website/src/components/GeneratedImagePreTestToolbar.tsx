@@ -99,7 +99,14 @@ export function GeneratedImagePreTestToolbar({
           </Button>
         )}
       </div>
-      {isTesting && <LoadingModal heading={currentBatchId.toString()} />}
+      {isTesting && (
+        <LoadingModal
+          heading={`Test #${currentBatchId.toString()}`}
+          text="This report present the test results of the image ads, including the champion ad that had the highest
+          performance in terms of click-through rate, conversion rate, and cost-per-click."
+          eventText="Testing Ads..."
+        />
+      )}
     </>
   );
 }

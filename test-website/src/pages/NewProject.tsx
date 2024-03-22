@@ -61,7 +61,8 @@ export function NewProject() {
         title: 'Upscale image',
         description: 'Create high-quality images from low-quality images.',
         img: 'dog.png',
-        tag: <Tag>Coming soon</Tag>,
+        tag: <Tag type="high-contrast">Available</Tag>,
+        onClick: () => navigate('./upscale'),
       },
       {
         title: 'SDXL + LoRa',
