@@ -49,8 +49,13 @@ export const ImageCanvas = React.forwardRef(({ image }: ImageCanvasProps, ref) =
         const scaleX = (CANVAS_WIDTH - 2 * pos.x) / i.width;
         const scaleY = (CANVAS_HEIGHT - 2 * pos.y) / i.height;
         const sc = Math.min(scaleX, scaleY);
-        if (sc < 1) {
+        if (sc < 1 && scaleX <= scaleY) {
           setScale(sc);
+          setPos({ x: 50, y: (CANVAS_HEIGHT - i.height * sc) / 2 });
+        }
+        if (sc < 1 && scaleX > scaleY) {
+          setScale(sc);
+          setPos({ x: (CANVAS_WIDTH - i.width * sc) / 2, y: 50 });
         }
       };
       i.crossOrigin = 'anonymous';
