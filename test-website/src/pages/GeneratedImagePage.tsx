@@ -9,6 +9,9 @@ import TilesList from '../components/TilesList';
 import { useAuth } from '../hooks/useAuth';
 import useIsMobile from '../hooks/useIsMobile';
 import { Backend, Options, PaintImageResponse } from '../services/backend';
+import { isOldApi } from '../utils/helpers';
+// @ts-ignore
+import { ToastNotification, Theme } from 'carbon-components-react';
 
 export function GeneratedImagePage() {
   const { id } = useParams();
@@ -83,15 +86,15 @@ export function GeneratedImagePage() {
       ? [
           ...sortedData.flatMap(job =>
             !!job.output?.length
-              ? job.output
-                  .filter((_, index) => index !== 0)
-                  .map(o => ({
-                    prompt: job.prompt ?? job.input.prompt,
-                    url: o,
-                    isLoading: false,
-                    selected: selectedItems.some(e => e.url === o),
-                  }))
-              : new Array(job.input.image_num ?? 0).fill(1).map(() => ({ isLoading: true })),
+              ? job.output.map(o => ({
+                  prompt: job.prompt ?? job.input.prompt,
+                  url: o,
+                  isLoading: false,
+                  selected: selectedItems.some(e => e.url === o),
+                }))
+              : new Array(isOldApi(job.input) ? job.input.image_num : job.input.num_outputs ?? 0)
+                  .fill(1)
+                  .map(() => ({ isLoading: true })),
           ),
         ]
       : [];
@@ -99,7 +102,10 @@ export function GeneratedImagePage() {
 
   useEffect(() => {
     const validData = generatedImage ?? data;
-    setCurrentOptions(validData?.jobs?.[validData?.jobs.length - 1].input);
+    const lastJob = validData?.jobs?.[validData?.jobs.length - 1];
+    if (!!lastJob && isOldApi(lastJob.input)) {
+      setCurrentOptions(lastJob?.input);
+    }
   }, [generatedImage, data]);
 
   const onOptionChange: React.ComponentProps<typeof GenerateSidePanel>['onChange'] = (key, val) => {
@@ -112,26 +118,42 @@ export function GeneratedImagePage() {
   return (
     <>
       <div className="rai-test-page" style={{ flexGrow: !showPanel ? '1' : undefined }}>
-        <GenerateToolbar
-          isLoading={isLoading}
-          onGenerate={startTest}
-          onShowPanel={() => setShowPanel(v => !v)}
-          isDisabled={mappedData?.some(d => d.isLoading) || isLoading || !!selectedItems.length}
-          onImageChange={() => navigate('/generate')}
-          image={originalImage?.image_path}
-          initialPrompt={originalImage?.prompt}
-        />
+        {!originalImage ||
+          (isOldApi(originalImage) && (
+            <GenerateToolbar
+              isLoading={isLoading}
+              onGenerate={startTest}
+              onShowPanel={() => setShowPanel(v => !v)}
+              isDisabled={mappedData?.some(d => d.isLoading) || isLoading || !!selectedItems.length}
+              onImageChange={() => navigate('/generate')}
+              image={originalImage?.image_path}
+              initialPrompt={originalImage?.prompt}
+            />
+          ))}
         <GeneratedImagePreTestToolbar
           selectedItems={selectedItems}
           data={mappedData}
           onCancel={() => setSelectedItems([])}
           onSelectAll={() => setSelectedItems(mappedData)}
         />
+        {mappedData.some(e => e.isLoading) && (
+          <Theme theme="white">
+            <ToastNotification
+              title="Queued..."
+              subtitle="This process may require some time, especially if your request is in line or the model is starting up. Typically, this takes around 1-2 minutes."
+              notificationType="inline"
+              kind="info"
+              style={{ width: '100%' }}
+              role="alert"
+              hideCloseButton
+            />
+          </Theme>
+        )}
         {!!mappedData.length && (
           <TilesList
             style={isMobile ? { overflow: 'auto', width: 'calc(100% + 1rem)', paddingRight: '1rem' } : undefined}
             data={mappedData ?? []}
-            renderer={image => (
+            renderer={(image, ind) => (
               <GeneratedTile
                 isLoading={image.isLoading}
                 text={image?.prompt}
@@ -140,14 +162,14 @@ export function GeneratedImagePage() {
                 onClick={() =>
                   image.selected
                     ? setSelectedItems(v => [...v.filter(e => e.url != image.url)])
-                    : setSelectedItems(v => [...v, image])
+                    : navigate(`./${ind}`, { state: { data } })
                 }
               />
             )}
           />
         )}
       </div>
-      {!!showPanel && (
+      {!!showPanel && (!originalImage || isOldApi(originalImage)) && (
         <GenerateSidePanel
           initialOptions={currentOptions}
           onChange={onOptionChange}

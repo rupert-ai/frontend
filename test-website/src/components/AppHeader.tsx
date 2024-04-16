@@ -26,6 +26,7 @@ import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import { useUserData } from '../hooks/useUserData';
+import { hideSideNav } from '../utils/helpers';
 
 const isNewProject = (path: string) => path === '/' || path === '/generate/' || path === '/test';
 
@@ -33,8 +34,8 @@ export function AppHeader() {
   const { user } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const { data: userData, isLoading } = useUserData({ enabled: pathname !== '/login' });
+  const location = useLocation();
+  const { data: userData, isLoading } = useUserData({ enabled: location.pathname !== '/login' });
 
   const goToPlans = async () => {
     setShowUserMenu(false);
@@ -70,7 +71,7 @@ export function AppHeader() {
                 <ExpandableSearch labelText="Search" />
               </HeaderGlobalAction> */}
               {!!user &&
-                pathname !== '/login' &&
+                location.pathname !== '/login' &&
                 (isLoading ? (
                   <ButtonSkeleton
                     className="rai-credits-link cds--layout--size-sm"
@@ -96,7 +97,7 @@ export function AppHeader() {
                 </Popover>
               )}
             </HeaderGlobalBar>
-            {pathname !== '/login' && pathname !== '/register' && (
+            {!hideSideNav(location) && (
               <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
                 <SideNavItems className="rai-side-nav-new-project">
                   <SideNavLink
@@ -104,19 +105,19 @@ export function AppHeader() {
                     // @ts-ignore
                     as={Link}
                     to="/"
-                    aria-current={isNewProject(pathname) ? 'page' : undefined}
+                    aria-current={isNewProject(location.pathname) ? 'page' : undefined}
                     onClick={onClickSideNavExpand}
                   >
                     Create new project
                   </SideNavLink>
                 </SideNavItems>
                 <SideNavItems className="rai-side-nav-items">
-                  <SideNavMenu title="My projects">
+                  <SideNavMenu title="My projects" defaultExpanded>
                     <SideNavMenuItem
                       // @ts-ignore
                       element={Link}
                       to="/generated"
-                      aria-current={pathname === '/generated' ? 'page' : undefined}
+                      aria-current={location.pathname === '/generated' ? 'page' : undefined}
                       onClick={onClickSideNavExpand}
                     >
                       My generated ads
@@ -125,22 +126,12 @@ export function AppHeader() {
                       // @ts-ignore
                       element={Link}
                       to="/projects"
-                      aria-current={pathname.includes('/projects') ? 'page' : undefined}
+                      aria-current={location.pathname.includes('/projects') ? 'page' : undefined}
                       onClick={onClickSideNavExpand}
                     >
                       My tests
                     </SideNavMenuItem>
                   </SideNavMenu>
-                  <SideNavDivider />
-                  <SideNavLink aria-disabled renderIcon={MachineLearning} onClick={onClickSideNavExpand}>
-                    Rupert AI tools
-                  </SideNavLink>
-                  <SideNavLink aria-disabled renderIcon={MachineLearningModel} onClick={onClickSideNavExpand}>
-                    AI training
-                  </SideNavLink>
-                  <SideNavLink aria-disabled renderIcon={Folder} onClick={onClickSideNavExpand}>
-                    Assets
-                  </SideNavLink>
                 </SideNavItems>
               </SideNav>
             )}
