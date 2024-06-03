@@ -125,6 +125,15 @@ export function AppHeader() {
                     <SideNavMenuItem
                       // @ts-ignore
                       element={Link}
+                      to="/upscaled"
+                      aria-current={location.pathname === '/upscaled' ? 'page' : undefined}
+                      onClick={onClickSideNavExpand}
+                    >
+                      My upscaled images
+                    </SideNavMenuItem>
+                    <SideNavMenuItem
+                      // @ts-ignore
+                      element={Link}
                       to="/projects"
                       aria-current={location.pathname.includes('/projects') ? 'page' : undefined}
                       onClick={onClickSideNavExpand}
