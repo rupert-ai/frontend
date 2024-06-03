@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 
 type PrivateRouteProps = {
@@ -7,8 +7,15 @@ type PrivateRouteProps = {
 
 function PrivateRoute({ children }: PrivateRouteProps) {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
-  return !!user && !isLoading ? children : !user && !isLoading ? <Navigate to="/login" /> : <></>;
+  return !!user && !isLoading ? (
+    children
+  ) : !user && !isLoading ? (
+    <Navigate to="/login" state={{ redirect: location.pathname }} />
+  ) : (
+    <></>
+  );
 }
 
 export default PrivateRoute;
