@@ -1,14 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { Button } from 'carbon-components-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { signInWithGoogle } from '../services/authentication';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectUrl: string | undefined = location.state?.redirect;
 
   const { mutate, isLoading } = useMutation(signInWithGoogle, {
     onSuccess() {
-      navigate('../');
+      navigate(`../${redirectUrl ?? ''}`);
     },
   });
 
